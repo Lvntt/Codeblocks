@@ -1,5 +1,7 @@
-package com.example.codeblocks.domain.entity
+package com.example.codeblocks.domain.entity.parambundles.function
 
+import com.example.codeblocks.domain.entity.ParamBundle
+import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
 class FunctionSignature(val name: String, val returnType: KClass<out Variable>) : ParamBundle() {

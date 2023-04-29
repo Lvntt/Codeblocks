@@ -8,7 +8,7 @@ class Program : Executable {
 
     override fun execute() {
         blocks.forEach {
-            it.setScope(scope)
+            it.setupScope(scope)
             it.execute()
         }
     }

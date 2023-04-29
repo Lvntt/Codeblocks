@@ -1,3 +1,3 @@
 package com.example.codeblocks.domain.entity
 
-abstract class ParamBundle
+abstract class StopExecutionBlock: Block()

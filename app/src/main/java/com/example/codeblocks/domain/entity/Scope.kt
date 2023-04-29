@@ -1,25 +1,36 @@
 package com.example.codeblocks.domain.entity
 
+import com.example.codeblocks.domain.entity.blocks.function.FunctionBlock
+
 open class Scope {
 
-    private val variables: MutableList<Variable> = mutableListOf()
+    protected val variables: MutableList<Variable> = mutableListOf()
 
-    private val functions: MutableList<Function> = mutableListOf()
+    private val functions: MutableList<FunctionBlock> = mutableListOf()
 
-    open fun addVariable(variable: Variable) {
+    fun addVariable(variable: Variable) {
         variables.add(variable)
     }
 
-    open fun addFunction(function: Function) {
+    fun addFunction(function: FunctionBlock) {
         functions.add(function)
     }
 
     open fun findVariable(name: String): Variable? {
-        return variables.find { it.getName() == name }
+        return variables.find { it.name == name }
     }
 
-    open fun findFunction(name: String): Function? {
+    open fun findFunction(name: String): FunctionBlock? {
         return functions.find { it.getName() == name }
+    }
+
+    open fun setVariable(name: String, variable: Variable) {
+        val index = variables.indexOfFirst { it.name == name }
+        if(index != -1) {
+            variables[index] = variable.copy(name)
+        } else {
+            //TODO error handling
+        }
     }
 
 }
