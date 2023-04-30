@@ -20,11 +20,11 @@ abstract class Block : Executable {
         else if(scope == null) {
             //TODO error handling
         } else {
-            executeAfterChecks()
+            executeAfterChecks(scope!!)
         }
     }
 
-    protected abstract fun executeAfterChecks()
+    protected abstract fun executeAfterChecks(scope: Scope)
     fun setParams(paramBundle: ParamBundle) {
         if(paramType == paramBundle::class) {
             this.paramBundle = paramBundle

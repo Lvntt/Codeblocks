@@ -5,7 +5,7 @@ import com.example.codeblocks.domain.entity.Variable
 class BooleanVariable(name: String): Variable(name) {
     private var value: Boolean? = null
 
-    fun getValue(): Boolean? = null
+    fun getValue(): Boolean? = value
 
     fun setValue(value: Boolean?) {
         this.value = value
@@ -19,4 +19,5 @@ class BooleanVariable(name: String): Variable(name) {
 
     override fun toString(): String = value.toString()
 
+    override fun equals(other: Any?): Boolean = value?.equals(other) ?: false
 }

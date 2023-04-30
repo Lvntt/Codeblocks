@@ -6,8 +6,10 @@ import com.example.codeblocks.domain.entity.parambundles.function.FunctionSignat
 import com.example.codeblocks.domain.entity.NestedScope
 import com.example.codeblocks.domain.entity.ParamBundle
 import com.example.codeblocks.domain.entity.Returnable
+import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
 
 class FunctionBlock : BlockWithNesting(), Returnable {
 
@@ -15,10 +17,10 @@ class FunctionBlock : BlockWithNesting(), Returnable {
     private var returnedVariable: Variable? = null
     override val paramType: KClass<out ParamBundle> = FunctionSignature::class
 
-    override fun executeAfterChecks() {
+    override fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
         returnedVariable = null
-        val nestedScope = NestedScope(scope!!)
+        val nestedScope = NestedScope(scope)
         if (paramValues is LoadedFunctionParams) {
             (paramValues as LoadedFunctionParams).variableList.forEachIndexed { index, variable ->
                 nestedScope.addVariable(
@@ -35,10 +37,13 @@ class FunctionBlock : BlockWithNesting(), Returnable {
             block.setupScope(nestedScope)
             block.execute()
             if(block is FunctionReturnBlock || block is BlockWithNesting && block.stopCallingBlock is FunctionReturnBlock) {
+                if(block is BlockWithNesting) {
+                    block.stopCallingBlock = null
+                }
                 return
             }
         }
-        //TODO assign null var
+        returnedVariable = (paramBundle as FunctionSignature).returnType.primaryConstructor?.call("")
     }
 
     fun setValues(paramBundle: ParamBundle) {
