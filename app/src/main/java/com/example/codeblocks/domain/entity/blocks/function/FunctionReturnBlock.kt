@@ -11,16 +11,9 @@ class FunctionReturnBlock: StopExecutionBlock() {
 
     override fun executeAfterChecks(scope: Scope) {
         (paramBundle as FunctionReturnBundle).expression.setupScope(scope)
-        val returnResult = (paramBundle as FunctionReturnBundle).expression.getReturnedValue()
-        if(returnResult != null) {
-            val function = scope.findFunction((paramBundle as FunctionReturnBundle).functionName)
-            if(function != null) {
-                function.callReturn(returnResult)
-            } else {
-                //TODO error handling
-            }
-        } else {
-            //TODO error handling
-        }
+        val returnResult = (paramBundle as FunctionReturnBundle).expression.getReturnedValue() ?: /*TODO error handling*/ throw Exception()
+
+        val function = scope.findFunction((paramBundle as FunctionReturnBundle).functionName) ?: /*TODO error handling*/ throw Exception()
+        function.callReturn(returnResult)
     }
 }

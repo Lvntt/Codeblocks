@@ -11,11 +11,7 @@ class CreateVariableBlock: Block() {
     override val paramType: KClass<out ParamBundle> = CreateVariableBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
-        val variable = (paramBundle as CreateVariableBundle).type.primaryConstructor?.call((paramBundle as CreateVariableBundle).name)
-        if(variable != null) {
-            scope.addVariable(variable)
-        } else {
-            //TODO error handling
-        }
+        val variable = (paramBundle as CreateVariableBundle).type.primaryConstructor?.call((paramBundle as CreateVariableBundle).name) ?: /*TODO error handling*/ throw Exception()
+        scope.addVariable(variable)
     }
 }

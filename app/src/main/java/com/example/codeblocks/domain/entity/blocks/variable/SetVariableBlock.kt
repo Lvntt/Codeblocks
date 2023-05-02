@@ -12,19 +12,16 @@ class SetVariableBlock: Block() {
 
     override fun executeAfterChecks(scope: Scope) {
         (paramBundle as SetVariableBundle).expression.setupScope(scope)
-        val returnResult = (paramBundle as SetVariableBundle).expression.getReturnedValue()
-        if(returnResult != null) {
-            val originalVariable = scope.findVariable((paramBundle as SetVariableBundle).name)
-            if(originalVariable != null && originalVariable::class == returnResult::class) {
-                scope.setVariable(originalVariable.name, returnResult)
-            } else if(originalVariable != null && returnResult is NullVariable) {
-                val setValueCallable = originalVariable::class.members.single { it.name == "setValue" }
-                val originalNullCopy = originalVariable.copy(originalVariable.name)
-                setValueCallable.call(originalNullCopy, null)
-                scope.setVariable(originalVariable.name, originalNullCopy)
-            } else {
-                //TODO error handling
-            }
+        val returnResult = (paramBundle as SetVariableBundle).expression.getReturnedValue() ?: /*TODO error handling*/ throw Exception()
+
+        val originalVariable = scope.findVariable((paramBundle as SetVariableBundle).name)
+        if(originalVariable != null && originalVariable::class == returnResult::class) {
+            scope.setVariable(originalVariable.name, returnResult)
+        } else if(originalVariable != null && returnResult is NullVariable) {
+            val setValueCallable = originalVariable::class.members.single { it.name == "setValue" }
+            val originalNullCopy = originalVariable.copy(originalVariable.name)
+            setValueCallable.call(originalNullCopy, null)
+            scope.setVariable(originalVariable.name, originalNullCopy)
         } else {
             //TODO error handling
         }

@@ -12,8 +12,10 @@ class PrintToConsoleBlock: Block() {
 
     override fun executeAfterChecks(scope: Scope) {
         (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
-        val returnResult = (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
+        val returnResult = (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue() ?: /*TODO error handling*/ throw Exception()
+        val resultValue = returnResult::class.members.single { it.name == "getValue" }.call(returnResult)
+
         //TODO implement in-app console
-        Log.d("INTERPRETER", returnResult.toString())
+        Log.d("INTERPRETER", resultValue.toString())
     }
 }

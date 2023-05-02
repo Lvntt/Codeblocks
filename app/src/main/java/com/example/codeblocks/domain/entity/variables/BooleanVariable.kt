@@ -16,8 +16,4 @@ class BooleanVariable(name: String): Variable(name) {
         newVariable.setValue(value)
         return newVariable
     }
-
-    override fun toString(): String = value.toString()
-
-    override fun equals(other: Any?): Boolean = value?.equals(other) ?: false
 }

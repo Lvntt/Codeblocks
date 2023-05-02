@@ -13,19 +13,12 @@ class FunctionCallBlock : ExpressionBlock() {
     override fun executeAfterChecks(scope: Scope) {
         val functionParams = LoadedFunctionParams()
         (paramBundle as FunctionParamValues).expressionList.forEach {
-            val expressionResult = getVariableFromParams(it, scope)
-            if(expressionResult != null) {
-                functionParams.addParam(expressionResult)
-            } else {
-                //TODO error handling
-            }
+            val expressionResult = getVariableFromParams(it, scope) ?: /*TODO error handling*/ throw Exception()
+            functionParams.addParam(expressionResult)
         }
-        val function = scope.findFunction((paramBundle as FunctionParamValues).functionName)
-        if(function != null) {
-            function.setValues(functionParams)
-            returnedVariable = function.getReturnedValue()
-        } else {
-            //TODO error handling
-        }
+
+        val function = scope.findFunction((paramBundle as FunctionParamValues).functionName) ?: /*TODO error handling*/ throw Exception()
+        function.setValues(functionParams)
+        returnedVariable = function.getReturnedValue()
     }
 }

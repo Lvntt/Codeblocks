@@ -26,11 +26,9 @@ open class Scope {
 
     open fun setVariable(name: String, variable: Variable) {
         val index = variables.indexOfFirst { it.name == name }
-        if(index != -1) {
-            variables[index] = variable.copy(name)
-        } else {
-            //TODO error handling
-        }
+        if (index == -1) { /*TODO error handling*/ throw Exception() }
+
+        variables[index] = variable.copy(name)
     }
 
 }

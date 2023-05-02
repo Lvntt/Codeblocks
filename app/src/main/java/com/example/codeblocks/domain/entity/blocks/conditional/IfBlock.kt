@@ -9,37 +9,32 @@ import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpres
 import com.example.codeblocks.domain.entity.variables.BooleanVariable
 import kotlin.reflect.KClass
 
-class IfBlock: BlockWithNesting() {
+class IfBlock : BlockWithNesting() {
     override val paramType: KClass<out ParamBundle> = SingleExpressionBlockBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
         (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
-        val returnedValue = (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
-        if(returnedValue is BooleanVariable) {
-            val value = returnedValue.getValue()
-            if(value != null) {
-                if(value) {
-                    val nestedScope = NestedScope(scope)
-                    for(block in nestedBlocks) {
-                        block.setupScope(nestedScope)
-                        block.execute()
-                        if(block is StopExecutionBlock || block is BlockWithNesting && block.stopCallingBlock != null) {
-                            if(block is BlockWithNesting) {
-                                stopCallingBlock = block.stopCallingBlock
-                                block.stopCallingBlock = null
-                            } else if(block is StopExecutionBlock) {
-                                stopCallingBlock = block
-                            }
-                            return
-                        }
-                    }
+        val returnedValue =
+            (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
+
+        if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception() }
+        val booleanValue = returnedValue.getValue() ?: /*TODO error handling*/ throw Exception()
+
+        if (booleanValue) {
+            val nestedScope = NestedScope(scope)
+            for (block in nestedBlocks) {
+                block.setupScope(nestedScope)
+                block.execute()
+                if (block is BlockWithNesting && block.stopCallingBlock != null) {
+                    stopCallingBlock = block.stopCallingBlock
+                    block.stopCallingBlock = null
+                    return
+                } else if (block is StopExecutionBlock) {
+                    stopCallingBlock = block
+                    return
                 }
-            } else {
-                //TODO error handling
             }
-        } else {
-            //TODO error handling
         }
     }
 }

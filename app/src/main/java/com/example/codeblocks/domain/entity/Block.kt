@@ -11,26 +11,18 @@ abstract class Block : Executable {
     protected abstract val paramType: KClass<out ParamBundle>
 
     override fun execute() {
-        if(paramBundle == null) {
-            //TODO error handling
-        }
-        else if(paramBundle!!::class != paramType) {
-            //TODO error handling
-        }
-        else if(scope == null) {
-            //TODO error handling
-        } else {
-            executeAfterChecks(scope!!)
-        }
+        if(paramBundle == null) { /*TODO error handling*/ throw Exception() }
+        if(paramBundle!!::class != paramType) { /*TODO error handling*/ throw Exception() }
+        if(scope == null) { /*TODO error handling*/ throw Exception() }
+
+        executeAfterChecks(scope!!)
     }
 
     protected abstract fun executeAfterChecks(scope: Scope)
     fun setParams(paramBundle: ParamBundle) {
-        if(paramType == paramBundle::class) {
-            this.paramBundle = paramBundle
-        } else {
-            //TODO Error handling
-        }
+        if(paramType != paramBundle::class) { /*TODO error handling*/ throw Exception() }
+
+        this.paramBundle = paramBundle
     }
 
     fun setupScope(scope: Scope) {
