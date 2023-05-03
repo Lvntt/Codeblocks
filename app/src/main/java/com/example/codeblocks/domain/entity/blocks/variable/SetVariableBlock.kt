@@ -18,9 +18,8 @@ class SetVariableBlock: Block() {
         if(originalVariable != null && originalVariable::class == returnResult::class) {
             scope.setVariable(originalVariable.name, returnResult)
         } else if(originalVariable != null && returnResult is NullVariable) {
-            val setValueCallable = originalVariable::class.members.single { it.name == "setValue" }
             val originalNullCopy = originalVariable.copy(originalVariable.name)
-            setValueCallable.call(originalNullCopy, null)
+            originalNullCopy.setValue(null)
             scope.setVariable(originalVariable.name, originalNullCopy)
         } else {
             //TODO error handling

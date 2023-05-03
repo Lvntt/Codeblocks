@@ -1,105 +1,48 @@
 package com.example.codeblocks.domain.entity.variables
 
+import kotlin.reflect.KClass
+
 object OperatorExtensions {
-    //All the operators should be declared here
-    //Plus operator - plusOperator(other) extension
-    //Minus operator - minusOperator(other) extension
-    //Multiplication operator - timesOperator(other) extension
-    //Division operator - divOperator(other) extension
-    //Remainder operator - remOperator(other) extension
-
-    /*Int operators*/
-    fun Int.plusOperator(other: Byte): Int =
-        this + other.toInt()
-
-    fun Int.plusOperator(other: Short): Int =
-        this + other.toInt()
-
-    fun Int.plusOperator(other: Int): Int =
-        this + other
-
-    fun Int.plusOperator(other: Long): Long =
-        this.toLong() + other
-
-    fun Int.plusOperator(other: Float): Float =
-        this.toFloat() + other
-
-    fun Int.plusOperator(other: Double): Double =
-        this.toDouble() + other
-
-
-    fun Int.minusOperator(other: Byte): Int =
-        this - other.toInt()
-
-    fun Int.minusOperator(other: Short): Int =
-        this - other.toInt()
-
-    fun Int.minusOperator(other: Int): Int =
-        this - other
-
-    fun Int.minusOperator(other: Long): Long =
-        this.toLong() - other
-
-    fun Int.minusOperator(other: Float): Float =
-        this.toFloat() - other
-
-    fun Int.minusOperator(other: Double): Double =
-        this.toDouble() - other
-
-
-    fun Int.timesOperator(other: Byte): Int =
-        this * other.toInt()
-
-    fun Int.timesOperator(other: Short): Int =
-        this * other.toInt()
-
-    fun Int.timesOperator(other: Int): Int =
-        this * other
-
-    fun Int.timesOperator(other: Long): Long =
-        this.toLong() * other
-
-    fun Int.timesOperator(other: Float): Float =
-        this.toFloat() * other
-
-    fun Int.timesOperator(other: Double): Double =
-        this.toDouble() * other
-
-
-    fun Int.divOperator(other: Byte): Int =
-        this / other.toInt()
-
-    fun Int.divOperator(other: Short): Int =
-        this / other.toInt()
-
-    fun Int.divOperator(other: Int): Int =
-        this / other
-
-    fun Int.divOperator(other: Long): Long =
-        this.toLong() / other
-
-    fun Int.divOperator(other: Float): Float =
-        this.toFloat() / other
-
-    fun Int.divOperator(other: Double): Double =
-        this.toDouble() / other
-
-
-    fun Int.remOperator(other: Byte): Int =
-        this % other.toInt()
-
-    fun Int.remOperator(other: Short): Int =
-        this % other.toInt()
-
-    fun Int.remOperator(other: Int): Int =
-        this * other
-
-    fun Int.remOperator(other: Long): Long =
-        this.toLong() % other
-
-    fun Int.remOperator(other: Float): Float =
-        this.toFloat() % other
-
-    fun Int.remOperator(other: Double): Double =
-        this.toDouble() % other
+    val operators = mapOf(
+        "plusOperator" to mapOf<Pair<KClass<out Any>, KClass<out Any>>, (Any, Any) -> Any>(
+            Pair(Int::class, Byte::class) to { first, second -> (first as Int) + (second as Byte).toInt() },
+            Pair(Int::class, Short::class) to { first, second -> (first as Int) + (second as Short).toInt() },
+            Pair(Int::class, Int::class) to { first, second -> (first as Int) + (second as Int) },
+            Pair(Int::class, Long::class) to { first, second -> (first as Int).toLong() + (second as Long) },
+            Pair(Int::class, Float::class) to { first, second -> (first as Int).toFloat() + (second as Float) },
+            Pair(Int::class, Double::class) to { first, second -> (first as Int).toDouble() + (second as Double) },
+        ),
+        "minusOperator" to mapOf<Pair<KClass<out Any>, KClass<out Any>>, (Any, Any) -> Any>(
+            Pair(Int::class, Byte::class) to { first, second -> (first as Int) - (second as Byte).toInt() },
+            Pair(Int::class, Short::class) to { first, second -> (first as Int) - (second as Short).toInt() },
+            Pair(Int::class, Int::class) to { first, second -> (first as Int) - (second as Int) },
+            Pair(Int::class, Long::class) to { first, second -> (first as Int).toLong() - (second as Long) },
+            Pair(Int::class, Float::class) to { first, second -> (first as Int).toFloat() - (second as Float) },
+            Pair(Int::class, Double::class) to { first, second -> (first as Int).toDouble() - (second as Double) },
+        ),
+        "timesOperator" to mapOf<Pair<KClass<out Any>, KClass<out Any>>, (Any, Any) -> Any>(
+            Pair(Int::class, Byte::class) to { first, second -> (first as Int) * (second as Byte).toInt() },
+            Pair(Int::class, Short::class) to { first, second -> (first as Int) * (second as Short).toInt() },
+            Pair(Int::class, Int::class) to { first, second -> (first as Int) * (second as Int) },
+            Pair(Int::class, Long::class) to { first, second -> (first as Int).toLong() * (second as Long) },
+            Pair(Int::class, Float::class) to { first, second -> (first as Int).toFloat() * (second as Float) },
+            Pair(Int::class, Double::class) to { first, second -> (first as Int).toDouble() * (second as Double) },
+        ),
+        "divOperator" to mapOf<Pair<KClass<out Any>, KClass<out Any>>, (Any, Any) -> Any>(
+            Pair(Int::class, Byte::class) to { first, second -> (first as Int) / (second as Byte).toInt() },
+            Pair(Int::class, Short::class) to { first, second -> (first as Int) / (second as Short).toInt() },
+            Pair(Int::class, Int::class) to { first, second -> (first as Int) / (second as Int) },
+            Pair(Int::class, Long::class) to { first, second -> (first as Int).toLong() / (second as Long) },
+            Pair(Int::class, Float::class) to { first, second -> (first as Int).toFloat() / (second as Float) },
+            Pair(Int::class, Double::class) to { first, second -> (first as Int).toDouble() / (second as Double) },
+        ),
+        "remOperator" to mapOf<Pair<KClass<out Any>, KClass<out Any>>, (Any, Any) -> Any>(
+            Pair(Int::class, Byte::class) to { first, second -> (first as Int) % (second as Byte).toInt() },
+            Pair(Int::class, Short::class) to { first, second -> (first as Int) % (second as Short).toInt() },
+            Pair(Int::class, Int::class) to { first, second -> (first as Int) % (second as Int) },
+            Pair(Int::class, Long::class) to { first, second -> (first as Int).toLong() % (second as Long) },
+            Pair(Int::class, Float::class) to { first, second -> (first as Int).toFloat() % (second as Float) },
+            Pair(Int::class, Double::class) to { first, second -> (first as Int).toDouble() % (second as Double) },
+        )
+    )
 }

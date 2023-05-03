@@ -19,15 +19,14 @@ abstract class OperatorBlock: ExpressionBlock() {
             getVariableFromParams((paramBundle as TwoExpressionBlockBundle).secondExpressionBlock, scope)
 
         if (firstVariable == null || secondVariable == null) { /*TODO error handling*/ throw Exception() }
-        val firstValue = firstVariable::class.members.single { it.name == "getValue" }.call(firstVariable)
-        val secondValue = secondVariable::class.members.single { it.name == "getValue" }.call(secondVariable)
+        val firstValue = firstVariable.getValue()
+        val secondValue = secondVariable.getValue()
 
         val resultValue = getOperatorResultValue(firstValue, secondValue)
         if (resultValue == null || VariableTypeMap.typeMap[resultValue::class] == null) { /*TODO error handling*/ throw Exception() }
         val variableToReturn = VariableTypeMap.typeMap[resultValue::class]?.primaryConstructor?.call("")
                 ?: /*TODO error handling*/ throw Exception()
-        val setValueCallable = variableToReturn::class.members.single { it.name == "setValue" }
-        setValueCallable.call(variableToReturn, resultValue)
+        variableToReturn.setValue(resultValue)
         returnedVariable = variableToReturn
     }
 

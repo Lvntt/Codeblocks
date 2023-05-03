@@ -16,8 +16,7 @@ class VariableByValueBlock : ExpressionBlock() {
         val value = convertStringToVariableValue((paramBundle as VariableValueBundle).value)
         returnedVariable = if (value != null) {
             val variable = typeMap[value::class]?.primaryConstructor?.call("") ?: /*TODO error handling*/ throw Exception()
-            val setValueCallable = variable::class.members.single { it.name == "setValue" }
-            setValueCallable.call(variable, value)
+            variable.setValue(value)
             variable
         } else {
             NullVariable("")

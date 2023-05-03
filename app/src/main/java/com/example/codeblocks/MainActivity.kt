@@ -34,28 +34,9 @@ import com.example.codeblocks.ui.theme.CodeblocksTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        fibonacciTest("0").execute()
-//        fibonacciTest("1").execute()
-//        fibonacciTest("2").execute()
-//        fibonacciTest("3").execute()
-//        fibonacciTest("4").execute()
-//        fibonacciTest("5").execute()
-//        fibonacciTest("6").execute()
-//        fibonacciTest("7").execute()
-//        fibonacciTest("8").execute()
-//        fibonacciTest("9").execute()
-//        fibonacciTest("10").execute()
-//        fibonacciTest("11").execute()
-//        fibonacciTest("12").execute()
-//        fibonacciTest("13").execute()
-//        fibonacciTest("14").execute()
-//        fibonacciTest("15").execute()
-//        fibonacciTest("16").execute()
-//        fibonacciTest("17").execute()
-//        fibonacciTest("18").execute()
-//        val finalTest = fibonacciTest("19")
-//        finalTest.execute()
-//        finalTest.execute()
+        for(i in 0..19) {
+            fibonacciTest(i.toString()).execute()
+        }
         setContent {
             CodeblocksTheme {
                 // A surface container using the 'background' color from the theme

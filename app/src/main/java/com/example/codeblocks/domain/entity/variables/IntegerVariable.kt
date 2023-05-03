@@ -1,14 +1,16 @@
 package com.example.codeblocks.domain.entity.variables
 
 import com.example.codeblocks.domain.entity.Variable
+import kotlin.reflect.KClass
 
 class IntegerVariable(name: String): Variable(name) {
+    override val valueType: KClass<out Any> = Integer::class
     private var value: Int? = null
 
-    fun getValue(): Int? = value
+    override fun getValue(): Int? = value
 
-    fun setValue(value: Int?) {
-        this.value = value
+    override fun setValueAfterChecks(value: Any?) {
+        this.value = value as Int?
     }
 
     override fun copy(newName: String): Variable {
