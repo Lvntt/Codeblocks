@@ -4,13 +4,14 @@ import com.example.codeblocks.domain.entity.ParamBundle
 import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
+import com.example.codeblocks.domain.entity.variables.OperatorType
 import com.example.codeblocks.domain.entity.variables.VariableTypeMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
 abstract class OperatorBlock: ExpressionBlock() {
     override val paramType: KClass<out ParamBundle> = TwoExpressionBlockBundle::class
-    protected abstract val kClassOperatorName: String
+    protected abstract val operatorType: OperatorType
 
     override fun executeAfterChecks(scope: Scope) {
         val firstVariable =
