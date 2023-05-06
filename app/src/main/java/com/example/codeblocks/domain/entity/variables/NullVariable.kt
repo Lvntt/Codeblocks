@@ -4,6 +4,7 @@ import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
 class NullVariable(name: String) : Variable(name) {
+
     override val valueType: KClass<out Any> = Any::class
 
     override fun getValue(): Any? = null
@@ -15,4 +16,5 @@ class NullVariable(name: String) : Variable(name) {
     override fun copy(newName: String): Variable {
         return NullVariable(newName)
     }
+
 }

@@ -6,7 +6,8 @@ import com.example.codeblocks.domain.entity.StopExecutionBlock
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionReturnBundle
 import kotlin.reflect.KClass
 
-class FunctionReturnBlock: StopExecutionBlock() {
+class FunctionReturnBlock : StopExecutionBlock() {
+
     override val paramType: KClass<out ParamBundle> = FunctionReturnBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
@@ -16,4 +17,5 @@ class FunctionReturnBlock: StopExecutionBlock() {
         val function = scope.findFunction((paramBundle as FunctionReturnBundle).functionName) ?: /*TODO error handling*/ throw Exception()
         function.callReturn(returnResult)
     }
+
 }

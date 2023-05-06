@@ -4,6 +4,9 @@ import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
 object VariableTypeMap {
+    private val integerRegex = Regex("^-?[0-9]+$")
+    private val booleanRegex = Regex("^(?:true|false)$")
+
     val typeMap = mapOf<KClass<out Any>, KClass<out Variable>>(
         Int::class to IntegerVariable::class,
         Boolean::class to BooleanVariable::class
@@ -11,14 +14,14 @@ object VariableTypeMap {
 
     @JvmStatic
     fun convertStringToVariableValue(string: String): Any? {
-        val integerRegex = Regex("^-?[0-9]+$")
-        val booleanRegex = Regex("^(?:true|false)$")
-        if(string.matches(integerRegex)) {
+
+        if (string.matches(integerRegex)) {
             return string.toInt()
         }
-        if(string.matches(booleanRegex)) {
+        if (string.matches(booleanRegex)) {
             return string.toBooleanStrict()
         }
         return null
     }
+
 }

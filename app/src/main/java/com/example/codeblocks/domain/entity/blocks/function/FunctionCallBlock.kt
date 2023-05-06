@@ -8,6 +8,7 @@ import com.example.codeblocks.domain.entity.parambundles.function.LoadedFunction
 import kotlin.reflect.KClass
 
 class FunctionCallBlock : ExpressionBlock() {
+
     override val paramType: KClass<out ParamBundle> = FunctionParamValues::class
 
     override fun executeAfterChecks(scope: Scope) {
@@ -21,4 +22,5 @@ class FunctionCallBlock : ExpressionBlock() {
         function.setValues(functionParams)
         returnedVariable = function.getReturnedValue()
     }
+
 }

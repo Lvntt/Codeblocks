@@ -3,6 +3,7 @@ package com.example.codeblocks.domain.entity.variables
 import kotlin.reflect.KClass
 
 object OperatorMap {
+
     val operators = mapOf(
         OperatorType.ADDITION to mapOf<Pair<KClass<out Any>, KClass<out Any>>, (Any, Any) -> Any>(
             Pair(Int::class, Byte::class) to { first, second -> (first as Int) + (second as Byte).toInt() },
@@ -45,4 +46,5 @@ object OperatorMap {
             Pair(Int::class, Double::class) to { first, second -> (first as Int).toDouble() % (second as Double) },
         )
     )
+
 }

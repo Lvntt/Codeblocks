@@ -7,6 +7,7 @@ import com.example.codeblocks.domain.entity.Variable
 import com.example.codeblocks.domain.entity.blocks.function.FunctionBlock
 
 abstract class ExpressionBlock : Block(), Returnable {
+
     protected var returnedVariable: Variable? = null
 
     override fun getReturnedValue(): Variable? {
@@ -26,4 +27,5 @@ abstract class ExpressionBlock : Block(), Returnable {
         }
         return null
     }
+
 }

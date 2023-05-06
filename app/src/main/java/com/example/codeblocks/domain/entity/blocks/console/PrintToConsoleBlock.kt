@@ -7,7 +7,8 @@ import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpressionBlockBundle
 import kotlin.reflect.KClass
 
-class PrintToConsoleBlock: Block() {
+class PrintToConsoleBlock : Block() {
+
     override val paramType: KClass<out ParamBundle> = SingleExpressionBlockBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
@@ -17,4 +18,5 @@ class PrintToConsoleBlock: Block() {
         //TODO implement in-app console
         Log.d("INTERPRETER", returnResult.getValue().toString())
     }
+
 }

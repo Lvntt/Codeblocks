@@ -10,6 +10,7 @@ import com.example.codeblocks.domain.entity.variables.BooleanVariable
 import kotlin.reflect.KClass
 
 class IfBlock : BlockWithNesting() {
+
     override val paramType: KClass<out ParamBundle> = SingleExpressionBlockBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
@@ -21,20 +22,20 @@ class IfBlock : BlockWithNesting() {
         if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception() }
         val booleanValue = returnedValue.getValue() ?: /*TODO error handling*/ throw Exception()
 
-        if (booleanValue) {
-            val nestedScope = NestedScope(scope)
-            for (block in nestedBlocks) {
-                block.setupScope(nestedScope)
-                block.execute()
-                if (block is BlockWithNesting && block.stopCallingBlock != null) {
-                    stopCallingBlock = block.stopCallingBlock
-                    block.stopCallingBlock = null
-                    return
-                } else if (block is StopExecutionBlock) {
-                    stopCallingBlock = block
-                    return
-                }
+        if (!booleanValue) { return }
+        val nestedScope = NestedScope(scope)
+        for (block in nestedBlocks) {
+            block.setupScope(nestedScope)
+            block.execute()
+            if (block is BlockWithNesting && block.stopCallingBlock != null) {
+                stopCallingBlock = block.stopCallingBlock
+                block.stopCallingBlock = null
+                return
+            } else if (block is StopExecutionBlock) {
+                stopCallingBlock = block
+                return
             }
         }
     }
+
 }

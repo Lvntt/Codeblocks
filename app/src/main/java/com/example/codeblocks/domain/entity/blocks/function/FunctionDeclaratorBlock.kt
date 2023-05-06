@@ -7,6 +7,7 @@ import com.example.codeblocks.domain.entity.Scope
 import kotlin.reflect.KClass
 
 class FunctionDeclaratorBlock : BlockWithNesting() {
+
     override val paramType: KClass<out ParamBundle> = FunctionSignature::class
 
     override fun executeAfterChecks(scope: Scope) {

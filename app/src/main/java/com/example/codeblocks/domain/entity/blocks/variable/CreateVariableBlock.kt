@@ -7,11 +7,13 @@ import com.example.codeblocks.domain.entity.parambundles.variable.CreateVariable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-class CreateVariableBlock: Block() {
+class CreateVariableBlock : Block() {
+
     override val paramType: KClass<out ParamBundle> = CreateVariableBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
         val variable = (paramBundle as CreateVariableBundle).type.primaryConstructor?.call((paramBundle as CreateVariableBundle).name) ?: /*TODO error handling*/ throw Exception()
         scope.addVariable(variable)
     }
+
 }

@@ -7,7 +7,8 @@ import com.example.codeblocks.domain.entity.parambundles.variable.SetVariableBun
 import com.example.codeblocks.domain.entity.variables.NullVariable
 import kotlin.reflect.KClass
 
-class SetVariableBlock: Block() {
+class SetVariableBlock : Block() {
+
     override val paramType: KClass<out ParamBundle> = SetVariableBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
@@ -15,9 +16,9 @@ class SetVariableBlock: Block() {
         val returnResult = (paramBundle as SetVariableBundle).expression.getReturnedValue() ?: /*TODO error handling*/ throw Exception()
 
         val originalVariable = scope.findVariable((paramBundle as SetVariableBundle).name)
-        if(originalVariable != null && originalVariable::class == returnResult::class) {
+        if (originalVariable != null && originalVariable::class == returnResult::class) {
             scope.setVariable(originalVariable.name, returnResult)
-        } else if(originalVariable != null && returnResult is NullVariable) {
+        } else if (originalVariable != null && returnResult is NullVariable) {
             val originalNullCopy = originalVariable.copy(originalVariable.name)
             originalNullCopy.setValue(null)
             scope.setVariable(originalVariable.name, originalNullCopy)
@@ -25,4 +26,5 @@ class SetVariableBlock: Block() {
             //TODO error handling
         }
     }
+
 }

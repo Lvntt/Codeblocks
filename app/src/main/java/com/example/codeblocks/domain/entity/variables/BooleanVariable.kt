@@ -3,7 +3,8 @@ package com.example.codeblocks.domain.entity.variables
 import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
-class BooleanVariable(name: String): Variable(name) {
+class BooleanVariable(name: String) : Variable(name) {
+
     override val valueType: KClass<out Any> = Boolean::class
     private var value: Boolean? = null
 
@@ -18,4 +19,5 @@ class BooleanVariable(name: String): Variable(name) {
         newVariable.setValue(value)
         return newVariable
     }
+
 }
