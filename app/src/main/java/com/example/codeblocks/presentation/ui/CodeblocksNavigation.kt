@@ -30,6 +30,9 @@ fun Navigation(navController: NavHostController) {
         composable(CodeblocksDestinations.OVERVIEW_ROUTE) {
             OverviewScreen()
         }
+        composable(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE) {
+            BlocksAdditionScreen()
+        }
     }
 }
 

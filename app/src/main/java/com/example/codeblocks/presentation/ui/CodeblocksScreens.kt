@@ -42,3 +42,15 @@ fun OverviewScreen(
         Text(text = "This is overview screen!")
     }
 }
+
+@Composable
+fun BlocksAdditionScreen(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "This is blocks addition screen!")
+    }
+}

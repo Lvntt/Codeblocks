@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Codeblocks</string>
+    <string name="appName">Codeblocks</string>
+    <string name="addBlocks">Add blocks</string>
+    <string name="backToEditor">Back to editor</string>
 </resources>
