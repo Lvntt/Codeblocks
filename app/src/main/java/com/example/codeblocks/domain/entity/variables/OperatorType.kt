@@ -6,5 +6,11 @@ enum class OperatorType {
     MULTIPLICATION,
     DIVISION,
     REMAINDER,
-    EQUALITY
+    EQUALITY,
+    NOT_EQUAL,
+    COMPARE_TO,
+    MORE,
+    MORE_OR_EQUAL,
+    LESS,
+    LESS_OR_EQUAL
 }
