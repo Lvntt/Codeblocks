@@ -1,66 +1,95 @@
 package com.example.codeblocks
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.codeblocks.domain.entity.Program
-import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
-import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
-import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
-import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
-import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
-import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
-import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
-import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
-import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
-import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBlock
-import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
-import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpressionBlockBundle
-import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
-import com.example.codeblocks.domain.entity.parambundles.expression.VariableNameBundle
-import com.example.codeblocks.domain.entity.parambundles.expression.VariableValueBundle
-import com.example.codeblocks.domain.entity.parambundles.function.FunctionParamValues
-import com.example.codeblocks.domain.entity.parambundles.function.FunctionReturnBundle
-import com.example.codeblocks.domain.entity.parambundles.function.FunctionSignature
-import com.example.codeblocks.domain.entity.variables.IntegerVariable
-import com.example.codeblocks.ui.theme.CodeblocksTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.codeblocks.presentation.CodeblocksDestinations
+import com.example.codeblocks.presentation.ui.BottomNavItems
+import com.example.codeblocks.presentation.ui.BottomNavigationBar
+import com.example.codeblocks.presentation.ui.Navigation
+import com.example.codeblocks.presentation.ui.theme.CodeblocksTheme
 
 class MainActivity : ComponentActivity() {
+
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
         setContent {
             CodeblocksTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                val navController = rememberNavController()
+                var fabClicked by remember { mutableStateOf(false) }
+                val backStackEntry = navController.currentBackStackEntryAsState()
+                val currentRoute = backStackEntry.value?.destination?.route
+
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationBar(
+                            buttons = BottomNavItems.getBottomNavItems(),
+                            navController = navController,
+                            onItemClick = {
+                                fabClicked = false
+                                navController.navigate(it.route)
+                            }
+                        )
+                    },
+                    floatingActionButton = {
+                        if (currentRoute != CodeblocksDestinations.EDITOR_ROUTE &&
+                            currentRoute != CodeblocksDestinations.BLOCKS_ADDITION_ROUTE) {
+                            return@Scaffold
+                        }
+                        ExtendedFloatingActionButton(
+                            onClick = {
+                                if (fabClicked) {
+                                    navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
+                                } else {
+                                    navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
+                                }
+                                fabClicked = !fabClicked
+                            },
+                            icon = {
+                                if (fabClicked) {
+                                    Icon(
+                                        imageVector = Icons.Default.ArrowBack,
+                                        contentDescription = getString(R.string.backToEditor)
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = getString(R.string.addBlocks)
+                                    )
+                                }
+                            },
+                            text = {
+                                if (fabClicked) {
+                                    Text(text = getString(R.string.backToEditor))
+                                } else {
+                                    Text(text = getString(R.string.addBlocks))
+                                }
+                            }
+                        )
+                    }
                 ) {
-                    Greeting("Android")
+                    Navigation(navController = navController)
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CodeblocksTheme {
-        Greeting("Android")
-    }
+    
 }
