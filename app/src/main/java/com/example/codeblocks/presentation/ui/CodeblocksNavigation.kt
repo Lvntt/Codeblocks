@@ -14,6 +14,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.codeblocks.presentation.CodeblocksDestinations
+import com.example.codeblocks.presentation.ui.view.BlocksAdditionScreen
+import com.example.codeblocks.presentation.ui.view.ConsoleScreen
+import com.example.codeblocks.presentation.ui.view.EditorScreen
+import com.example.codeblocks.presentation.ui.view.OverviewScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
