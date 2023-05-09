@@ -2,4 +2,7 @@
     <string name="appName">Codeblocks</string>
     <string name="addBlocks">Add blocks</string>
     <string name="backToEditor">Back to editor</string>
+    <string name="create">Create</string>
+    <string name="variable">variable</string>
+    <string name="namePlaceholder">name</string>
 </resources>
