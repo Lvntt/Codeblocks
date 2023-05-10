@@ -1,4 +1,4 @@
-package com.example.codeblocks.presentation.ui.view
+package com.example.codeblocks.ui.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,22 +29,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.example.codeblocks.R
-import com.example.codeblocks.presentation.ui.theme.BlockAccentedTextStyle
-import com.example.codeblocks.presentation.ui.theme.BlockElementShape
-import com.example.codeblocks.presentation.ui.theme.BlockHeight
-import com.example.codeblocks.presentation.ui.theme.BlockMinimumWidth
-import com.example.codeblocks.presentation.ui.theme.BlockPadding
-import com.example.codeblocks.presentation.ui.theme.BlockRegularTextStyle
-import com.example.codeblocks.presentation.ui.theme.InnerBlockElementStartPadding
-import com.example.codeblocks.presentation.ui.theme.TextFieldHeight
-import com.example.codeblocks.presentation.ui.theme.TextFieldMinimumWidth
-import com.example.codeblocks.presentation.ui.theme.TextFieldPadding
-import com.example.codeblocks.presentation.ui.theme.VariableTypeChoiceHeight
-import com.example.codeblocks.presentation.ui.theme.VariableTypeChoiceWidth
+import com.example.codeblocks.ui.theme.BlockAccentedTextStyle
+import com.example.codeblocks.ui.theme.BlockElementShape
+import com.example.codeblocks.ui.theme.BlockHeight
+import com.example.codeblocks.ui.theme.BlockMinimumWidth
+import com.example.codeblocks.ui.theme.BlockPadding
+import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.InnerBlockElementStartPadding
+import com.example.codeblocks.ui.theme.TextFieldHeight
+import com.example.codeblocks.ui.theme.TextFieldMinimumWidth
+import com.example.codeblocks.ui.theme.TextFieldPadding
+import com.example.codeblocks.ui.theme.VariableTypeChoiceHeight
+import com.example.codeblocks.ui.theme.VariableTypeChoiceWidth
 
 @Composable
 fun VariableDeclarationBlock(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isEditable: Boolean = true
 ) {
     val availableVariableTypes = listOf("int", "boolean", "double", "float")
     var textFieldContent by remember { mutableStateOf("") }

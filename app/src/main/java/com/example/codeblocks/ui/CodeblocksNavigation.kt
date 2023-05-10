@@ -1,4 +1,4 @@
-package com.example.codeblocks.presentation.ui
+package com.example.codeblocks.ui
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -13,11 +13,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.codeblocks.presentation.CodeblocksDestinations
-import com.example.codeblocks.presentation.ui.view.BlocksAdditionScreen
-import com.example.codeblocks.presentation.ui.view.ConsoleScreen
-import com.example.codeblocks.presentation.ui.view.EditorScreen
-import com.example.codeblocks.presentation.ui.view.OverviewScreen
+import com.example.codeblocks.ui.view.BlocksAdditionScreen
+import com.example.codeblocks.ui.view.ConsoleScreen
+import com.example.codeblocks.ui.view.EditorScreen
+import com.example.codeblocks.ui.view.OverviewScreen
+
+object CodeblocksDestinations {
+    const val EDITOR_ROUTE = "editor"
+    const val CONSOLE_ROUTE = "console"
+    const val OVERVIEW_ROUTE = "overview"
+    const val BLOCKS_ADDITION_ROUTE = "blocks_addition"
+}
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -26,7 +32,7 @@ fun Navigation(navController: NavHostController) {
         startDestination = CodeblocksDestinations.EDITOR_ROUTE
     ) {
         composable(CodeblocksDestinations.EDITOR_ROUTE) {
-            EditorScreen()
+            EditorScreen(navController = navController)
         }
         composable(CodeblocksDestinations.CONSOLE_ROUTE) {
             ConsoleScreen()

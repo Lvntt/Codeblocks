@@ -18,11 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.codeblocks.presentation.CodeblocksDestinations
-import com.example.codeblocks.presentation.ui.BottomNavItems
-import com.example.codeblocks.presentation.ui.BottomNavigationBar
-import com.example.codeblocks.presentation.ui.Navigation
-import com.example.codeblocks.presentation.ui.theme.CodeblocksTheme
+import com.example.codeblocks.ui.BottomNavItems
+import com.example.codeblocks.ui.BottomNavigationBar
+import com.example.codeblocks.ui.CodeblocksDestinations
+import com.example.codeblocks.ui.Navigation
+import com.example.codeblocks.ui.theme.CodeblocksTheme
 
 class MainActivity : ComponentActivity() {
 

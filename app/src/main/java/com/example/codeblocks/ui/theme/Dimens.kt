@@ -1,8 +1,9 @@
-package com.example.codeblocks.presentation.ui.theme
+package com.example.codeblocks.ui.theme
 
 import androidx.compose.ui.unit.dp
 
 val BlockHeight = 80.dp
+val SmallBlockMinimumWidth = 150.dp
 val BlockMinimumWidth = 350.dp
 val BlockPadding = 16.dp
 val InnerBlockElementStartPadding = 12.dp

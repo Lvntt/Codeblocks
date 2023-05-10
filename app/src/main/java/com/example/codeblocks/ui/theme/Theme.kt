@@ -1,4 +1,4 @@
-package com.example.codeblocks.presentation.ui.theme
+package com.example.codeblocks.ui.theme
 
 import android.app.Activity
 import android.os.Build
