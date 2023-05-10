@@ -7,16 +7,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.codeblocks.presentation.CodeEditorViewModel
 import com.example.codeblocks.ui.view.BlocksAdditionScreen
 import com.example.codeblocks.ui.view.ConsoleScreen
 import com.example.codeblocks.ui.view.EditorScreen
 import com.example.codeblocks.ui.view.OverviewScreen
+import org.koin.androidx.compose.koinViewModel
 
 object CodeblocksDestinations {
     const val EDITOR_ROUTE = "editor"
@@ -26,13 +27,19 @@ object CodeblocksDestinations {
 }
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(
+    navController: NavHostController,
+    viewModel: CodeEditorViewModel = koinViewModel()
+) {
     NavHost(
         navController = navController,
         startDestination = CodeblocksDestinations.EDITOR_ROUTE
     ) {
         composable(CodeblocksDestinations.EDITOR_ROUTE) {
-            EditorScreen(navController = navController)
+            EditorScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
         }
         composable(CodeblocksDestinations.CONSOLE_ROUTE) {
             ConsoleScreen()
@@ -41,7 +48,10 @@ fun Navigation(navController: NavHostController) {
             OverviewScreen()
         }
         composable(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE) {
-            BlocksAdditionScreen()
+            BlocksAdditionScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
         }
     }
 }
@@ -57,8 +67,7 @@ fun BottomNavigationBar(
 
     NavigationBar(
         modifier = modifier,
-        containerColor = Color.LightGray,
-        tonalElevation = 5.dp
+        containerColor = Color.LightGray
     ) {
         buttons.forEach { item ->
             val selected = item.route == backStackEntry.value?.destination?.route

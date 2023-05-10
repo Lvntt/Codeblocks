@@ -45,13 +45,9 @@ import com.example.codeblocks.ui.theme.VariableTypeChoiceWidth
 @Composable
 fun VariableDeclarationBlock(
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
-    val availableVariableTypes = listOf("int", "boolean", "double", "float")
-    var textFieldContent by remember { mutableStateOf("") }
-    var dropdownMenuExpanded by remember { mutableStateOf(false) }
-    var dropdownMenuSelectedIndex by remember { mutableStateOf(0) }
-
     Box(
         modifier = modifier
             .height(BlockHeight)
@@ -59,6 +55,11 @@ fun VariableDeclarationBlock(
             .clip(BlockElementShape)
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(BlockPadding)
+            .clickable {
+                if (!isEditable) {
+                    onClick()
+                }
+            }
     ) {
         Row(
             modifier = modifier.fillMaxSize(),
@@ -75,46 +76,9 @@ fun VariableDeclarationBlock(
                     style = BlockRegularTextStyle
                 )
             }
-            Box(
-                modifier = modifier
-                    .padding(start = InnerBlockElementStartPadding)
-                    .height(VariableTypeChoiceHeight)
-                    .width(VariableTypeChoiceWidth)
-                    .clip(BlockElementShape)
-                    .background(MaterialTheme.colorScheme.background),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = availableVariableTypes[dropdownMenuSelectedIndex],
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = modifier
-                        .clickable {
-                        dropdownMenuExpanded = true
-                    },
-                    style = BlockAccentedTextStyle
-                )
-                DropdownMenu(
-                    expanded = dropdownMenuExpanded,
-                    onDismissRequest = {
-                        dropdownMenuExpanded = false
-                    }
-                ) {
-                    availableVariableTypes.forEachIndexed { index, s ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = s,
-                                    style = BlockRegularTextStyle
-                                )
-                            },
-                            onClick = {
-                                dropdownMenuSelectedIndex = index
-                                dropdownMenuExpanded = false
-                            }
-                        )
-                    }
-                }
-            }
+
+            VariableTypesDropdownMenu()
+
             Box(
                 modifier = modifier.padding(start = InnerBlockElementStartPadding),
                 contentAlignment = Alignment.Center
@@ -125,36 +89,96 @@ fun VariableDeclarationBlock(
                     style = BlockRegularTextStyle
                 )
             }
-            Box(
-                modifier = modifier
-                    .padding(start = InnerBlockElementStartPadding)
-                    .width(IntrinsicSize.Min)
-                    .height(TextFieldHeight)
-                    .clip(BlockElementShape)
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = TextFieldPadding),
-                contentAlignment = Alignment.Center
-            ) {
-                BasicTextField(
-                    value = textFieldContent,
-                    onValueChange = {
-                        textFieldContent = it
+
+            VariableNameTextField(isEditable = isEditable)
+        }
+    }
+}
+
+@Composable
+fun VariableTypesDropdownMenu(modifier: Modifier = Modifier) {
+    val availableVariableTypes = listOf("int", "boolean", "double", "float")
+    var dropdownMenuExpanded by remember { mutableStateOf(false) }
+    var dropdownMenuSelectedIndex by remember { mutableStateOf(0) }
+
+    Box(
+        modifier = modifier
+            .padding(start = InnerBlockElementStartPadding)
+            .height(VariableTypeChoiceHeight)
+            .width(VariableTypeChoiceWidth)
+            .clip(BlockElementShape)
+            .background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = availableVariableTypes[dropdownMenuSelectedIndex],
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = modifier
+                .clickable {
+                    dropdownMenuExpanded = true
+                },
+            style = BlockAccentedTextStyle
+        )
+        DropdownMenu(
+            expanded = dropdownMenuExpanded,
+            onDismissRequest = {
+                dropdownMenuExpanded = false
+            }
+        ) {
+            availableVariableTypes.forEachIndexed { index, s ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = s,
+                            style = BlockRegularTextStyle
+                        )
                     },
-                    modifier = modifier.widthIn(TextFieldMinimumWidth, Dp.Infinity),
-                    singleLine = true,
-                    textStyle = BlockAccentedTextStyle.copy(textAlign = TextAlign.Center),
-                    decorationBox = { innerTextField ->
-                        if (textFieldContent.isEmpty()) {
-                            Text(
-                                text = stringResource(id = R.string.namePlaceholder),
-                                color = Color.LightGray,
-                                style = BlockRegularTextStyle.copy(textAlign = TextAlign.Center)
-                            )
-                        }
-                        innerTextField()
+                    onClick = {
+                        dropdownMenuSelectedIndex = index
+                        dropdownMenuExpanded = false
                     }
                 )
             }
         }
+    }
+}
+
+@Composable
+fun VariableNameTextField(
+    modifier: Modifier = Modifier,
+    isEditable: Boolean = false
+) {
+    var textFieldContent by remember { mutableStateOf("") }
+
+    Box(
+        modifier = modifier
+            .padding(start = InnerBlockElementStartPadding)
+            .width(IntrinsicSize.Min)
+            .height(TextFieldHeight)
+            .clip(BlockElementShape)
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = TextFieldPadding),
+        contentAlignment = Alignment.Center
+    ) {
+        BasicTextField(
+            enabled = isEditable,
+            value = textFieldContent,
+            onValueChange = {
+                textFieldContent = it
+            },
+            modifier = modifier.widthIn(TextFieldMinimumWidth, Dp.Infinity),
+            singleLine = true,
+            textStyle = BlockAccentedTextStyle.copy(textAlign = TextAlign.Center),
+            decorationBox = { innerTextField ->
+                if (textFieldContent.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.namePlaceholder),
+                        color = Color.LightGray,
+                        style = BlockRegularTextStyle.copy(textAlign = TextAlign.Center)
+                    )
+                }
+                innerTextField()
+            }
+        )
     }
 }

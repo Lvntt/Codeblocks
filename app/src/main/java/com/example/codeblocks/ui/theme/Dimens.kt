@@ -6,6 +6,7 @@ val BlockHeight = 80.dp
 val SmallBlockMinimumWidth = 150.dp
 val BlockMinimumWidth = 350.dp
 val BlockPadding = 16.dp
+val PaddingBetweenBlocks = 8.dp
 val InnerBlockElementStartPadding = 12.dp
 val VariableTypeChoiceHeight = 48.dp
 val VariableTypeChoiceWidth = 80.dp
