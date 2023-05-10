@@ -8,12 +8,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.presentation.CodeEditorViewModel
 import com.example.codeblocks.ui.AvailableBlocks.availableBlocks
 import com.example.codeblocks.ui.CodeblocksDestinations
+import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 
 @Composable
@@ -24,7 +24,7 @@ fun BlocksAdditionScreen(
 ) {
     LazyRow(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(BlockPadding)
     ) {
         item {
             LazyColumn(
