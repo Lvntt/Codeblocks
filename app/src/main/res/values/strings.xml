@@ -7,4 +7,12 @@
     <string name="variable">variable</string>
     <string name="namePlaceholder">name</string>
     <string name="start">start</string>
+    <string name="addBlock">add block</string>
+    <string name="byteType">byte</string>
+    <string name="shortType">short</string>
+    <string name="intType">int</string>
+    <string name="longType">long</string>
+    <string name="floatType">float</string>
+    <string name="doubleType">double</string>
+    <string name="booleanType">boolean</string>
 </resources>

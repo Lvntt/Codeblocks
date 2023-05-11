@@ -7,12 +7,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
-import com.example.codeblocks.presentation.CodeEditorViewModel
+import com.example.codeblocks.presentation.block.BlockData
+import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
+import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
@@ -23,7 +23,7 @@ fun EditorScreen(
     viewModel: CodeEditorViewModel,
     modifier: Modifier = Modifier
 ) {
-    val blocks: List<Block> by viewModel.programBlocks
+    val blocks: List<BlockData> = viewModel.programBlocks
 
     LazyRow(
         modifier = modifier.fillMaxSize(),
@@ -40,15 +40,23 @@ fun EditorScreen(
                 }
 
                 items(blocks) {currentBlock ->
-                    when (currentBlock::class) {
+                    when (currentBlock.blockClass) {
                         CreateVariableBlock::class -> {
-                            VariableDeclarationBlock()
+                            VariableDeclarationBlock(parameters = currentBlock.blockParametersData as VariableDeclarationBlockParameters)
                         }
                     }
                 }
 
                 item {
                     AddBlock(
+                        onClick = {
+                            navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
+                        }
+                    )
+                }
+
+                item {
+                    AddExpressionBlock(
                         onClick = {
                             navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
                         }

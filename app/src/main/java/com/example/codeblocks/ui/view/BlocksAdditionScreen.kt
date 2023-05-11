@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
-import com.example.codeblocks.presentation.CodeEditorViewModel
+import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.AvailableBlocks.availableBlocks
 import com.example.codeblocks.ui.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockPadding

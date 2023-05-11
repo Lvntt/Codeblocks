@@ -29,6 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.example.codeblocks.R
+import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
+import com.example.codeblocks.ui.AvailableVariableTypes
 import com.example.codeblocks.ui.theme.BlockAccentedTextStyle
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockHeight
@@ -45,6 +47,7 @@ import com.example.codeblocks.ui.theme.VariableTypeChoiceWidth
 @Composable
 fun VariableDeclarationBlock(
     modifier: Modifier = Modifier,
+    parameters: VariableDeclarationBlockParameters = VariableDeclarationBlockParameters(),
     onClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
@@ -77,7 +80,7 @@ fun VariableDeclarationBlock(
                 )
             }
 
-            VariableTypesDropdownMenu()
+            VariableTypesDropdownMenu(parameters = parameters)
 
             Box(
                 modifier = modifier.padding(start = InnerBlockElementStartPadding),
@@ -90,16 +93,23 @@ fun VariableDeclarationBlock(
                 )
             }
 
-            VariableNameTextField(isEditable = isEditable)
+            VariableNameTextField(
+                parameters = parameters,
+                isEditable = isEditable
+            )
         }
     }
 }
 
 @Composable
-fun VariableTypesDropdownMenu(modifier: Modifier = Modifier) {
-    val availableVariableTypes = listOf("int", "boolean", "double", "float")
+fun VariableTypesDropdownMenu(
+    parameters: VariableDeclarationBlockParameters,
+    modifier: Modifier = Modifier
+) {
+    val chosenTypeStringRes = AvailableVariableTypes.typenameToKClass.filterValues { it == parameters.type }.keys.toList()[0]
+    val availableVariableTypes = AvailableVariableTypes.typenameToKClass.keys.toList()
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
-    var dropdownMenuSelectedIndex by remember { mutableStateOf(0) }
+    var dropdownMenuSelectedItem by remember { mutableStateOf(chosenTypeStringRes) }
 
     Box(
         modifier = modifier
@@ -111,7 +121,7 @@ fun VariableTypesDropdownMenu(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = availableVariableTypes[dropdownMenuSelectedIndex],
+            text = stringResource(id = dropdownMenuSelectedItem),
             color = MaterialTheme.colorScheme.onBackground,
             modifier = modifier
                 .clickable {
@@ -125,17 +135,21 @@ fun VariableTypesDropdownMenu(modifier: Modifier = Modifier) {
                 dropdownMenuExpanded = false
             }
         ) {
-            availableVariableTypes.forEachIndexed { index, s ->
+            availableVariableTypes.forEach { s ->
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = s,
+                            text = stringResource(id = s),
                             style = BlockRegularTextStyle
                         )
                     },
                     onClick = {
-                        dropdownMenuSelectedIndex = index
-                        dropdownMenuExpanded = false
+                        val blockKClass = AvailableVariableTypes.typenameToKClass[s]
+                        if (blockKClass != null) {
+                            parameters.type = blockKClass
+                            dropdownMenuSelectedItem = s
+                            dropdownMenuExpanded = false
+                        }
                     }
                 )
             }
@@ -145,10 +159,11 @@ fun VariableTypesDropdownMenu(modifier: Modifier = Modifier) {
 
 @Composable
 fun VariableNameTextField(
+    parameters: VariableDeclarationBlockParameters,
     modifier: Modifier = Modifier,
     isEditable: Boolean = false
 ) {
-    var textFieldContent by remember { mutableStateOf("") }
+    var textFieldContent by remember { mutableStateOf(parameters.name) }
 
     Box(
         modifier = modifier
@@ -165,6 +180,7 @@ fun VariableNameTextField(
             value = textFieldContent,
             onValueChange = {
                 textFieldContent = it
+                parameters.name = it
             },
             modifier = modifier.widthIn(TextFieldMinimumWidth, Dp.Infinity),
             singleLine = true,

@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.codeblocks.presentation.CodeEditorViewModel
+import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.view.BlocksAdditionScreen
 import com.example.codeblocks.ui.view.ConsoleScreen
 import com.example.codeblocks.ui.view.EditorScreen

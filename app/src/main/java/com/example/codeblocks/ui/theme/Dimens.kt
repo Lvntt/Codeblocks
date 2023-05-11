@@ -10,6 +10,7 @@ val PaddingBetweenBlocks = 8.dp
 val InnerBlockElementStartPadding = 12.dp
 val VariableTypeChoiceHeight = 48.dp
 val VariableTypeChoiceWidth = 80.dp
+val AddExpressionButtonSize = 48.dp
 val TextFieldHeight = 48.dp
 val TextFieldPadding = 8.dp
 val TextFieldMinimumWidth = 100.dp
