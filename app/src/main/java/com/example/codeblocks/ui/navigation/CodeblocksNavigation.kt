@@ -1,4 +1,4 @@
-package com.example.codeblocks.ui
+package com.example.codeblocks.ui.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -13,10 +13,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
-import com.example.codeblocks.ui.view.BlocksAdditionScreen
-import com.example.codeblocks.ui.view.ConsoleScreen
-import com.example.codeblocks.ui.view.EditorScreen
-import com.example.codeblocks.ui.view.OverviewScreen
+import com.example.codeblocks.ui.AvailableBlocks
+import com.example.codeblocks.ui.view.screens.BlocksAdditionScreen
+import com.example.codeblocks.ui.view.screens.ConsoleScreen
+import com.example.codeblocks.ui.view.screens.EditorScreen
+import com.example.codeblocks.ui.view.screens.ExpressionAdditionScreen
+import com.example.codeblocks.ui.view.screens.OverviewScreen
 import org.koin.androidx.compose.koinViewModel
 
 object CodeblocksDestinations {
@@ -24,6 +26,7 @@ object CodeblocksDestinations {
     const val CONSOLE_ROUTE = "console"
     const val OVERVIEW_ROUTE = "overview"
     const val BLOCKS_ADDITION_ROUTE = "blocks_addition"
+    const val EXPRESSION_ADDITION_ROUTE = "expression_addition"
 }
 
 @Composable
@@ -49,6 +52,14 @@ fun Navigation(
         }
         composable(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE) {
             BlocksAdditionScreen(
+                availableBlocks = AvailableBlocks.availableBlocks,
+                navController = navController,
+                viewModel = viewModel
+            )
+        }
+        composable(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE) {
+            ExpressionAdditionScreen(
+                availableExpressions = AvailableBlocks.availableExpressions,
                 navController = navController,
                 viewModel = viewModel
             )

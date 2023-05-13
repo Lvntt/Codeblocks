@@ -1,4 +1,4 @@
-package com.example.codeblocks.ui.view
+package com.example.codeblocks.ui.view.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,17 +1,16 @@
-package com.example.codeblocks.ui.view
+package com.example.codeblocks.ui.view.blocks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -24,9 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.example.codeblocks.R
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
@@ -37,18 +34,16 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
-import com.example.codeblocks.ui.theme.InnerBlockElementStartPadding
-import com.example.codeblocks.ui.theme.TextFieldHeight
-import com.example.codeblocks.ui.theme.TextFieldMinimumWidth
-import com.example.codeblocks.ui.theme.TextFieldPadding
+import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.theme.VariableTypeChoiceHeight
 import com.example.codeblocks.ui.theme.VariableTypeChoiceWidth
+import com.example.codeblocks.ui.view.common.VariableNameTextField
 
 @Composable
 fun VariableDeclarationBlock(
     modifier: Modifier = Modifier,
     parameters: VariableDeclarationBlockParameters = VariableDeclarationBlockParameters(),
-    onClick: () -> Unit = {},
+    onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
     Box(
@@ -60,7 +55,7 @@ fun VariableDeclarationBlock(
             .padding(BlockPadding)
             .clickable {
                 if (!isEditable) {
-                    onClick()
+                    onAddBlockClick()
                 }
             }
     ) {
@@ -80,10 +75,17 @@ fun VariableDeclarationBlock(
                 )
             }
 
+            Spacer(
+                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+            )
+
             VariableTypesDropdownMenu(parameters = parameters)
 
+            Spacer(
+                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+            )
+
             Box(
-                modifier = modifier.padding(start = InnerBlockElementStartPadding),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -93,8 +95,16 @@ fun VariableDeclarationBlock(
                 )
             }
 
+            Spacer(
+                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+            )
+
             VariableNameTextField(
-                parameters = parameters,
+                parameterName = parameters.name,
+                onValueChange = {
+                    parameters.name = it
+                },
+                placeholderId = R.string.namePlaceholder,
                 isEditable = isEditable
             )
         }
@@ -106,14 +116,14 @@ fun VariableTypesDropdownMenu(
     parameters: VariableDeclarationBlockParameters,
     modifier: Modifier = Modifier
 ) {
-    val chosenTypeStringRes = AvailableVariableTypes.typenameToKClass.filterValues { it == parameters.type }.keys.toList()[0]
+    val chosenTypeStringRes =
+        AvailableVariableTypes.typenameToKClass.filterValues { it == parameters.type }.keys.toList()[0]
     val availableVariableTypes = AvailableVariableTypes.typenameToKClass.keys.toList()
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
     var dropdownMenuSelectedItem by remember { mutableStateOf(chosenTypeStringRes) }
 
     Box(
         modifier = modifier
-            .padding(start = InnerBlockElementStartPadding)
             .height(VariableTypeChoiceHeight)
             .width(VariableTypeChoiceWidth)
             .clip(BlockElementShape)
@@ -154,47 +164,5 @@ fun VariableTypesDropdownMenu(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun VariableNameTextField(
-    parameters: VariableDeclarationBlockParameters,
-    modifier: Modifier = Modifier,
-    isEditable: Boolean = false
-) {
-    var textFieldContent by remember { mutableStateOf(parameters.name) }
-
-    Box(
-        modifier = modifier
-            .padding(start = InnerBlockElementStartPadding)
-            .width(IntrinsicSize.Min)
-            .height(TextFieldHeight)
-            .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = TextFieldPadding),
-        contentAlignment = Alignment.Center
-    ) {
-        BasicTextField(
-            enabled = isEditable,
-            value = textFieldContent,
-            onValueChange = {
-                textFieldContent = it
-                parameters.name = it
-            },
-            modifier = modifier.widthIn(TextFieldMinimumWidth, Dp.Infinity),
-            singleLine = true,
-            textStyle = BlockAccentedTextStyle.copy(textAlign = TextAlign.Center),
-            decorationBox = { innerTextField ->
-                if (textFieldContent.isEmpty()) {
-                    Text(
-                        text = stringResource(id = R.string.namePlaceholder),
-                        color = Color.LightGray,
-                        style = BlockRegularTextStyle.copy(textAlign = TextAlign.Center)
-                    )
-                }
-                innerTextField()
-            }
-        )
     }
 }

@@ -1,4 +1,4 @@
-package com.example.codeblocks.ui
+package com.example.codeblocks.ui.navigation
 
 import androidx.annotation.DrawableRes
 

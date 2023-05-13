@@ -4,10 +4,16 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.BlockWithNesting
+import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
-import com.example.codeblocks.presentation.block.BlockData
-import com.example.codeblocks.presentation.block.BlockWithNestingData
-import com.example.codeblocks.presentation.block.SimpleBlockData
+import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.presentation.block.data.BlockData
+import com.example.codeblocks.presentation.block.data.BlockWithNestingData
+import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import com.example.codeblocks.presentation.block.data.SimpleBlockData
+import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
+import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -18,28 +24,53 @@ class CodeEditorViewModel : ViewModel() {
     private val _programBlocks: MutableList<BlockData> = mutableStateListOf()
     val programBlocks: List<BlockData> = _programBlocks
 
+    private var _currentAddBlockCallback: (KClass<out Block>) -> Unit = {}
+
+    // TODO VariableByValueBlock
     private val blockTypeToParameter = mapOf(
-        CreateVariableBlock::class to VariableDeclarationBlockParameters::class
+        CreateVariableBlock::class to VariableDeclarationBlockParameters::class,
+        SetVariableBlock::class to VariableAssignmentBlockParameters::class,
+        VariableByNameBlock::class to StringExpressionParameter::class
     )
 
-    fun onAddBlockClick(blockToCreate: KClass<out Block>) {
-        val blockParameters = blockTypeToParameter[blockToCreate]
+    fun setAddBlockCallback(callback: (KClass<out Block>) -> Unit) {
+        _currentAddBlockCallback = callback
+    }
+
+    fun executeCallback(type: KClass<out Block>) {
+        _currentAddBlockCallback(type)
+        _currentAddBlockCallback = {}
+    }
+
+    fun createBlockDataByType(type: KClass<out Block>): BlockData? {
+        val blockParameters = blockTypeToParameter[type]
         if (blockParameters != null) {
-            _programBlocks.add(
-                if (blockToCreate.isSubclassOf(BlockWithNesting::class)) {
-                    BlockWithNestingData(
-                        blockToCreate,
-                        blockParameters.createInstance()
-                    )
-                } else {
-                    SimpleBlockData(
-                        blockToCreate,
-                        blockParameters.createInstance()
-                    )
-                }
-            )
+            return if (type.isSubclassOf(BlockWithNesting::class)) {
+                BlockWithNestingData(
+                    type,
+                    blockParameters.createInstance()
+                )
+            } else if (type.isSubclassOf(ExpressionBlock::class)) {
+                ExpressionBlockData(
+                    type as KClass<out ExpressionBlock>,
+                    blockParameters.createInstance()
+                )
+            } else {
+                SimpleBlockData(
+                    type,
+                    blockParameters.createInstance()
+                )
+            }
         } else {
+            return null
             // TODO show error message
+        }
+    }
+
+    fun onAddBlockClick(blockToCreate: KClass<out Block>) {
+        val block = createBlockDataByType(blockToCreate)
+        if (block != null) {
+            _programBlocks.add(block)
         }
     }
 

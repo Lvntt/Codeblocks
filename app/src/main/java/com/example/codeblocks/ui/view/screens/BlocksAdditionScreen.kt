@@ -1,4 +1,4 @@
-package com.example.codeblocks.ui.view
+package com.example.codeblocks.ui.view.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,15 +9,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
+import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
-import com.example.codeblocks.ui.AvailableBlocks.availableBlocks
-import com.example.codeblocks.ui.CodeblocksDestinations
+import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
+import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
+import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
+import kotlin.reflect.KClass
 
 @Composable
 fun BlocksAdditionScreen(
+    availableBlocks: List<KClass<out Block>>,
     navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: CodeEditorViewModel
@@ -39,7 +44,13 @@ fun BlocksAdditionScreen(
                     when (currentBlockClass) {
                         CreateVariableBlock::class -> {
                             VariableDeclarationBlock(
-                                onClick = onClick,
+                                onAddBlockClick = onClick,
+                                isEditable = false
+                            )
+                        }
+                        SetVariableBlock::class -> {
+                            VariableAssignmentBlock(
+                                onAddBlockClick = onClick,
                                 isEditable = false
                             )
                         }

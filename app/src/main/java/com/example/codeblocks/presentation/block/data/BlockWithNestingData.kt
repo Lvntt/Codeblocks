@@ -1,6 +1,7 @@
-package com.example.codeblocks.presentation.block
+package com.example.codeblocks.presentation.block.data
 
 import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.presentation.block.parameters.BlockParameters
 import kotlin.reflect.KClass
 
 data class BlockWithNestingData(

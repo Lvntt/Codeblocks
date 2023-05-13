@@ -1,4 +1,4 @@
-package com.example.codeblocks.ui.view
+package com.example.codeblocks.ui.view.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,12 +10,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
-import com.example.codeblocks.presentation.block.BlockData
+import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.presentation.block.data.BlockData
+import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
-import com.example.codeblocks.ui.CodeblocksDestinations
+import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
+import com.example.codeblocks.ui.view.blocks.AddBlock
+import com.example.codeblocks.ui.view.blocks.StartBlock
+import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
+import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
 
 @Composable
 fun EditorScreen(
@@ -39,24 +46,32 @@ fun EditorScreen(
                     StartBlock()
                 }
 
-                items(blocks) {currentBlock ->
+                items(blocks) { currentBlock ->
                     when (currentBlock.blockClass) {
                         CreateVariableBlock::class -> {
-                            VariableDeclarationBlock(parameters = currentBlock.blockParametersData as VariableDeclarationBlockParameters)
+                                VariableDeclarationBlock(
+                                parameters = currentBlock.blockParametersData as VariableDeclarationBlockParameters
+                            )
+                        }
+
+                        SetVariableBlock::class -> {
+                            VariableAssignmentBlock(
+                                parameters = currentBlock.blockParametersData as VariableAssignmentBlockParameters,
+                                isEditable = true,
+                                onAddExpressionClick = {
+                                    viewModel.setAddBlockCallback {
+                                        (currentBlock.blockParametersData as VariableAssignmentBlockParameters).expression =
+                                            viewModel.createBlockDataByType(it) as ExpressionBlockData
+                                    }
+                                    navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+                                }
+                            )
                         }
                     }
                 }
 
                 item {
                     AddBlock(
-                        onClick = {
-                            navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
-                        }
-                    )
-                }
-
-                item {
-                    AddExpressionBlock(
                         onClick = {
                             navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
                         }

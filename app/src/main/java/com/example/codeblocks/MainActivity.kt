@@ -16,10 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.codeblocks.ui.BottomNavItems
-import com.example.codeblocks.ui.BottomNavigationBar
-import com.example.codeblocks.ui.CodeblocksDestinations
-import com.example.codeblocks.ui.Navigation
+import com.example.codeblocks.ui.navigation.BottomNavItems
+import com.example.codeblocks.ui.navigation.BottomNavigationBar
+import com.example.codeblocks.ui.navigation.CodeblocksDestinations
+import com.example.codeblocks.ui.navigation.Navigation
 import com.example.codeblocks.ui.theme.CodeblocksTheme
 
 class MainActivity : ComponentActivity() {
@@ -63,7 +63,8 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            CodeblocksDestinations.BLOCKS_ADDITION_ROUTE -> {
+                            CodeblocksDestinations.BLOCKS_ADDITION_ROUTE,
+                            CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE -> {
                                 ExtendedFloatingActionButton(
                                     onClick = {
                                         navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)

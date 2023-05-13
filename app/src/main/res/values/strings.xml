@@ -15,4 +15,6 @@
     <string name="floatType">float</string>
     <string name="doubleType">double</string>
     <string name="booleanType">boolean</string>
+    <string name="set">set</string>
+    <string name="to">to</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.codeblocks.ui.view
+package com.example.codeblocks.ui.view.blocks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,8 +24,9 @@ import com.example.codeblocks.ui.theme.BlockPadding
 
 @Composable
 fun AddExpressionBlock(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isEditable: Boolean = true,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -36,7 +37,9 @@ fun AddExpressionBlock(
             .background(MaterialTheme.colorScheme.tertiaryContainer)
             .padding(BlockPadding)
             .clickable {
-                onClick()
+                if (isEditable) {
+                    onClick()
+                }
             },
         contentAlignment = Alignment.Center
     ) {
