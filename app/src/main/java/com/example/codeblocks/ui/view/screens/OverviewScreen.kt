@@ -1,4 +1,4 @@
-package com.example.codeblocks.presentation.ui.view
+package com.example.codeblocks.ui.view.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,13 +8,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun BlocksAdditionScreen(
+fun OverviewScreen(
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "This is blocks addition screen!")
+        Text(text = "This is overview screen!")
     }
 }

@@ -1,4 +1,4 @@
-package com.example.codeblocks.presentation.ui.theme
+package com.example.codeblocks.ui.theme
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
