@@ -1,7 +1,6 @@
-package com.example.codeblocks.presentation.ui
+package com.example.codeblocks.ui.navigation
 
 import com.example.codeblocks.R
-import com.example.codeblocks.presentation.CodeblocksDestinations
 
 object BottomNavItems {
 
