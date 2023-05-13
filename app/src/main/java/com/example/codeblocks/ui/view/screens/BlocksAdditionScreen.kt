@@ -50,6 +50,7 @@ fun BlocksAdditionScreen(
                         }
                         SetVariableBlock::class -> {
                             VariableAssignmentBlock(
+                                navController = navController,
                                 onAddBlockClick = onClick,
                                 isEditable = false
                             )

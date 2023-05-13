@@ -12,7 +12,6 @@ import androidx.navigation.NavController
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.presentation.block.data.BlockData
-import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
@@ -50,21 +49,16 @@ fun EditorScreen(
                     when (currentBlock.blockClass) {
                         CreateVariableBlock::class -> {
                                 VariableDeclarationBlock(
-                                parameters = currentBlock.blockParametersData as VariableDeclarationBlockParameters
+                                    parameters = currentBlock.blockParametersData as VariableDeclarationBlockParameters
                             )
                         }
-
                         SetVariableBlock::class -> {
                             VariableAssignmentBlock(
+                                navController = navController,
+                                setAddBlockCallback = viewModel::setAddBlockCallback,
+                                createBlockDataByType = viewModel::createBlockDataByType,
                                 parameters = currentBlock.blockParametersData as VariableAssignmentBlockParameters,
-                                isEditable = true,
-                                onAddExpressionClick = {
-                                    viewModel.setAddBlockCallback {
-                                        (currentBlock.blockParametersData as VariableAssignmentBlockParameters).expression =
-                                            viewModel.createBlockDataByType(it) as ExpressionBlockData
-                                    }
-                                    navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
-                                }
+                                isEditable = true
                             )
                         }
                     }

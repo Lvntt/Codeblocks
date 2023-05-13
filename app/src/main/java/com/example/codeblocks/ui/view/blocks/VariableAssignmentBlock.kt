@@ -19,27 +19,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
 import com.example.codeblocks.R
-import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
-import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
-import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
+import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.presentation.block.data.BlockData
+import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
+import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
+import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import com.example.codeblocks.ui.view.common.VariableNameTextField
+import kotlin.reflect.KClass
 
 @Composable
 fun VariableAssignmentBlock(
+    navController: NavController,
     modifier: Modifier = Modifier,
+    setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit = {},
+    createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
     parameters: VariableAssignmentBlockParameters = VariableAssignmentBlockParameters(),
     onAddBlockClick: () -> Unit = {},
-    onAddExpressionClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
+    val onAddExpressionClick = {
+        setAddBlockCallback {
+            parameters.expression = createBlockDataByType(it) as ExpressionBlockData
+        }
+        navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+
     Box(
         modifier = modifier
             .height(BlockHeight)
@@ -107,19 +120,12 @@ fun VariableAssignmentBlock(
                     onClick = { onAddExpressionClick() }
                 )
             } else {
-                // TODO вынести в отдельный Composable
-                when (parametersExpression.blockClass) {
-                    VariableByNameBlock::class -> {
-                        VariableByNameExpressionBlock(
-                            parameters = parametersExpression.blockParametersData as StringExpressionParameter
-                        )
-                    }
-                    VariableByValueBlock::class -> {
-                        VariableByValueExpressionBlock(
-                            parameters = parametersExpression.blockParametersData as StringExpressionParameter
-                        )
-                    }
-                }
+                ComposableByExpressionBlockClass(
+                    navController = navController,
+                    parametersExpression = parametersExpression,
+                    setAddBlockCallback = setAddBlockCallback,
+                    createBlockDataByType = createBlockDataByType
+                )
             }
         }
     }
