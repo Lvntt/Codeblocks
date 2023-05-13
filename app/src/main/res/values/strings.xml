@@ -6,6 +6,7 @@
     <string name="create">create</string>
     <string name="variable">variable</string>
     <string name="namePlaceholder">name</string>
+    <string name="valuePlaceholder">value</string>
     <string name="start">start</string>
     <string name="addBlock">add block</string>
     <string name="byteType">byte</string>

@@ -115,7 +115,9 @@ fun VariableAssignmentBlock(
                         )
                     }
                     VariableByValueBlock::class -> {
-
+                        VariableByValueExpressionBlock(
+                            parameters = parametersExpression.blockParametersData as StringExpressionParameter
+                        )
                     }
                 }
             }

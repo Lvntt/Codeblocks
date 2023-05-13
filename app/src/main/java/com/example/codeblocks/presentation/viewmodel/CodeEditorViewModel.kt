@@ -6,6 +6,7 @@ import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.BlockWithNesting
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
+import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.presentation.block.data.BlockData
@@ -26,11 +27,11 @@ class CodeEditorViewModel : ViewModel() {
 
     private var _currentAddBlockCallback: (KClass<out Block>) -> Unit = {}
 
-    // TODO VariableByValueBlock
     private val blockTypeToParameter = mapOf(
         CreateVariableBlock::class to VariableDeclarationBlockParameters::class,
         SetVariableBlock::class to VariableAssignmentBlockParameters::class,
-        VariableByNameBlock::class to StringExpressionParameter::class
+        VariableByNameBlock::class to StringExpressionParameter::class,
+        VariableByValueBlock::class to StringExpressionParameter::class
     )
 
     fun setAddBlockCallback(callback: (KClass<out Block>) -> Unit) {
