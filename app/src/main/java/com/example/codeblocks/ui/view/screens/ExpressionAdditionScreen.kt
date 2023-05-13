@@ -31,8 +31,7 @@ import com.example.codeblocks.ui.theme.ExpressionBlockHeight
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.theme.SmallBlockMinimumWidth
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
-import com.example.codeblocks.ui.view.blocks.VariableByNameExpressionBlock
-import com.example.codeblocks.ui.view.blocks.VariableByValueExpressionBlock
+import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
 import kotlin.reflect.KClass
 
 @Composable
@@ -66,7 +65,8 @@ fun ExpressionAdditionScreen(
                     ) {
                         when (currentBlockClass) {
                             VariableByNameBlock::class -> {
-                                VariableByNameExpressionBlock(
+                                VariableExpressionBlock(
+                                    placeholderId = R.string.namePlaceholder,
                                     onAddBlockClick = {
                                         onClick(currentBlockClass)
                                     },
@@ -74,7 +74,8 @@ fun ExpressionAdditionScreen(
                                 )
                             }
                             VariableByValueBlock::class -> {
-                                VariableByValueExpressionBlock(
+                                VariableExpressionBlock(
+                                    placeholderId = R.string.valuePlaceholder,
                                     onAddBlockClick = {
                                         onClick(currentBlockClass)
                                     },

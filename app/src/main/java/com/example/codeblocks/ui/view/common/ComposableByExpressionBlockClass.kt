@@ -13,8 +13,7 @@ import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
-import com.example.codeblocks.ui.view.blocks.VariableByNameExpressionBlock
-import com.example.codeblocks.ui.view.blocks.VariableByValueExpressionBlock
+import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
 import kotlin.reflect.KClass
 
 @Composable
@@ -26,12 +25,14 @@ fun ComposableByExpressionBlockClass(
 ) {
     when (parametersExpression.blockClass) {
         VariableByNameBlock::class -> {
-            VariableByNameExpressionBlock(
+            VariableExpressionBlock(
+                placeholderId = R.string.namePlaceholder,
                 parameters = parametersExpression.blockParametersData as StringExpressionParameter
             )
         }
         VariableByValueBlock::class -> {
-            VariableByValueExpressionBlock(
+            VariableExpressionBlock(
+                placeholderId = R.string.valuePlaceholder,
                 parameters = parametersExpression.blockParametersData as StringExpressionParameter
             )
         }
