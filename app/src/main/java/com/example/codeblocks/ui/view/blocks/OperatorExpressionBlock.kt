@@ -16,13 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
-import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
-import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
-import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
-import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
@@ -111,28 +107,12 @@ fun OperatorExpressionBlock(
                 onClick = { onAddRightOperandClick() }
             )
         } else {
-            // TODO вынести в отдельный Composable
-            when (parametersRightOperandExpression.blockClass) {
-                VariableByNameBlock::class -> {
-                    VariableByNameExpressionBlock(
-                        parameters = parametersRightOperandExpression.blockParametersData as StringExpressionParameter
-                    )
-                }
-                VariableByValueBlock::class -> {
-                    VariableByValueExpressionBlock(
-                        parameters = parametersRightOperandExpression.blockParametersData as StringExpressionParameter
-                    )
-                }
-                PlusBlock::class -> {
-                    OperatorExpressionBlock(
-                        navController = navController,
-                        blockOperator = stringResource(id = R.string.additionOperator),
-                        parameters = parametersRightOperandExpression.blockParametersData as OperatorExpressionBlockParameters,
-                        setAddBlockCallback = setAddBlockCallback,
-                        createBlockDataByType = createBlockDataByType
-                    )
-                }
-            }
+            ComposableByExpressionBlockClass(
+                navController = navController,
+                parametersExpression = parametersRightOperandExpression,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
         }
 
         Spacer(
