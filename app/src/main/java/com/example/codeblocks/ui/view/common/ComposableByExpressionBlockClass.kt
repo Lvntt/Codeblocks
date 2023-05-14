@@ -7,7 +7,11 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
@@ -40,6 +44,42 @@ fun ComposableByExpressionBlockClass(
             OperatorExpressionBlock(
                 navController = navController,
                 blockOperator = stringResource(id = R.string.additionOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        MinusBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.subtractionOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        DivisionBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.divisionOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        MultiplicationBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.multiplicationOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        RemainderBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.remainderOperator),
                 parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType

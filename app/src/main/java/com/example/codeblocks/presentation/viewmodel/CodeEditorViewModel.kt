@@ -7,7 +7,11 @@ import com.example.codeblocks.domain.entity.BlockWithNesting
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.presentation.block.data.BlockData
@@ -34,7 +38,11 @@ class CodeEditorViewModel : ViewModel() {
         SetVariableBlock::class to VariableAssignmentBlockParameters::class,
         VariableByNameBlock::class to StringExpressionParameter::class,
         VariableByValueBlock::class to StringExpressionParameter::class,
-        PlusBlock::class to OperatorExpressionBlockParameters::class
+        PlusBlock::class to OperatorExpressionBlockParameters::class,
+        MinusBlock::class to OperatorExpressionBlockParameters::class,
+        DivisionBlock::class to OperatorExpressionBlockParameters::class,
+        MultiplicationBlock::class to OperatorExpressionBlockParameters::class,
+        RemainderBlock::class to OperatorExpressionBlockParameters::class,
     )
 
     fun setAddBlockCallback(callback: (KClass<out Block>) -> Unit) {

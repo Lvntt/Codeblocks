@@ -22,7 +22,11 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
@@ -86,6 +90,46 @@ fun ExpressionAdditionScreen(
                                 OperatorExpressionBlock(
                                     navController = navController,
                                     blockOperator = stringResource(id = R.string.additionOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            MinusBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.subtractionOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            DivisionBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.divisionOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            MultiplicationBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.multiplicationOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            RemainderBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.remainderOperator),
                                     onAddBlockClick = {
                                         onClick(currentBlockClass)
                                     },

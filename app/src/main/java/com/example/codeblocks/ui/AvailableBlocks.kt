@@ -4,7 +4,11 @@ import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import kotlin.reflect.KClass
@@ -19,7 +23,11 @@ object AvailableBlocks {
     val availableExpressions: List<KClass<out ExpressionBlock>> = listOf(
         VariableByNameBlock::class,
         VariableByValueBlock::class,
-        PlusBlock::class
+        PlusBlock::class,
+        MinusBlock::class,
+        DivisionBlock::class,
+        MultiplicationBlock::class,
+        RemainderBlock::class
     )
 
 }

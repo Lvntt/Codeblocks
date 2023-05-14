@@ -19,6 +19,10 @@
     <string name="set">set</string>
     <string name="to">to</string>
     <string name="additionOperator">+</string>
+    <string name="subtractionOperator">-</string>
+    <string name="divisionOperator">÷</string>
+    <string name="multiplicationOperator">×</string>
+    <string name="remainderOperator">%</string>
     <string name="openingBracket">(</string>
     <string name="closingBracket">)</string>
 </resources>
