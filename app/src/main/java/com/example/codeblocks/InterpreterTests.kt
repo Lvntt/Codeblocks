@@ -6,11 +6,19 @@ import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
+import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
+import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
+import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
+import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
+import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.domain.entity.parambundles.expression.ForExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.VariableNameBundle
@@ -18,6 +26,8 @@ import com.example.codeblocks.domain.entity.parambundles.expression.VariableValu
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionParamValues
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionReturnBundle
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionSignature
+import com.example.codeblocks.domain.entity.parambundles.variable.CreateVariableBundle
+import com.example.codeblocks.domain.entity.parambundles.variable.SetVariableBundle
 import com.example.codeblocks.domain.entity.variables.IntegerVariable
 
 fun fibonacciTest(n: String): Program {
@@ -88,5 +98,91 @@ fun fibonacciTest(n: String): Program {
     functionCallBlock.setParams(functionParamValues)
     printFibBlock.setParams(SingleExpressionBlockBundle(functionCallBlock))
     program.blocks.add(printFibBlock)
+    return program
+}
+
+fun whileTest(n: String): Program {
+    val program = Program()
+    val variableDeclaratorBlock = CreateVariableBlock()
+    val variableDeclaratorBundle = CreateVariableBundle("n", IntegerVariable::class)
+    variableDeclaratorBlock.setParams(variableDeclaratorBundle)
+    val inputValueBlock = VariableByValueBlock()
+    val inputValueBundle = VariableValueBundle(n)
+    inputValueBlock.setParams(inputValueBundle)
+    val setVariableBlock = SetVariableBlock()
+    val setVariableBundle = SetVariableBundle("n", inputValueBlock)
+    setVariableBlock.setParams(setVariableBundle)
+    val whileBlock = DoWhileBlock()
+    val nValueBlock = VariableByNameBlock()
+    val nValueBundle = VariableNameBundle("n")
+    nValueBlock.setParams(nValueBundle)
+    val zeroValueBlock = VariableByValueBlock()
+    val zeroValueBundle = VariableValueBundle("0")
+    zeroValueBlock.setParams(zeroValueBundle)
+    val oneValueBlock = VariableByValueBlock()
+    val oneValueBundle = VariableValueBundle("1")
+    oneValueBlock.setParams(oneValueBundle)
+    val moreCheckBlock = MoreOrEqualCheckBlock()
+    moreCheckBlock.setParams(TwoExpressionBlockBundle(nValueBlock, zeroValueBlock))
+    whileBlock.setParams(SingleExpressionBlockBundle(moreCheckBlock))
+    val printCons = PrintToConsoleBlock()
+    printCons.setParams(SingleExpressionBlockBundle(nValueBlock))
+    val setMinusBlock = SetVariableBlock()
+    val minusBlock = MinusBlock()
+    minusBlock.setParams(TwoExpressionBlockBundle(nValueBlock, oneValueBlock))
+    setMinusBlock.setParams(SetVariableBundle("n", minusBlock))
+    whileBlock.nestedBlocks.add(printCons)
+    whileBlock.nestedBlocks.add(setMinusBlock)
+    program.blocks.add(variableDeclaratorBlock)
+    program.blocks.add(setVariableBlock)
+    program.blocks.add(whileBlock)
+    return program
+}
+
+fun forTest(n: String): Program {
+    val program = Program()
+    val variableDeclaratorBlock = CreateVariableBlock()
+    val variableDeclaratorBundle = CreateVariableBundle("n", IntegerVariable::class)
+    variableDeclaratorBlock.setParams(variableDeclaratorBundle)
+    val inputValueBlock = VariableByValueBlock()
+    val inputValueBundle = VariableValueBundle(n)
+    inputValueBlock.setParams(inputValueBundle)
+    val setVariableBlock = SetVariableBlock()
+    val setVariableBundle = SetVariableBundle("n", inputValueBlock)
+    setVariableBlock.setParams(setVariableBundle)
+    val twoVariableDeclaratorBlock = CreateVariableBlock()
+    val twoVariableDeclaratorBundle = CreateVariableBundle("i", IntegerVariable::class)
+    twoVariableDeclaratorBlock.setParams(twoVariableDeclaratorBundle)
+    val zeroValueBlock = VariableByValueBlock()
+    val zeroValueBundle = VariableValueBundle("0")
+    zeroValueBlock.setParams(zeroValueBundle)
+    val twoSetVariableBlock = SetVariableBlock()
+    val twoSetVariableBundle = SetVariableBundle("i", zeroValueBlock)
+    twoSetVariableBlock.setParams(twoSetVariableBundle)
+    val whileBlock = ForBlock()
+    val nValueBlock = VariableByNameBlock()
+    val nValueBundle = VariableNameBundle("n")
+    nValueBlock.setParams(nValueBundle)
+    val iValueBlock = VariableByNameBlock()
+    val iValueBundle = VariableNameBundle("i")
+    iValueBlock.setParams(iValueBundle)
+    val oneValueBlock = VariableByValueBlock()
+    val oneValueBundle = VariableValueBundle("1")
+    oneValueBlock.setParams(oneValueBundle)
+    val setMinusBlock = SetVariableBlock()
+    val plusBlock = PlusBlock()
+    plusBlock.setParams(TwoExpressionBlockBundle(iValueBlock, oneValueBlock))
+    setMinusBlock.setParams(SetVariableBundle("i", plusBlock))
+    val moreCheckBlock = LessOrEqualCheckBlock()
+    moreCheckBlock.setParams(TwoExpressionBlockBundle(iValueBlock, nValueBlock))
+    whileBlock.setParams(ForExpressionBlockBundle(zeroValueBlock, moreCheckBlock, setMinusBlock))
+    val printCons = PrintToConsoleBlock()
+    printCons.setParams(SingleExpressionBlockBundle(iValueBlock))
+    whileBlock.nestedBlocks.add(printCons)
+    program.blocks.add(variableDeclaratorBlock)
+    program.blocks.add(setVariableBlock)
+    program.blocks.add(twoVariableDeclaratorBlock)
+    program.blocks.add(twoSetVariableBlock)
+    program.blocks.add(whileBlock)
     return program
 }

@@ -5,28 +5,29 @@ import com.example.codeblocks.domain.entity.NestedScope
 import com.example.codeblocks.domain.entity.ParamBundle
 import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.StopExecutionBlock
-import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpressionBlockBundle
+import com.example.codeblocks.domain.entity.parambundles.expression.ForExpressionBlockBundle
 import com.example.codeblocks.domain.entity.variables.BooleanVariable
 import kotlin.reflect.KClass
 
-class WhileBlock : BlockWithNesting() {
+class ForBlock : BlockWithNesting() {
 
-    override val paramType: KClass<out ParamBundle> = SingleExpressionBlockBundle::class
+    override val paramType: KClass<out ParamBundle> = ForExpressionBlockBundle::class
 
     override fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
+        val nestedScope = NestedScope(scope)
+        (paramBundle as ForExpressionBlockBundle).firstBlock.setupScope(nestedScope)
+        (paramBundle as ForExpressionBlockBundle).firstBlock.execute()
 
         while (true) {
-            (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
+            (paramBundle as ForExpressionBlockBundle).expressionBlock.setupScope(nestedScope)
             val returnedValue =
-                (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
+                (paramBundle as ForExpressionBlockBundle).expressionBlock.getReturnedValue()
 
-            if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception()
-            }
+            if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception() }
             val booleanValue = returnedValue.getValue() ?: /*TODO error handling*/ throw Exception()
 
             if (!booleanValue) { return }
-            val nestedScope = NestedScope(scope)
             for (block in nestedBlocks) {
                 block.setupScope(nestedScope)
                 block.execute()
@@ -43,6 +44,9 @@ class WhileBlock : BlockWithNesting() {
                     return
                 }
             }
+
+            (paramBundle as ForExpressionBlockBundle).secondBlock.setupScope(nestedScope)
+            (paramBundle as ForExpressionBlockBundle).secondBlock.execute()
         }
     }
 

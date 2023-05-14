@@ -9,7 +9,7 @@ import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpres
 import com.example.codeblocks.domain.entity.variables.BooleanVariable
 import kotlin.reflect.KClass
 
-class WhileBlock : BlockWithNesting() {
+class DoWhileBlock  : BlockWithNesting() {
 
     override val paramType: KClass<out ParamBundle> = SingleExpressionBlockBundle::class
 
@@ -17,15 +17,6 @@ class WhileBlock : BlockWithNesting() {
         stopCallingBlock = null
 
         while (true) {
-            (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
-            val returnedValue =
-                (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
-
-            if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception()
-            }
-            val booleanValue = returnedValue.getValue() ?: /*TODO error handling*/ throw Exception()
-
-            if (!booleanValue) { return }
             val nestedScope = NestedScope(scope)
             for (block in nestedBlocks) {
                 block.setupScope(nestedScope)
@@ -43,7 +34,16 @@ class WhileBlock : BlockWithNesting() {
                     return
                 }
             }
+
+            (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(nestedScope)
+            val returnedValue =
+                (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
+
+            if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception()
+            }
+            val booleanValue = returnedValue.getValue() ?: /*TODO error handling*/ throw Exception()
+
+            if (!booleanValue) { return }
         }
     }
-
 }
