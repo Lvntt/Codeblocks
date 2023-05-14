@@ -70,7 +70,7 @@ fun ExpressionAdditionScreen(
                             .height(ExpressionBlockHeight)
                             .widthIn(SmallBlockMinimumWidth, Dp.Infinity)
                             .clip(BlockElementShape)
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .background(MaterialTheme.colorScheme.primaryContainer)
                             .padding(BlockPadding)
                     ) {
                         when (currentBlockClass) {

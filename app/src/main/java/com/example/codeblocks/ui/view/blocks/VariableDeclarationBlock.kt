@@ -2,6 +2,7 @@ package com.example.codeblocks.ui.view.blocks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -46,6 +47,7 @@ fun VariableDeclarationBlock(
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
             .height(BlockHeight)
@@ -53,7 +55,10 @@ fun VariableDeclarationBlock(
             .clip(BlockElementShape)
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(BlockPadding)
-            .clickable {
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
                 if (!isEditable) {
                     onAddBlockClick()
                 }
@@ -116,6 +121,7 @@ fun VariableTypesDropdownMenu(
     parameters: VariableDeclarationBlockParameters,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     val chosenTypeStringRes =
         AvailableVariableTypes.typenameToKClass.filterValues { it == parameters.type }.keys.toList()[0]
     val availableVariableTypes = AvailableVariableTypes.typenameToKClass.keys.toList()
@@ -134,7 +140,10 @@ fun VariableTypesDropdownMenu(
             text = stringResource(id = dropdownMenuSelectedItem),
             color = MaterialTheme.colorScheme.onBackground,
             modifier = modifier
-                .clickable {
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) {
                     dropdownMenuExpanded = true
                 },
             style = BlockAccentedTextStyle

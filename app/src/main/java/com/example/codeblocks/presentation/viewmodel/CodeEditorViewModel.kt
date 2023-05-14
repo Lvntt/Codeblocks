@@ -28,6 +28,7 @@ import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBl
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
+import org.burnoutcrew.reorderable.ItemPosition
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.isSubclassOf
@@ -56,6 +57,15 @@ class CodeEditorViewModel : ViewModel() {
         MoreOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
         NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class
     )
+
+    fun moveBlock(from: ItemPosition, to: ItemPosition) {
+        _programBlocks.apply {
+            if (to.index - 1 >= 0 && to.index - 1 < _programBlocks.size
+                && from.index - 1 >= 0 && from.index - 1 < _programBlocks.size) {
+                add(to.index - 1, removeAt(from.index - 1))
+            }
+        }
+    }
 
     fun setAddBlockCallback(callback: (KClass<out Block>) -> Unit) {
         _currentAddBlockCallback = callback
