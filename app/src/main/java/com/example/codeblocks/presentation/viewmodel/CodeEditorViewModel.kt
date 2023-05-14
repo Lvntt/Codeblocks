@@ -7,6 +7,12 @@ import com.example.codeblocks.domain.entity.BlockWithNesting
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.NotEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
@@ -43,6 +49,12 @@ class CodeEditorViewModel : ViewModel() {
         DivisionBlock::class to OperatorExpressionBlockParameters::class,
         MultiplicationBlock::class to OperatorExpressionBlockParameters::class,
         RemainderBlock::class to OperatorExpressionBlockParameters::class,
+        EqualityCheckBlock::class to OperatorExpressionBlockParameters::class,
+        LessCheckBlock::class to OperatorExpressionBlockParameters::class,
+        LessOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
+        MoreCheckBlock::class to OperatorExpressionBlockParameters::class,
+        MoreOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
+        NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class
     )
 
     fun setAddBlockCallback(callback: (KClass<out Block>) -> Unit) {

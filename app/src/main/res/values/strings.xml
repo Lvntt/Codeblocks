@@ -23,6 +23,12 @@
     <string name="divisionOperator">÷</string>
     <string name="multiplicationOperator">×</string>
     <string name="remainderOperator">%</string>
+    <string name="equalityOperator">==</string>
+    <string name="lessOperator">&lt;</string>
+    <string name="lessOrEqualOperator">≤</string>
+    <string name="greaterOperator">&gt;</string>
+    <string name="greaterOrEqualOperator">≥</string>
+    <string name="inequalityOperator">≠</string>
     <string name="openingBracket">(</string>
     <string name="closingBracket">)</string>
 </resources>
