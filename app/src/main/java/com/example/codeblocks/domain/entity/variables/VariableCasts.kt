@@ -231,36 +231,92 @@ object VariableCasts {
             Pair(BooleanVariable::class, ByteVariable::class) to {
                 val value = (it as BooleanVariable).getValue()
                 val castedVariable = ByteVariable(it.name)
-                castedVariable.setValue(if(value==null) null else { if(value) 1 else 0 })
+                castedVariable.setValue(
+                    if (value == null) null else {
+                        if (value) 1 else 0
+                    }
+                )
                 castedVariable
             },
             Pair(BooleanVariable::class, ShortVariable::class) to {
                 val value = (it as BooleanVariable).getValue()
                 val castedVariable = ShortVariable(it.name)
-                castedVariable.setValue(if(value==null) null else { if(value) 1 else 0 })
+                castedVariable.setValue(
+                    if (value == null) null else {
+                        if (value) 1 else 0
+                    }
+                )
                 castedVariable
             },
             Pair(BooleanVariable::class, IntegerVariable::class) to {
                 val value = (it as BooleanVariable).getValue()
                 val castedVariable = IntegerVariable(it.name)
-                castedVariable.setValue(if(value==null) null else { if(value) 1 else 0 })
+                castedVariable.setValue(
+                    if (value == null) null else {
+                        if (value) 1 else 0
+                    }
+                )
                 castedVariable
             },
             Pair(BooleanVariable::class, FloatVariable::class) to {
                 val value = (it as BooleanVariable).getValue()
                 val castedVariable = FloatVariable(it.name)
-                castedVariable.setValue(if(value==null) null else { if(value) 1 else 0 })
+                castedVariable.setValue(
+                    if (value == null) null else {
+                        if (value) 1 else 0
+                    }
+                )
                 castedVariable
             },
             Pair(BooleanVariable::class, ByteVariable::class) to {
                 val value = (it as BooleanVariable).getValue()
                 val castedVariable = DoubleVariable(it.name)
-                castedVariable.setValue(if(value==null) null else { if(value) 1 else 0 })
+                castedVariable.setValue(
+                    if (value == null) null else {
+                        if (value) 1 else 0
+                    }
+                )
                 castedVariable
             },
-            Pair(BooleanVariable::class, BooleanVariable::class) to { it }
+            Pair(BooleanVariable::class, BooleanVariable::class) to { it },
+            Pair(NullVariable::class, ByteVariable::class) to {
+                val castedVariable = ByteVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, ShortVariable::class) to {
+                val castedVariable = ShortVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, IntegerVariable::class) to {
+                val castedVariable = IntegerVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, LongVariable::class) to {
+                val castedVariable = LongVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, FloatVariable::class) to {
+                val castedVariable = FloatVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, DoubleVariable::class) to {
+                val castedVariable = DoubleVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, BooleanVariable::class) to {
+                val castedVariable = BooleanVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, NullVariable::class) to { it }
         )
-    val typeCompatibilityMap: Map<Pair<KClass<out Variable>, KClass<out Variable>>, (Variable) -> Boolean> =
+    private val typeCompatibilityMap: Map<Pair<KClass<out Variable>, KClass<out Variable>>, (Variable) -> Boolean> =
         mapOf(
             Pair(ByteVariable::class, ByteVariable::class) to { true },
             Pair(ByteVariable::class, ShortVariable::class) to { true },
@@ -297,17 +353,37 @@ object VariableCasts {
             Pair(LongVariable::class, IntegerVariable::class) to {
                 val value = (it as LongVariable).getValue()
                 value == null || value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE
-                                                                 },
+            },
             Pair(LongVariable::class, LongVariable::class) to { true },
             Pair(LongVariable::class, BooleanVariable::class) to { true },
             Pair(FloatVariable::class, FloatVariable::class) to { true },
-            Pair(DoubleVariable::class, DoubleVariable::class) to { true }
+            Pair(DoubleVariable::class, DoubleVariable::class) to { true },
+            Pair(BooleanVariable::class, BooleanVariable::class) to { true },
+            Pair(NullVariable::class, ByteVariable::class) to { true },
+            Pair(NullVariable::class, ShortVariable::class) to { true },
+            Pair(NullVariable::class, IntegerVariable::class) to { true },
+            Pair(NullVariable::class, LongVariable::class) to { true },
+            Pair(NullVariable::class, FloatVariable::class) to { true },
+            Pair(NullVariable::class, DoubleVariable::class) to { true },
+            Pair(NullVariable::class, BooleanVariable::class) to { true },
+            Pair(NullVariable::class, NullVariable::class) to { true }
         )
 
     @JvmStatic
-    fun typeCanBeSeamlesslyConverted(firstTypeVariable: Variable, secondType: KClass<out Variable>): Boolean {
+    fun typeCanBeSeamlesslyConverted(
+        firstTypeVariable: Variable,
+        secondType: KClass<out Variable>
+    ): Boolean {
         val compatibilityLambda = typeCompatibilityMap[Pair(firstTypeVariable::class, secondType)]
             ?: return false
         return compatibilityLambda(firstTypeVariable)
+    }
+
+    @JvmStatic
+    fun castVariable(variable: Variable, to: KClass<out Variable>): Variable? {
+        val castLambda = castMap[Pair(variable::class, to)]
+        if (castLambda != null)
+            return castLambda(variable)
+        return null
     }
 }
