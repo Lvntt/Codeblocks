@@ -2,6 +2,7 @@ package com.example.codeblocks.ui
 
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
+import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
@@ -41,7 +42,8 @@ object AvailableBlocks {
         LessOrEqualCheckBlock::class,
         MoreCheckBlock::class,
         MoreOrEqualCheckBlock::class,
-        NotEqualCheckBlock::class
+        NotEqualCheckBlock::class,
+        ReadFromConsoleBlock::class
     )
 
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
+import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
@@ -29,6 +30,7 @@ import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.view.blocks.AddBlock
+import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OutputToConsoleBlock
 import com.example.codeblocks.ui.view.blocks.StartBlock
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
@@ -100,6 +102,9 @@ fun EditorScreen(
                                         parameters = currentBlock.blockParametersData as SingleExpressionParameter,
                                         isEditable = true
                                     )
+                                }
+                                ReadFromConsoleBlock::class -> {
+                                    InputFromConsoleBlock()
                                 }
                             }
                         }

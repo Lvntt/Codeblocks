@@ -11,7 +11,7 @@ class VariableByNameBlock : ExpressionBlock() {
 
 
     override suspend fun executeAfterChecks(scope: Scope) {
-        returnedVariable = scope.findVariable((paramBundle as VariableBundle).variableName)
+        returnedVariable = scope.findVariable((paramBundle as VariableBundle).value)
     }
 
 }

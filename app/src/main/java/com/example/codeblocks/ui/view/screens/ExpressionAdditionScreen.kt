@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import com.example.codeblocks.R
+import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
@@ -40,6 +41,7 @@ import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.ExpressionBlockHeight
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.theme.SmallBlockMinimumWidth
+import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
 import kotlin.reflect.KClass
@@ -200,6 +202,13 @@ fun ExpressionAdditionScreen(
                                         onClick(currentBlockClass)
                                     },
                                     isEditable = false
+                                )
+                            }
+                            ReadFromConsoleBlock::class -> {
+                                InputFromConsoleBlock(
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    }
                                 )
                             }
                         }

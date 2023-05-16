@@ -33,4 +33,5 @@
     <string name="closingBracket">)</string>
     <string name="print">print</string>
     <string name="toConsole">to console</string>
+    <string name="readFromConsole">read from console</string>
 </resources>
