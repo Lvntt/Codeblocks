@@ -21,7 +21,7 @@ class ForBlock : BlockWithNesting() {
 
         while (true) {
             val nestedScope = NestedScope(scope)
-            (paramBundle as ForExpressionBlockBundle).expressionBlock.setupScope(nestedScope)
+            (paramBundle as ForExpressionBlockBundle).expressionBlock.setupScope(expressionNestedScope)
             val returnedValue =
                 (paramBundle as ForExpressionBlockBundle).expressionBlock.getReturnedValue()
 

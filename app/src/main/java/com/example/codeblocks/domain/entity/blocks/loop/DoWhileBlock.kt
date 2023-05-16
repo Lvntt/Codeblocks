@@ -35,7 +35,7 @@ class DoWhileBlock  : BlockWithNesting() {
                 }
             }
 
-            (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(nestedScope)
+            (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
             val returnedValue =
                 (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
 
