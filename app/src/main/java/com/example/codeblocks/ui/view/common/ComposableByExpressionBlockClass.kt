@@ -5,6 +5,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
@@ -22,6 +23,7 @@ import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
+import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
 import kotlin.reflect.KClass
@@ -144,6 +146,9 @@ fun ComposableByExpressionBlockClass(
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType
             )
+        }
+        ReadFromConsoleBlock::class -> {
+            InputFromConsoleBlock()
         }
     }
 }
