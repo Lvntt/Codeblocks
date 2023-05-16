@@ -7,7 +7,17 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.NotEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
@@ -40,6 +50,96 @@ fun ComposableByExpressionBlockClass(
             OperatorExpressionBlock(
                 navController = navController,
                 blockOperator = stringResource(id = R.string.additionOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        MinusBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.subtractionOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        DivisionBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.divisionOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        MultiplicationBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.multiplicationOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        RemainderBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.remainderOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        EqualityCheckBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.equalityOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        LessCheckBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.lessOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        LessOrEqualCheckBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.lessOrEqualOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        MoreCheckBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.greaterOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        MoreOrEqualCheckBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.greaterOrEqualOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        NotEqualCheckBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.inequalityOperator),
                 parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType

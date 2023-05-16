@@ -22,7 +22,17 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.NotEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
@@ -60,7 +70,7 @@ fun ExpressionAdditionScreen(
                             .height(ExpressionBlockHeight)
                             .widthIn(SmallBlockMinimumWidth, Dp.Infinity)
                             .clip(BlockElementShape)
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .background(MaterialTheme.colorScheme.primaryContainer)
                             .padding(BlockPadding)
                     ) {
                         when (currentBlockClass) {
@@ -86,6 +96,106 @@ fun ExpressionAdditionScreen(
                                 OperatorExpressionBlock(
                                     navController = navController,
                                     blockOperator = stringResource(id = R.string.additionOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            MinusBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.subtractionOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            DivisionBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.divisionOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            MultiplicationBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.multiplicationOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            RemainderBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.remainderOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            EqualityCheckBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.equalityOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            LessCheckBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.lessOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            LessOrEqualCheckBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.lessOrEqualOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            MoreCheckBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.greaterOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            MoreOrEqualCheckBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.greaterOrEqualOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+                            NotEqualCheckBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.inequalityOperator),
                                     onAddBlockClick = {
                                         onClick(currentBlockClass)
                                     },
