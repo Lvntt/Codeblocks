@@ -10,12 +10,12 @@ abstract class ExpressionBlock : Block(), Returnable {
 
     protected var returnedVariable: Variable? = null
 
-    override fun getReturnedValue(): Variable? {
+    override suspend fun getReturnedValue(): Variable? {
         execute()
         return returnedVariable
     }
 
-    protected fun getVariableFromParams(returnable: Returnable, scope: Scope): Variable? {
+    protected suspend fun getVariableFromParams(returnable: Returnable, scope: Scope): Variable? {
         if (returnable is Block) {
             if (returnable !is FunctionBlock) {
                 returnable.setupScope(scope)

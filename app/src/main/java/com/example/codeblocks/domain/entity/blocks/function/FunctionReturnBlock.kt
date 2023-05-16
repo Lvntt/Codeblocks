@@ -10,7 +10,7 @@ class FunctionReturnBlock : StopExecutionBlock() {
 
     override val paramType: KClass<out ParamBundle> = FunctionReturnBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         (paramBundle as FunctionReturnBundle).expression.setupScope(scope)
         val returnResult = (paramBundle as FunctionReturnBundle).expression.getReturnedValue() ?: /*TODO error handling*/ throw Exception()
 

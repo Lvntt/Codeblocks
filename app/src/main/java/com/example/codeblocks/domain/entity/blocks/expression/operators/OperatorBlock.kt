@@ -15,7 +15,7 @@ abstract class OperatorBlock : ExpressionBlock() {
     override val paramType: KClass<out ParamBundle> = TwoExpressionBlockBundle::class
     protected abstract val operatorType: OperatorType
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         val firstVariable =
             getVariableFromParams((paramBundle as TwoExpressionBlockBundle).firstExpressionBlock, scope)
         val secondVariable =

@@ -13,7 +13,7 @@ class SetVariableBlock : Block() {
 
     override val paramType: KClass<out ParamBundle> = SetVariableBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         (paramBundle as SetVariableBundle).expression.setupScope(scope)
         val returnResult = (paramBundle as SetVariableBundle).expression.getReturnedValue() ?: /*TODO error handling*/ throw Exception()
 

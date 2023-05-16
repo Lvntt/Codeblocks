@@ -10,7 +10,7 @@ class FunctionDeclaratorBlock : BlockWithNesting() {
 
     override val paramType: KClass<out ParamBundle> = FunctionSignature::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         val function = FunctionBlock()
         function.nestedBlocks = nestedBlocks
         function.setParams(paramBundle!!)

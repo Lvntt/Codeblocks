@@ -17,6 +17,6 @@ abstract class Variable(val name: String) : Returnable {
         setValueAfterChecks(value)
     }
 
-    override fun getReturnedValue(): Variable? = this
+    override suspend fun getReturnedValue(): Variable? = this
 
 }

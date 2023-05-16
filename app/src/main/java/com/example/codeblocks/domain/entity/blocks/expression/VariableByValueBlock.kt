@@ -14,7 +14,7 @@ class VariableByValueBlock : ExpressionBlock() {
 
     override val paramType: KClass<out ParamBundle> = VariableValueBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         val value = convertStringToVariableValue((paramBundle as VariableValueBundle).value)
         returnedVariable = if (value != null) {
             val variable = typeMap[value::class]?.primaryConstructor?.call(DefaultValues.EMPTY_STRING) ?: /*TODO error handling*/ throw Exception()

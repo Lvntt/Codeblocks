@@ -15,3 +15,9 @@ val BlockAccentedTextStyle = TextStyle(
     fontFamily = Oxygen,
     fontWeight = FontWeight.Bold
 )
+
+val ConsoleRegularTextStyle = TextStyle(
+    fontSize = 18.sp,
+    fontFamily = JetBrainsMono,
+    fontWeight = FontWeight.Normal
+)

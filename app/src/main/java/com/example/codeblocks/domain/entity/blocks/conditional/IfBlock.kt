@@ -15,7 +15,7 @@ class IfBlock : BlockWithNesting() {
 
     override val paramType: KClass<out ParamBundle> = SingleExpressionBlockBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
         (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
         var returnedValue = (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()

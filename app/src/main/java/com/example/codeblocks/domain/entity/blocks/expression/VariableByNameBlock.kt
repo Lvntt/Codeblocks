@@ -9,7 +9,7 @@ class VariableByNameBlock : ExpressionBlock() {
 
     override val paramType: KClass<out ParamBundle> = VariableNameBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         returnedVariable = scope.findVariable((paramBundle as VariableNameBundle).variableName)
     }
 

@@ -21,7 +21,7 @@ class FunctionBlock : BlockWithNesting(), Returnable {
     private var returnedVariable: Variable? = null
     override val paramType: KClass<out ParamBundle> = FunctionSignature::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
         returnedVariable = null
 
@@ -80,7 +80,7 @@ class FunctionBlock : BlockWithNesting(), Returnable {
         this.returnedVariable = castVariable(returnedVariable, (paramBundle as FunctionSignature).returnType)
     }
 
-    override fun getReturnedValue(): Variable? {
+    override suspend fun getReturnedValue(): Variable? {
         execute()
         return returnedVariable
     }
