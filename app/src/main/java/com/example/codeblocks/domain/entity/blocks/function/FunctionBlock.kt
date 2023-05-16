@@ -10,6 +10,8 @@ import com.example.codeblocks.domain.entity.Returnable
 import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.StopExecutionBlock
 import com.example.codeblocks.domain.entity.Variable
+import com.example.codeblocks.domain.entity.variables.VariableCasts.castVariable
+import com.example.codeblocks.domain.entity.variables.VariableCasts.typeCanBeSeamlesslyConverted
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -19,17 +21,20 @@ class FunctionBlock : BlockWithNesting(), Returnable {
     private var returnedVariable: Variable? = null
     override val paramType: KClass<out ParamBundle> = FunctionSignature::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
         returnedVariable = null
 
         val nestedScope = NestedScope(scope)
-        if (paramValues !is LoadedFunctionParams) { /*TODO error handling*/ throw Exception() }
+        if (paramValues !is LoadedFunctionParams) { /*TODO error handling*/ throw Exception()
+        }
         (paramValues as LoadedFunctionParams).variableList.forEachIndexed { index, variable ->
             nestedScope.addVariable(
-                variable.copy(
-                    (paramBundle as FunctionSignature).paramsSignature[index].first
-                )
+                castVariable(
+                    variable.copy(
+                        (paramBundle as FunctionSignature).paramsSignature[index].first
+                    ), (paramBundle as FunctionSignature).paramsSignature[index].second
+                )!!
             )
         }
 
@@ -60,18 +65,22 @@ class FunctionBlock : BlockWithNesting(), Returnable {
         index: Int,
         variable: Variable
     ) = (index >= (this.paramBundle as FunctionSignature).paramsSignature.size
-            || variable::class != (this.paramBundle as FunctionSignature).paramsSignature[index].second)
+            || !typeCanBeSeamlesslyConverted(
+        variable,
+        (this.paramBundle as FunctionSignature).paramsSignature[index].second
+    ))
 
     fun getName(): String = (paramBundle as FunctionSignature).name
 
     fun callReturn(returnedVariable: Variable) {
         if (paramBundle !is FunctionSignature) { /*TODO error handling*/ throw Exception() }
-        if (returnedVariable::class != (paramBundle as FunctionSignature).returnType) { /*TODO error handling*/ throw Exception() }
+        if (!typeCanBeSeamlesslyConverted(returnedVariable, (paramBundle as FunctionSignature).returnType))
+        { /*TODO error handling*/ throw Exception() }
 
-        this.returnedVariable = returnedVariable
+        this.returnedVariable = castVariable(returnedVariable, (paramBundle as FunctionSignature).returnType)
     }
 
-    override fun getReturnedValue(): Variable? {
+    override suspend fun getReturnedValue(): Variable? {
         execute()
         return returnedVariable
     }

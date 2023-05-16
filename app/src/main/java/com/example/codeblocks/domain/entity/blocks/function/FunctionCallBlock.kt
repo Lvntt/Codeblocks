@@ -11,7 +11,7 @@ class FunctionCallBlock : ExpressionBlock() {
 
     override val paramType: KClass<out ParamBundle> = FunctionParamValues::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         val functionParams = LoadedFunctionParams()
         (paramBundle as FunctionParamValues).expressionList.forEach {
             val expressionResult = getVariableFromParams(it, scope) ?: /*TODO error handling*/ throw Exception()

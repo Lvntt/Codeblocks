@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
@@ -22,6 +23,8 @@ import com.example.codeblocks.ui.navigation.BottomNavigationBar
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.navigation.Navigation
 import com.example.codeblocks.ui.theme.CodeblocksTheme
+import com.example.codeblocks.ui.theme.ConsoleBackground
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +39,11 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val backStackEntry = navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry.value?.destination?.route
-
+                val systemUiController = rememberSystemUiController()
+                systemUiController.setStatusBarColor(color = when(currentRoute) {
+                    CodeblocksDestinations.CONSOLE_ROUTE -> ConsoleBackground
+                    else -> MaterialTheme.colorScheme.background
+                })
                 Scaffold(
                     bottomBar = {
                         BottomNavigationBar(

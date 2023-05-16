@@ -6,7 +6,7 @@ class Program : Executable {
 
     var blocks: MutableList<Block> = mutableListOf()
 
-    override fun execute() {
+    override suspend fun execute() {
         scope = Scope()
         blocks.forEach {
             it.setupScope(scope)

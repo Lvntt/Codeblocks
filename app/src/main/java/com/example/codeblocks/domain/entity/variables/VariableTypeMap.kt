@@ -28,13 +28,13 @@ object VariableTypeMap {
         if (string.matches(doubleRegex)){
             return string.toDouble()
         }
-        if (string.matches(integerRegex) && (string.toLong() <= 127) && (string.toLong() >= -128)){
+        if (string.matches(integerRegex) && (string.toLong() <= Byte.MAX_VALUE) && (string.toLong() >= Byte.MIN_VALUE)){
             return string.toByte()
         }
-        if (string.matches(integerRegex) && (string.toLong() <= 32767) && (string.toLong() >= -32768)){
+        if (string.matches(integerRegex) && (string.toLong() <= Short.MAX_VALUE) && (string.toLong() >= Short.MIN_VALUE)){
             return string.toShort()
         }
-        if (string.matches(integerRegex) && (string.toLong() <= 2147483647) && (string.toLong() >= -2147483648)) {
+        if (string.matches(integerRegex) && (string.toLong() <= Int.MAX_VALUE) && (string.toLong() >= Int.MIN_VALUE)) {
             return string.toInt()
         }
         if (string.matches(integerRegex)){
