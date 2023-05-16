@@ -13,8 +13,7 @@ import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBl
 import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
-import com.example.codeblocks.domain.entity.parambundles.expression.VariableNameBundle
-import com.example.codeblocks.domain.entity.parambundles.expression.VariableValueBundle
+import com.example.codeblocks.domain.entity.parambundles.expression.VariableBundle
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionParamValues
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionReturnBundle
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionSignature
@@ -29,16 +28,16 @@ fun fibonacciTest(n: String): Program {
     val firstIf = IfBlock()
     val secondIf = IfBlock()
     val nValueBlock = VariableByNameBlock()
-    val nValueBundle = VariableNameBundle("n")
+    val nValueBundle = VariableBundle("n")
     nValueBlock.setParams(nValueBundle)
     val zeroValueBlock = VariableByValueBlock()
-    val zeroValueBundle = VariableValueBundle("0")
+    val zeroValueBundle = VariableBundle("0")
     zeroValueBlock.setParams(zeroValueBundle)
     val oneValueBlock = VariableByValueBlock()
-    val oneValueBundle = VariableValueBundle("1")
+    val oneValueBundle = VariableBundle("1")
     oneValueBlock.setParams(oneValueBundle)
     val twoValueBlock = VariableByValueBlock()
-    val twoValueBundle = VariableValueBundle("2")
+    val twoValueBundle = VariableBundle("2")
     twoValueBlock.setParams(twoValueBundle)
     val firstComparisonBlock = EqualityCheckBlock()
     val firstComparisonBundle = TwoExpressionBlockBundle(nValueBlock, zeroValueBlock)
@@ -82,7 +81,7 @@ fun fibonacciTest(n: String): Program {
     val functionCallBlock = FunctionCallBlock()
     val functionParamValues = FunctionParamValues("fib")
     val inputValueBlock = VariableByValueBlock()
-    val inputValueBundle = VariableValueBundle(n)
+    val inputValueBundle = VariableBundle(n)
     inputValueBlock.setParams(inputValueBundle)
     functionParamValues.addParam(inputValueBlock)
     functionCallBlock.setParams(functionParamValues)

@@ -1,3 +1,7 @@
 package com.example.codeblocks.presentation.block.parameters
 
-abstract class BlockParameters
+import com.example.codeblocks.domain.entity.ParamBundle
+
+abstract class BlockParameters {
+    abstract fun createBundle(): ParamBundle
+}

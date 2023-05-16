@@ -19,6 +19,18 @@
     <string name="set">set</string>
     <string name="to">to</string>
     <string name="additionOperator">+</string>
+    <string name="subtractionOperator">-</string>
+    <string name="divisionOperator">÷</string>
+    <string name="multiplicationOperator">×</string>
+    <string name="remainderOperator">%</string>
+    <string name="equalityOperator">==</string>
+    <string name="lessOperator">&lt;</string>
+    <string name="lessOrEqualOperator">≤</string>
+    <string name="greaterOperator">&gt;</string>
+    <string name="greaterOrEqualOperator">≥</string>
+    <string name="inequalityOperator">≠</string>
     <string name="openingBracket">(</string>
     <string name="closingBracket">)</string>
+    <string name="print">print</string>
+    <string name="toConsole">to console</string>
 </resources>
