@@ -16,11 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.navigation.BottomNavItems
 import com.example.codeblocks.ui.navigation.BottomNavigationBar
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.navigation.Navigation
 import com.example.codeblocks.ui.theme.CodeblocksTheme
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
         
         setContent {
             CodeblocksTheme {
+                val viewModel = koinViewModel<CodeEditorViewModel>()
                 val navController = rememberNavController()
                 val backStackEntry = navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry.value?.destination?.route
@@ -49,7 +52,7 @@ class MainActivity : ComponentActivity() {
                             CodeblocksDestinations.EDITOR_ROUTE -> {
                                 ExtendedFloatingActionButton(
                                     onClick = {
-                                        // TODO run the program and output the result in console
+                                        viewModel.runProgram()
                                         navController.navigate(CodeblocksDestinations.CONSOLE_ROUTE)
                                     },
                                     icon = {

@@ -2,8 +2,10 @@ package com.example.codeblocks.presentation.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.BlockWithNesting
+import com.example.codeblocks.domain.entity.Program
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
@@ -30,6 +32,7 @@ import com.example.codeblocks.presentation.block.parameters.SingleExpressionPara
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
+import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.ItemPosition
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -108,6 +111,17 @@ class CodeEditorViewModel : ViewModel() {
         val block = createBlockDataByType(blockToCreate)
         if (block != null) {
             _programBlocks.add(block)
+        }
+    }
+
+    fun runProgram() {
+        val program = Program()
+        viewModelScope.launch {
+            programBlocks.forEach {
+                val block = it.createBlock()
+                program.blocks.add(block)
+            }
+            program.execute()
         }
     }
 
