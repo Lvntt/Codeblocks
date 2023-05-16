@@ -24,6 +24,8 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Plu
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.domain.usecases.ClearConsoleUseCase
+import com.example.codeblocks.domain.usecases.WriteToConsoleUseCase
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.BlockWithNestingData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
@@ -34,13 +36,18 @@ import com.example.codeblocks.presentation.block.parameters.SingleExpressionPara
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.ItemPosition
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.isSubclassOf
 
-class CodeEditorViewModel : ViewModel() {
+class CodeEditorViewModel(
+    private val clearConsoleUseCase: ClearConsoleUseCase,
+    private val writeToConsoleUseCase: WriteToConsoleUseCase
+) : ViewModel() {
 
     private val _programBlocks: MutableList<BlockData> = mutableStateListOf()
     val programBlocks: List<BlockData> = _programBlocks
@@ -66,6 +73,11 @@ class CodeEditorViewModel : ViewModel() {
         PrintToConsoleBlock::class to SingleExpressionParameter::class,
         ReadFromConsoleBlock::class to EmptyParameters::class
     )
+
+    private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        writeToConsoleUseCase.writeErrorToConsole(throwable.stackTraceToString())
+        writeToConsoleUseCase.writeOutputToConsole("\nProcess finished with exit code 1")
+    }
 
     fun moveBlock(from: ItemPosition, to: ItemPosition) {
         _programBlocks.apply {
@@ -119,12 +131,14 @@ class CodeEditorViewModel : ViewModel() {
 
     fun runProgram() {
         val program = Program()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO + runtimeExceptionHandler) {
             programBlocks.forEach {
                 val block = it.createBlock()
                 program.blocks.add(block)
             }
+            clearConsoleUseCase.clear()
             program.execute()
+            writeToConsoleUseCase.writeOutputToConsole("\nProcess finished with exit code 0")
         }
     }
 

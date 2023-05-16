@@ -20,7 +20,7 @@ class ConsoleRepositoryImpl : ConsoleRepository() {
     private companion object {
         const val BUFFER_SIZE = 200
         fun getColorByType(messageType: MessageType): Color {
-            return when(messageType) {
+            return when (messageType) {
                 MessageType.OUTPUT -> ConsoleOutput
                 MessageType.INPUT -> ConsoleInput
                 MessageType.ERROR -> ConsoleError
@@ -37,7 +37,7 @@ class ConsoleRepositoryImpl : ConsoleRepository() {
         if (outputBuffer.size == BUFFER_SIZE) {
             outputBuffer.removeFirst()
         }
-        outputBuffer.add(Pair(message + '\n', messageType))
+        outputBuffer.add(Pair('\n' + message, messageType))
         inputBuffer.tryEmit(message)
         flush()
     }
