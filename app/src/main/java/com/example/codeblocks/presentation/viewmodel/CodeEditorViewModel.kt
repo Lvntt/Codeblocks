@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.BlockWithNesting
+import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
@@ -25,6 +26,7 @@ import com.example.codeblocks.presentation.block.data.BlockWithNestingData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.data.SimpleBlockData
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
+import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
@@ -55,7 +57,8 @@ class CodeEditorViewModel : ViewModel() {
         LessOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
         MoreCheckBlock::class to OperatorExpressionBlockParameters::class,
         MoreOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
-        NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class
+        NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
+        PrintToConsoleBlock::class to SingleExpressionParameter::class
     )
 
     fun moveBlock(from: ItemPosition, to: ItemPosition) {

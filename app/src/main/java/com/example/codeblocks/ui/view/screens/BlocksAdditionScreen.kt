@@ -10,12 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
+import com.example.codeblocks.ui.view.blocks.OutputToConsoleBlock
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
 import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
 import kotlin.reflect.KClass
@@ -50,6 +52,13 @@ fun BlocksAdditionScreen(
                         }
                         SetVariableBlock::class -> {
                             VariableAssignmentBlock(
+                                navController = navController,
+                                onAddBlockClick = onClick,
+                                isEditable = false
+                            )
+                        }
+                        PrintToConsoleBlock::class -> {
+                            OutputToConsoleBlock(
                                 navController = navController,
                                 onAddBlockClick = onClick,
                                 isEditable = false

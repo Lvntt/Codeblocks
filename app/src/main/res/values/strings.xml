@@ -31,4 +31,6 @@
     <string name="inequalityOperator">≠</string>
     <string name="openingBracket">(</string>
     <string name="closingBracket">)</string>
+    <string name="print">print</string>
+    <string name="toConsole">to console</string>
 </resources>

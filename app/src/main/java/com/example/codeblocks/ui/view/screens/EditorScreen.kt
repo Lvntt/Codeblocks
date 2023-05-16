@@ -17,8 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
@@ -27,6 +29,7 @@ import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.view.blocks.AddBlock
+import com.example.codeblocks.ui.view.blocks.OutputToConsoleBlock
 import com.example.codeblocks.ui.view.blocks.StartBlock
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
 import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
@@ -86,6 +89,15 @@ fun EditorScreen(
                                         setAddBlockCallback = viewModel::setAddBlockCallback,
                                         createBlockDataByType = viewModel::createBlockDataByType,
                                         parameters = currentBlock.blockParametersData as VariableAssignmentBlockParameters,
+                                        isEditable = true
+                                    )
+                                }
+                                PrintToConsoleBlock::class -> {
+                                    OutputToConsoleBlock(
+                                        navController = navController,
+                                        setAddBlockCallback = viewModel::setAddBlockCallback,
+                                        createBlockDataByType = viewModel::createBlockDataByType,
+                                        parameters = currentBlock.blockParametersData as SingleExpressionParameter,
                                         isEditable = true
                                     )
                                 }
