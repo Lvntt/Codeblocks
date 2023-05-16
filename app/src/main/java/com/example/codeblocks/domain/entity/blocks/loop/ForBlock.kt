@@ -15,11 +15,12 @@ class ForBlock : BlockWithNesting() {
 
     override fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
-        val nestedScope = NestedScope(scope)
-        (paramBundle as ForExpressionBlockBundle).firstBlock.setupScope(nestedScope)
-        (paramBundle as ForExpressionBlockBundle).firstBlock.execute()
+        val expressionNestedScope = NestedScope(scope)
+        (paramBundle as ForExpressionBlockBundle).initBlock.setupScope(expressionNestedScope)
+        (paramBundle as ForExpressionBlockBundle).initBlock.execute()
 
         while (true) {
+            val nestedScope = NestedScope(scope)
             (paramBundle as ForExpressionBlockBundle).expressionBlock.setupScope(nestedScope)
             val returnedValue =
                 (paramBundle as ForExpressionBlockBundle).expressionBlock.getReturnedValue()
@@ -45,8 +46,8 @@ class ForBlock : BlockWithNesting() {
                 }
             }
 
-            (paramBundle as ForExpressionBlockBundle).secondBlock.setupScope(nestedScope)
-            (paramBundle as ForExpressionBlockBundle).secondBlock.execute()
+            (paramBundle as ForExpressionBlockBundle).afterIterationBlock.setupScope(expressionNestedScope)
+            (paramBundle as ForExpressionBlockBundle).afterIterationBlock.execute()
         }
     }
 
