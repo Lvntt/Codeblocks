@@ -7,13 +7,15 @@ import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.StopExecutionBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.ForExpressionBlockBundle
 import com.example.codeblocks.domain.entity.variables.BooleanVariable
+import com.example.codeblocks.domain.entity.variables.VariableCasts
+import com.example.codeblocks.domain.entity.variables.VariableCasts.typeCanBeSeamlesslyConverted
 import kotlin.reflect.KClass
 
 class ForBlock : BlockWithNesting() {
 
     override val paramType: KClass<out ParamBundle> = ForExpressionBlockBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
         val expressionNestedScope = NestedScope(scope)
         (paramBundle as ForExpressionBlockBundle).initBlock.setupScope(expressionNestedScope)
@@ -22,11 +24,12 @@ class ForBlock : BlockWithNesting() {
         while (true) {
             val nestedScope = NestedScope(expressionNestedScope)
             (paramBundle as ForExpressionBlockBundle).expressionBlock.setupScope(expressionNestedScope)
-            val returnedValue =
-                (paramBundle as ForExpressionBlockBundle).expressionBlock.getReturnedValue()
+            var returnedValue = (paramBundle as ForExpressionBlockBundle).expressionBlock.getReturnedValue()
+                ?: /*TODO error handling*/ throw Exception()
 
-            if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception() }
-            val booleanValue = returnedValue.getValue() ?: /*TODO error handling*/ throw Exception()
+            if (!typeCanBeSeamlesslyConverted(returnedValue, BooleanVariable::class)) { /*TODO error handling*/ throw Exception() }
+            returnedValue = VariableCasts.castVariable(returnedValue, BooleanVariable::class) ?: /*TODO error handling*/ throw Exception()
+            val booleanValue = (returnedValue as BooleanVariable).getValue() ?: /*TODO error handling*/ throw Exception()
 
             if (!booleanValue) { return }
             for (block in nestedBlocks) {
