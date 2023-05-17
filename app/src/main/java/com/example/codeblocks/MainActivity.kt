@@ -3,6 +3,8 @@ package com.example.codeblocks
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.Animatable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -14,6 +16,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -32,18 +37,13 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         setContent {
             CodeblocksTheme {
                 val viewModel = koinViewModel<CodeEditorViewModel>()
                 val navController = rememberNavController()
                 val backStackEntry = navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry.value?.destination?.route
-                val systemUiController = rememberSystemUiController()
-                systemUiController.setStatusBarColor(color = when(currentRoute) {
-                    CodeblocksDestinations.CONSOLE_ROUTE -> ConsoleBackground
-                    else -> MaterialTheme.colorScheme.background
-                })
                 Scaffold(
                     bottomBar = {
                         BottomNavigationBar(
@@ -73,6 +73,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
+
                             CodeblocksDestinations.BLOCKS_ADDITION_ROUTE,
                             CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE -> {
                                 ExtendedFloatingActionButton(
@@ -90,14 +91,30 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
+
                             else -> {
                                 return@Scaffold
                             }
                         }
                     }
                 ) { innerPadding ->
+                    val systemUiController = rememberSystemUiController()
+                    val defaultBackground = MaterialTheme.colorScheme.background
+                    val color = remember { Animatable(defaultBackground) }
+                    LaunchedEffect(currentRoute) {
+                        when (currentRoute) {
+                            CodeblocksDestinations.CONSOLE_ROUTE -> color.animateTo(ConsoleBackground)
+
+                            else -> color.animateTo(defaultBackground)
+                        }
+                    }
+                    SideEffect {
+                        systemUiController.setStatusBarColor(color.value)
+                    }
                     Box(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .background(color.value)
                     ) {
                         Navigation(navController = navController)
                     }
@@ -105,5 +122,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    
+
 }

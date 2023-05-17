@@ -15,3 +15,4 @@ val AddExpressionButtonSize = 48.dp
 val TextFieldHeight = 48.dp
 val TextFieldPadding = 8.dp
 val TextFieldMinimumWidth = 100.dp
+val ConsolePadding = 8.dp

@@ -82,7 +82,8 @@ class CodeEditorViewModel(
     fun moveBlock(from: ItemPosition, to: ItemPosition) {
         _programBlocks.apply {
             if (to.index - 1 >= 0 && to.index - 1 < _programBlocks.size
-                && from.index - 1 >= 0 && from.index - 1 < _programBlocks.size) {
+                && from.index - 1 >= 0 && from.index - 1 < _programBlocks.size
+            ) {
                 add(to.index - 1, removeAt(from.index - 1))
             }
         }
@@ -132,11 +133,11 @@ class CodeEditorViewModel(
     fun runProgram() {
         val program = Program()
         viewModelScope.launch(Dispatchers.IO + runtimeExceptionHandler) {
+            clearConsoleUseCase.clear()
             programBlocks.forEach {
                 val block = it.createBlock()
                 program.blocks.add(block)
             }
-            clearConsoleUseCase.clear()
             program.execute()
             writeToConsoleUseCase.writeOutputToConsole("\nProcess finished with exit code 0")
         }

@@ -37,7 +37,11 @@ class ConsoleRepositoryImpl : ConsoleRepository() {
         if (outputBuffer.size == BUFFER_SIZE) {
             outputBuffer.removeFirst()
         }
-        outputBuffer.add(Pair('\n' + message, messageType))
+        if (outputBuffer.size != 0) {
+            outputBuffer.add(Pair('\n' + message, messageType))
+        } else {
+            outputBuffer.add(Pair(message, messageType))
+        }
         inputBuffer.tryEmit(message)
         flush()
     }
