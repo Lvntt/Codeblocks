@@ -4,6 +4,7 @@ import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
 object VariableTypeMap {
+
     private val floatRegex = Regex("^-?[0-9]+[.][0-9]+[fF]$")
     private val doubleRegex = Regex("^-?[0-9]+[.][0-9]+$")
     private val integerRegex = Regex("^-?[0-9]+$")

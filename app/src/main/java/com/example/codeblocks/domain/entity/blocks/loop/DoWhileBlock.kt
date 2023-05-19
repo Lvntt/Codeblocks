@@ -7,6 +7,8 @@ import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.StopExecutionBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpressionBlockBundle
 import com.example.codeblocks.domain.entity.variables.BooleanVariable
+import com.example.codeblocks.domain.entity.variables.VariableCasts.castVariable
+import com.example.codeblocks.domain.entity.variables.VariableCasts.typeCanBeSeamlesslyConverted
 import kotlin.reflect.KClass
 
 class DoWhileBlock  : BlockWithNesting() {
@@ -36,14 +38,15 @@ class DoWhileBlock  : BlockWithNesting() {
             }
 
             (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
-            val returnedValue =
-                (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
+            var returnedValue = (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue()
+                ?: /*TODO error handling*/ throw Exception()
 
-            if (returnedValue !is BooleanVariable) { /*TODO error handling*/ throw Exception()
-            }
-            val booleanValue = returnedValue.getValue() ?: /*TODO error handling*/ throw Exception()
+            if (!typeCanBeSeamlesslyConverted(returnedValue, BooleanVariable::class)) { /*TODO error handling*/ throw Exception() }
+            returnedValue = castVariable(returnedValue, BooleanVariable::class) ?: /*TODO error handling*/ throw Exception()
+            val booleanValue = (returnedValue as BooleanVariable).getValue() ?: /*TODO error handling*/ throw Exception()
 
             if (!booleanValue) { return }
         }
     }
+
 }

@@ -4,6 +4,7 @@ import com.example.codeblocks.domain.entity.MessageType
 import com.example.codeblocks.domain.repository.ConsoleRepository
 
 class WriteToConsoleUseCase(private val consoleRepository: ConsoleRepository) {
+
     fun writeInputToConsole(message: String) =
         consoleRepository.writeToConsole(message, MessageType.INPUT)
 
@@ -12,4 +13,5 @@ class WriteToConsoleUseCase(private val consoleRepository: ConsoleRepository) {
 
     fun writeErrorToConsole(message: String) =
         consoleRepository.writeToConsole(message, MessageType.ERROR)
+
 }
