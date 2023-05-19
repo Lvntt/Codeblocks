@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
@@ -17,6 +18,7 @@ import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
+import com.example.codeblocks.ui.view.blocks.IfExpressionBlock
 import com.example.codeblocks.ui.view.blocks.OutputToConsoleBlock
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
 import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
@@ -40,7 +42,8 @@ fun BlocksAdditionScreen(
             ) {
                 items(availableBlocks) { currentBlockClass ->
                     val onClick = {
-                        viewModel.onAddBlockClick(currentBlockClass)
+//                        viewModel.onAddBlockClick(currentBlockClass)
+                        viewModel.executeCallback(currentBlockClass)
                         navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
                     }
                     when (currentBlockClass) {
@@ -59,6 +62,13 @@ fun BlocksAdditionScreen(
                         }
                         PrintToConsoleBlock::class -> {
                             OutputToConsoleBlock(
+                                navController = navController,
+                                onAddBlockClick = onClick,
+                                isEditable = false
+                            )
+                        }
+                        IfBlock::class -> {
+                            IfExpressionBlock(
                                 navController = navController,
                                 onAddBlockClick = onClick,
                                 isEditable = false
