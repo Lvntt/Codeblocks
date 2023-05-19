@@ -133,7 +133,7 @@ class CodeEditorViewModel(
     fun runProgram() {
         val program = Program()
         viewModelScope.launch(Dispatchers.IO + runtimeExceptionHandler) {
-            clearConsoleUseCase.clear()
+            clearConsoleUseCase()
             programBlocks.forEach {
                 val block = it.createBlock()
                 program.blocks.add(block)

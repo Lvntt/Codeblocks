@@ -1,9 +1,7 @@
 package com.example.codeblocks.presentation.viewmodel
 
 import androidx.compose.ui.text.AnnotatedString
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import com.example.codeblocks.domain.usecases.GetConsoleOutputUseCase
 import com.example.codeblocks.domain.usecases.IsInputRequestedUseCase
 import com.example.codeblocks.domain.usecases.WriteToConsoleUseCase
@@ -15,11 +13,11 @@ class ConsoleViewModel(
     getConsoleOutputUseCase: GetConsoleOutputUseCase,
     isInputRequestedUseCase: IsInputRequestedUseCase
 ) : ViewModel() {
-    private val _consoleOutput = getConsoleOutputUseCase.getOutput()
+    private val _consoleOutput = getConsoleOutputUseCase()
     val consoleOutput: Flow<AnnotatedString>
         get() = _consoleOutput
 
-    private val _isInputRequested = isInputRequestedUseCase.isInputRequested()
+    private val _isInputRequested = isInputRequestedUseCase()
     val isInputRequested: Flow<Boolean>
         get() = _isInputRequested
 

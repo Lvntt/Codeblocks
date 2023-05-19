@@ -4,6 +4,6 @@ import com.example.codeblocks.domain.repository.ConsoleRepository
 
 class GetConsoleOutputUseCase(private val consoleRepository: ConsoleRepository) {
 
-    fun getOutput() = consoleRepository.output
+    operator fun invoke() = consoleRepository.output
 
 }

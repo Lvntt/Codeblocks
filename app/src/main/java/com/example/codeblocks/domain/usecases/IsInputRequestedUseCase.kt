@@ -4,6 +4,6 @@ import com.example.codeblocks.domain.repository.ConsoleRepository
 
 class IsInputRequestedUseCase(private val consoleRepository: ConsoleRepository) {
 
-    fun isInputRequested() = consoleRepository.inputRequested
+    operator fun invoke() = consoleRepository.inputRequested
 
 }
