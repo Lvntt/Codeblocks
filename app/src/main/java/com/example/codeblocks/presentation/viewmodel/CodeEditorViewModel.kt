@@ -1,11 +1,13 @@
 package com.example.codeblocks.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.BlockWithNesting
 import com.example.codeblocks.domain.entity.Program
+import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
@@ -42,8 +44,7 @@ import kotlin.reflect.full.isSubclassOf
 
 class CodeEditorViewModel : ViewModel() {
 
-    private val _programBlocks: MutableList<BlockData> = mutableStateListOf()
-    val programBlocks: List<BlockData> = _programBlocks
+    val programBlocks: MutableList<BlockData> = mutableStateListOf()
 
     private var _currentAddBlockCallback: (KClass<out Block>) -> Unit = {}
 
@@ -64,13 +65,15 @@ class CodeEditorViewModel : ViewModel() {
         MoreOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
         NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
         PrintToConsoleBlock::class to SingleExpressionParameter::class,
-        ReadFromConsoleBlock::class to EmptyParameters::class
+        ReadFromConsoleBlock::class to EmptyParameters::class,
+        IfBlock::class to SingleExpressionParameter::class
     )
 
     fun moveBlock(from: ItemPosition, to: ItemPosition) {
-        _programBlocks.apply {
-            if (to.index - 1 >= 0 && to.index - 1 < _programBlocks.size
-                && from.index - 1 >= 0 && from.index - 1 < _programBlocks.size) {
+        Log.d("TAG", "${from.index} ${to.index}")
+        programBlocks.apply {
+            if (to.index - 1 >= 0 && to.index - 1 < programBlocks.size
+                && from.index - 1 >= 0 && from.index - 1 < programBlocks.size) {
                 add(to.index - 1, removeAt(from.index - 1))
             }
         }
@@ -113,7 +116,7 @@ class CodeEditorViewModel : ViewModel() {
     fun onAddBlockClick(blockToCreate: KClass<out Block>) {
         val block = createBlockDataByType(blockToCreate)
         if (block != null) {
-            _programBlocks.add(block)
+            programBlocks.add(block)
         }
     }
 

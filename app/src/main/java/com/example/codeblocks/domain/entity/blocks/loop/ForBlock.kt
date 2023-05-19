@@ -13,7 +13,7 @@ class ForBlock : BlockWithNesting() {
 
     override val paramType: KClass<out ParamBundle> = ForExpressionBlockBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
         val expressionNestedScope = NestedScope(scope)
         (paramBundle as ForExpressionBlockBundle).initBlock.setupScope(expressionNestedScope)

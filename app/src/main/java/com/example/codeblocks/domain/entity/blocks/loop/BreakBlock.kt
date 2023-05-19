@@ -7,5 +7,5 @@ import com.example.codeblocks.domain.entity.parambundles.EmptyParamBundle
 class BreakBlock : StopExecutionBlock()
 {
     override val paramType = EmptyParamBundle::class
-    override fun executeAfterChecks(scope: Scope) {}
+    override suspend fun executeAfterChecks(scope: Scope) {}
 }

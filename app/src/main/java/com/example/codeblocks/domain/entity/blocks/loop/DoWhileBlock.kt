@@ -13,7 +13,7 @@ class DoWhileBlock  : BlockWithNesting() {
 
     override val paramType: KClass<out ParamBundle> = SingleExpressionBlockBundle::class
 
-    override fun executeAfterChecks(scope: Scope) {
+    override suspend fun executeAfterChecks(scope: Scope) {
         stopCallingBlock = null
 
         while (true) {

@@ -1,6 +1,7 @@
 package com.example.codeblocks.ui
 
 import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
@@ -26,7 +27,8 @@ object AvailableBlocks {
     val availableBlocks: List<KClass<out Block>> = listOf(
         CreateVariableBlock::class,
         SetVariableBlock::class,
-        PrintToConsoleBlock::class
+        PrintToConsoleBlock::class,
+        IfBlock::class
     )
 
     val availableExpressions: List<KClass<out ExpressionBlock>> = listOf(

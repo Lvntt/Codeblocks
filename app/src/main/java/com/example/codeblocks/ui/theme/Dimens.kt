@@ -2,10 +2,13 @@ package com.example.codeblocks.ui.theme
 
 import androidx.compose.ui.unit.dp
 
+const val NestingBlockPaddingInt = 44
+
 val BlockHeight = 80.dp
 val ExpressionBlockHeight = 66.dp
 val SmallBlockMinimumWidth = 150.dp
-val BlockMinimumWidth = 250.dp
+val BlockMinimumWidth = 100.dp
+val EndIfBlockWidth = 150.dp
 val BlockPadding = 16.dp
 val PaddingBetweenBlocks = 8.dp
 val SpacerBetweenInnerElementsWidth = 12.dp
