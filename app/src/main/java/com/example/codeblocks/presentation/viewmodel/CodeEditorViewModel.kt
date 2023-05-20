@@ -23,6 +23,12 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Min
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
+import com.example.codeblocks.domain.entity.blocks.loop.BreakBlock
+import com.example.codeblocks.domain.entity.blocks.loop.ContinueBlock
+import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
+import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.domain.usecases.ClearConsoleUseCase
@@ -32,15 +38,16 @@ import com.example.codeblocks.presentation.block.data.BlockWithNestingData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.data.SimpleBlockData
 import com.example.codeblocks.presentation.block.parameters.EmptyParameters
+import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
+import com.example.codeblocks.reorderable.ItemPosition
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.example.codeblocks.reorderable.ItemPosition
 import java.util.UUID
 import kotlin.math.abs
 import kotlin.reflect.KClass
@@ -78,7 +85,13 @@ class CodeEditorViewModel(
         NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
         PrintToConsoleBlock::class to SingleExpressionParameter::class,
         ReadFromConsoleBlock::class to EmptyParameters::class,
-        IfBlock::class to SingleExpressionParameter::class
+        IfBlock::class to SingleExpressionParameter::class,
+        WhileBlock::class to SingleExpressionParameter::class,
+        DoWhileBlock::class to SingleExpressionParameter::class,
+        BreakBlock::class to EmptyParameters::class,
+        ContinueBlock::class to EmptyParameters::class,
+        FunctionReturnBlock::class to SingleExpressionParameter::class,
+        FunctionDeclaratorBlock::class to FunctionDeclarationParameters::class
     )
 
     private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->

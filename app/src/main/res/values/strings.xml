@@ -36,4 +36,14 @@
     <string name="readFromConsole">read from console</string>
     <string name="ifKeyword">if</string>
     <string name="thenKeyword">then</string>
+    <string name="whileKeyword">while</string>
+    <string name="doKeyword">do</string>
+    <string name="doWhile">do while</string>
+    <string name="breakKeyword">break</string>
+    <string name="continueKeyword">continue</string>
+    <string name="returnKeyword">return</string>
+    <string name="nullVariableKeyword">nothing</string>
+    <string name="function">function</string>
+    <string name="colon">:</string>
+    <string name="comma">,</string>
 </resources>

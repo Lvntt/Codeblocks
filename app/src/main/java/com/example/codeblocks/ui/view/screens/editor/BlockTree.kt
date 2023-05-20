@@ -18,13 +18,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
+import com.example.codeblocks.domain.entity.blocks.loop.BreakBlock
+import com.example.codeblocks.domain.entity.blocks.loop.ContinueBlock
+import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
+import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.BlockWithNestingData
+import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
@@ -39,11 +47,15 @@ import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.EndIfBlockWidth
 import com.example.codeblocks.ui.theme.NestingBlockPaddingInt
 import com.example.codeblocks.ui.view.blocks.AddBlock
+import com.example.codeblocks.ui.view.blocks.FunctionDeclarationBlock
+import com.example.codeblocks.ui.view.blocks.SingleTextBlockView
 import com.example.codeblocks.ui.view.blocks.IfExpressionBlock
 import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OutputToConsoleBlock
+import com.example.codeblocks.ui.view.blocks.ReturnBlock
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
 import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
+import com.example.codeblocks.ui.view.blocks.WhileLoopBlock
 import java.util.UUID
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -94,26 +106,30 @@ fun LazyListScope.block(
             val spacing by animateDpAsState(targetValue = (NestingBlockPaddingInt * nestingLevel).dp)
             Row {
                 Spacer(modifier = Modifier.width(spacing))
-                Box(modifier = Modifier
-                    .detectReorderAfterLongPress(state = reorderableState, onDragStartListener = {
-                        if (block is BlockWithNestingData) {
-                            block.expanded = false
-                            block.parentBlockList?.removeAt(block.parentBlockListIndex)
-                            block.parentBlockList?.add(
-                                block.parentBlockListIndex, block
-                            )
-                        }
-                    }, onDragEndListener = {
-                        if (block is BlockWithNestingData) {
-                            block.expanded = true
-                            block.parentBlockList?.removeAt(block.parentBlockListIndex)
-                            block.parentBlockList?.add(
-                                block.parentBlockListIndex, block
-                            )
-                        }
-                    })
-                    .shadow(elevation.value, BlockElementShape)
-                    .background(MaterialTheme.colorScheme.surface)
+                Box(
+                    modifier = Modifier
+                        .detectReorderAfterLongPress(
+                            state = reorderableState,
+                            onDragStartListener = {
+                                if (block is BlockWithNestingData) {
+                                    block.expanded = false
+                                    block.parentBlockList?.removeAt(block.parentBlockListIndex)
+                                    block.parentBlockList?.add(
+                                        block.parentBlockListIndex, block
+                                    )
+                                }
+                            },
+                            onDragEndListener = {
+                                if (block is BlockWithNestingData) {
+                                    block.expanded = true
+                                    block.parentBlockList?.removeAt(block.parentBlockListIndex)
+                                    block.parentBlockList?.add(
+                                        block.parentBlockListIndex, block
+                                    )
+                                }
+                            })
+                        .shadow(elevation.value, BlockElementShape)
+                        .background(MaterialTheme.colorScheme.surface)
                 ) {
                     BlockView(
                         block = block, navController = navController, viewModel = viewModel
@@ -155,14 +171,28 @@ private fun LazyListScope.blockWithNestingBottomPart(
     item(key = block.bottomBorderId) {
         Row(modifier = Modifier.animateItemPlacement()) {
             Spacer(modifier = Modifier.width((NestingBlockPaddingInt * nestingLevel).dp))
-            Box(
-                modifier = Modifier
-                    .height(BlockHeight)
-                    .width(EndIfBlockWidth)
-                    .clip(BlockElementShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(BlockPadding)
-            ) {}
+            when (block.blockClass) {
+                DoWhileBlock::class -> {
+                    WhileLoopBlock(
+                        navController = navController,
+                        setAddBlockCallback = viewModel::setAddBlockCallback,
+                        createBlockDataByType = viewModel::createBlockDataByType,
+                        parameters = block.blockParametersData as SingleExpressionParameter,
+                        isEditable = true
+                    )
+                }
+
+                else -> {
+                    Box(
+                        modifier = Modifier
+                            .height(BlockHeight)
+                            .width(EndIfBlockWidth)
+                            .clip(BlockElementShape)
+                            .background(MaterialTheme.colorScheme.primaryContainer)
+                            .padding(BlockPadding)
+                    ) {}
+                }
+            }
         }
     }
 }
@@ -209,6 +239,50 @@ private fun BlockView(
                 createBlockDataByType = viewModel::createBlockDataByType,
                 parameters = block.blockParametersData as SingleExpressionParameter,
                 isEditable = true
+            )
+        }
+
+        WhileBlock::class -> {
+            WhileLoopBlock(
+                navController = navController,
+                setAddBlockCallback = viewModel::setAddBlockCallback,
+                createBlockDataByType = viewModel::createBlockDataByType,
+                parameters = block.blockParametersData as SingleExpressionParameter,
+                isEditable = true
+            )
+        }
+
+        DoWhileBlock::class -> {
+            SingleTextBlockView(
+                descriptionStringRes = R.string.doKeyword
+            )
+        }
+
+        BreakBlock::class -> {
+            SingleTextBlockView(
+                descriptionStringRes = R.string.breakKeyword
+            )
+        }
+
+        ContinueBlock::class -> {
+            SingleTextBlockView(
+                descriptionStringRes = R.string.continueKeyword
+            )
+        }
+
+        FunctionReturnBlock::class -> {
+            ReturnBlock(
+                navController = navController,
+                setAddBlockCallback = viewModel::setAddBlockCallback,
+                createBlockDataByType = viewModel::createBlockDataByType,
+                parameters = block.blockParametersData as SingleExpressionParameter,
+                isEditable = true
+            )
+        }
+
+        FunctionDeclaratorBlock::class -> {
+            FunctionDeclarationBlock(
+                parameters = block.blockParametersData as FunctionDeclarationParameters
             )
         }
     }

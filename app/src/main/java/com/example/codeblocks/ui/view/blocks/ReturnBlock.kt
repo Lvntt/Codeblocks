@@ -21,26 +21,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
 import com.example.codeblocks.R
-import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
-import com.example.codeblocks.ui.AvailableVariableTypes
+import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.presentation.block.data.BlockData
+import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
+import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
-import com.example.codeblocks.ui.view.common.VariableNameTextField
-import com.example.codeblocks.ui.view.common.VariableTypesDropdownMenu
+import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
+import kotlin.reflect.KClass
 
 @Composable
-fun VariableDeclarationBlock(
+fun ReturnBlock(
+    navController: NavController,
     modifier: Modifier = Modifier,
-    parameters: VariableDeclarationBlockParameters = VariableDeclarationBlockParameters(),
+    setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit = {},
+    createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
+    parameters: SingleExpressionParameter = SingleExpressionParameter(),
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val onAddExpressionClick = {
+        setAddBlockCallback {
+            parameters.expression = createBlockDataByType(it) as ExpressionBlockData
+        }
+        navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+
     Box(
         modifier = modifier
             .height(BlockHeight)
@@ -67,7 +81,7 @@ fun VariableDeclarationBlock(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(id = R.string.create),
+                    text = stringResource(id = R.string.returnKeyword),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = BlockRegularTextStyle
                 )
@@ -77,38 +91,20 @@ fun VariableDeclarationBlock(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
             )
 
-            VariableTypesDropdownMenu(
-                getCurrentType = { parameters.type },
-                setCurrentType = { parameters.type = it },
-                variableTypesMap = AvailableVariableTypes.typenameToKClass
-            )
-
-            Spacer(
-                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-            )
-
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.variable),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
+            val parametersExpression = parameters.expression
+            if (parametersExpression == null) {
+                AddExpressionBlock(
+                    isEditable = isEditable,
+                    onClick = { onAddExpressionClick() }
+                )
+            } else {
+                ComposableByExpressionBlockClass(
+                    navController = navController,
+                    parametersExpression = parametersExpression,
+                    setAddBlockCallback = setAddBlockCallback,
+                    createBlockDataByType = createBlockDataByType
                 )
             }
-
-            Spacer(
-                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-            )
-
-            VariableNameTextField(
-                parameterName = parameters.name,
-                onValueChange = {
-                    parameters.name = it
-                },
-                placeholderId = R.string.namePlaceholder,
-                isEditable = isEditable
-            )
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.codeblocks.ui
 
 import com.example.codeblocks.domain.entity.Block
+import com.example.codeblocks.domain.entity.Returnable
 import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
@@ -18,6 +19,13 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Min
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
+import com.example.codeblocks.domain.entity.blocks.loop.BreakBlock
+import com.example.codeblocks.domain.entity.blocks.loop.ContinueBlock
+import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
+import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
 import kotlin.reflect.KClass
@@ -28,7 +36,13 @@ object AvailableBlocks {
         CreateVariableBlock::class,
         SetVariableBlock::class,
         PrintToConsoleBlock::class,
-        IfBlock::class
+        IfBlock::class,
+        WhileBlock::class,
+        DoWhileBlock::class,
+        BreakBlock::class,
+        ContinueBlock::class,
+        FunctionReturnBlock::class,
+        FunctionDeclaratorBlock::class
     )
 
     val availableExpressions: List<KClass<out ExpressionBlock>> = listOf(
