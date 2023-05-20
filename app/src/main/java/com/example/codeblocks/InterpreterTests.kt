@@ -1,13 +1,18 @@
 package com.example.codeblocks
 
 import com.example.codeblocks.domain.entity.Program
+import com.example.codeblocks.domain.entity.blocks.conditional.ElseBlock
 import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.AndBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.OrBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
@@ -17,7 +22,9 @@ import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
 import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.domain.entity.parambundles.EmptyParamBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.ForExpressionBlockBundle
+import com.example.codeblocks.domain.entity.parambundles.expression.IfExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.VariableBundle
@@ -54,8 +61,8 @@ fun fibonacciTest(n: String): Program {
     val secondComparisonBlock = EqualityCheckBlock()
     val secondComparisonBundle = TwoExpressionBlockBundle(nValueBlock, oneValueBlock)
     secondComparisonBlock.setParams(secondComparisonBundle)
-    val firstIfExpression = SingleExpressionBlockBundle(firstComparisonBlock)
-    val secondIfExpression = SingleExpressionBlockBundle(secondComparisonBlock)
+    val firstIfExpression = IfExpressionBlockBundle(firstComparisonBlock, null)
+    val secondIfExpression = IfExpressionBlockBundle(secondComparisonBlock, null)
     firstIf.setParams(firstIfExpression)
     secondIf.setParams(secondIfExpression)
     val firstReturnBlock = FunctionReturnBlock()
@@ -182,5 +189,72 @@ fun forTest(n: String): Program {
     program.blocks.add(twoVariableDeclaratorBlock)
     program.blocks.add(twoSetVariableBlock)
     program.blocks.add(whileBlock)
+    return program
+}
+
+fun ifTest(n: String): Program {
+    val program = Program()
+    val variableDeclaratorBlock = CreateVariableBlock()
+    val variableDeclaratorBundle = CreateVariableBundle("n", IntegerVariable::class)
+    variableDeclaratorBlock.setParams(variableDeclaratorBundle)
+    val inputValueBlock = VariableByValueBlock()
+    val inputValueBundle = VariableBundle(n)
+    inputValueBlock.setParams(inputValueBundle)
+    val setVariableBlock = SetVariableBlock()
+    val setVariableBundle = SetVariableBundle("n", inputValueBlock)
+    setVariableBlock.setParams(setVariableBundle)
+    val ifBlock = IfBlock()
+    val nValueBlock = VariableByNameBlock()
+    val nValueBundle = VariableBundle("n")
+    nValueBlock.setParams(nValueBundle)
+    val fiveValueBlock = VariableByValueBlock()
+    val fiveValueBundle = VariableBundle("5")
+    fiveValueBlock.setParams(fiveValueBundle)
+    val minusFiveValueBlock = VariableByValueBlock()
+    val minusFiveValueBundle = VariableBundle("-5")
+    minusFiveValueBlock.setParams(minusFiveValueBundle)
+    val tenValueBlock = VariableByValueBlock()
+    val tenValueBundle = VariableBundle("10")
+    tenValueBlock.setParams(tenValueBundle)
+    val minusTenValueBlock = VariableByValueBlock()
+    val minusTenValueBundle = VariableBundle("-10")
+    minusTenValueBlock.setParams(minusTenValueBundle)
+    val oneValueBlock = VariableByValueBlock()
+    val oneValueBundle = VariableBundle("1")
+    oneValueBlock.setParams(oneValueBundle)
+    val minusOneValueBlock = VariableByValueBlock()
+    val minusOneValueBundle = VariableBundle("-1")
+    minusOneValueBlock.setParams(minusOneValueBundle)
+    val firstComparisonBlock = MoreOrEqualCheckBlock()
+    val firstComparisonBundle = TwoExpressionBlockBundle(nValueBlock, fiveValueBlock)
+    firstComparisonBlock.setParams(firstComparisonBundle)
+    val secondComparisonBlock = LessOrEqualCheckBlock()
+    val secondComparisonBundle = TwoExpressionBlockBundle(nValueBlock, tenValueBlock)
+    secondComparisonBlock.setParams(secondComparisonBundle)
+    val firstAndComparisonBlock = AndBlock()
+    firstAndComparisonBlock.setParams(TwoExpressionBlockBundle(firstComparisonBlock, secondComparisonBlock))
+    val thirdComparisonBlock = MoreCheckBlock()
+    val thirdComparisonBundle = TwoExpressionBlockBundle(nValueBlock, minusTenValueBlock)
+    thirdComparisonBlock.setParams(thirdComparisonBundle)
+    val fourthComparisonBlock = LessCheckBlock()
+    val fourthComparisonBundle = TwoExpressionBlockBundle(nValueBlock, minusFiveValueBlock)
+    fourthComparisonBlock.setParams(fourthComparisonBundle)
+    val secondAndComparisonBlock = AndBlock()
+    secondAndComparisonBlock.setParams(TwoExpressionBlockBundle(thirdComparisonBlock, fourthComparisonBlock))
+    val comparisonBlock = OrBlock()
+    comparisonBlock.setParams(TwoExpressionBlockBundle(firstAndComparisonBlock, secondAndComparisonBlock))
+    val printMinus = PrintToConsoleBlock()
+    printMinus.setParams(SingleExpressionBlockBundle(minusOneValueBlock))
+    val printPlus = PrintToConsoleBlock()
+    printPlus.setParams(SingleExpressionBlockBundle(oneValueBlock))
+    val elseBlock = ElseBlock()
+    elseBlock.setParams(EmptyParamBundle())
+    elseBlock.nestedBlocks.add(printMinus)
+    val ifExpression = IfExpressionBlockBundle(comparisonBlock, elseBlock)
+    ifBlock.setParams(ifExpression)
+    ifBlock.nestedBlocks.add(printPlus)
+    program.blocks.add(variableDeclaratorBlock)
+    program.blocks.add(setVariableBlock)
+    program.blocks.add(ifBlock)
     return program
 }

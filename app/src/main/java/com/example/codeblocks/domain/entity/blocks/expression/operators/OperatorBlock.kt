@@ -3,6 +3,7 @@ package com.example.codeblocks.domain.entity.blocks.expression.operators
 import com.example.codeblocks.domain.entity.DefaultValues
 import com.example.codeblocks.domain.entity.ParamBundle
 import com.example.codeblocks.domain.entity.Scope
+import com.example.codeblocks.domain.entity.Variable
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
 import com.example.codeblocks.domain.entity.variables.OperatorType
@@ -22,10 +23,8 @@ abstract class OperatorBlock : ExpressionBlock() {
             getVariableFromParams((paramBundle as TwoExpressionBlockBundle).secondExpressionBlock, scope)
 
         if (firstVariable == null || secondVariable == null) { /*TODO error handling*/ throw Exception() }
-        val firstValue = firstVariable.getValue()
-        val secondValue = secondVariable.getValue()
 
-        val resultValue = getOperatorResultValue(firstValue, secondValue)
+        val resultValue = getOperatorResultValue(firstVariable, secondVariable)
         if (resultValue == null || VariableTypeMap.typeMap[resultValue::class] == null) { /*TODO error handling*/ throw Exception() }
         val variableToReturn = VariableTypeMap.typeMap[resultValue::class]?.primaryConstructor?.call(DefaultValues.EMPTY_STRING)
                 ?: /*TODO error handling*/ throw Exception()
@@ -33,6 +32,6 @@ abstract class OperatorBlock : ExpressionBlock() {
         returnedVariable = variableToReturn
     }
 
-    protected abstract fun getOperatorResultValue(firstValue: Any?, secondValue: Any?): Any?
+    protected abstract fun getOperatorResultValue(firstVariable: Variable, secondVariable: Variable): Any?
 
 }
