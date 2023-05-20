@@ -42,7 +42,6 @@ fun BlocksAdditionScreen(
             ) {
                 items(availableBlocks) { currentBlockClass ->
                     val onClick = {
-//                        viewModel.onAddBlockClick(currentBlockClass)
                         viewModel.executeCallback(currentBlockClass)
                         navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
                     }

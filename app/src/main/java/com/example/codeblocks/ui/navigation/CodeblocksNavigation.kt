@@ -16,7 +16,7 @@ import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.AvailableBlocks
 import com.example.codeblocks.ui.view.screens.BlocksAdditionScreen
 import com.example.codeblocks.ui.view.screens.ConsoleScreen
-import com.example.codeblocks.ui.view.screens.EditorScreen
+import com.example.codeblocks.ui.view.screens.editor.EditorScreen
 import com.example.codeblocks.ui.view.screens.ExpressionAdditionScreen
 import com.example.codeblocks.ui.view.screens.OverviewScreen
 import org.koin.androidx.compose.koinViewModel
