@@ -42,8 +42,9 @@
     <string name="breakKeyword">break</string>
     <string name="continueKeyword">continue</string>
     <string name="returnKeyword">return</string>
-    <string name="nullVariableKeyword">nothing</string>
+    <string name="nullType">nothing</string>
     <string name="function">function</string>
     <string name="colon">:</string>
     <string name="comma">,</string>
+    <string name="call">call</string>
 </resources>

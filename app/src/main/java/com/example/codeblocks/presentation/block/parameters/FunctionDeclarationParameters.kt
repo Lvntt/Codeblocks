@@ -11,7 +11,8 @@ import kotlin.reflect.KClass
 data class FunctionDeclarationParameters(
     var name: String = DefaultValues.EMPTY_STRING,
     var returnType: KClass<out Variable> = NullVariable::class,
-    var paramsSignature: MutableList<Pair<String, KClass<out Variable>>> = mutableStateListOf()
+    var paramsSignature: MutableList<Pair<String, KClass<out Variable>>> = mutableStateListOf(),
+    val paramsVisibilityState: MutableList<Boolean> = mutableListOf()
 ): BlockParameters() {
     override fun createBundle(): ParamBundle {
         val functionSignature = FunctionSignature(name, returnType)

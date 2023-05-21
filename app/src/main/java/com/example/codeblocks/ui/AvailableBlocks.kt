@@ -1,7 +1,6 @@
 package com.example.codeblocks.ui
 
 import com.example.codeblocks.domain.entity.Block
-import com.example.codeblocks.domain.entity.Returnable
 import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
@@ -19,7 +18,7 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Min
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
-import com.example.codeblocks.domain.entity.blocks.function.FunctionBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
 import com.example.codeblocks.domain.entity.blocks.loop.BreakBlock
@@ -42,7 +41,8 @@ object AvailableBlocks {
         BreakBlock::class,
         ContinueBlock::class,
         FunctionReturnBlock::class,
-        FunctionDeclaratorBlock::class
+        FunctionDeclaratorBlock::class,
+        FunctionCallBlock::class
     )
 
     val availableExpressions: List<KClass<out ExpressionBlock>> = listOf(
@@ -59,7 +59,8 @@ object AvailableBlocks {
         MoreCheckBlock::class,
         MoreOrEqualCheckBlock::class,
         NotEqualCheckBlock::class,
-        ReadFromConsoleBlock::class
+        ReadFromConsoleBlock::class,
+        FunctionCallBlock::class
     )
 
 }

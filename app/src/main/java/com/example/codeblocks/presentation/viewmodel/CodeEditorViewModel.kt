@@ -23,6 +23,7 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Min
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionDeclaratorBlock
 import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
 import com.example.codeblocks.domain.entity.blocks.loop.BreakBlock
@@ -38,6 +39,7 @@ import com.example.codeblocks.presentation.block.data.BlockWithNestingData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.data.SimpleBlockData
 import com.example.codeblocks.presentation.block.parameters.EmptyParameters
+import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
@@ -91,7 +93,8 @@ class CodeEditorViewModel(
         BreakBlock::class to EmptyParameters::class,
         ContinueBlock::class to EmptyParameters::class,
         FunctionReturnBlock::class to SingleExpressionParameter::class,
-        FunctionDeclaratorBlock::class to FunctionDeclarationParameters::class
+        FunctionDeclaratorBlock::class to FunctionDeclarationParameters::class,
+        FunctionCallBlock::class to FunctionCallParameters::class
     )
 
     private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->

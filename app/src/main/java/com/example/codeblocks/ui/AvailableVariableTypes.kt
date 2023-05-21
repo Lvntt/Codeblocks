@@ -23,7 +23,7 @@ object AvailableVariableTypes {
     )
 
     val functionTypenameToKClass = mapOf(
-        R.string.nullVariableKeyword to NullVariable::class,
+        R.string.nullType to NullVariable::class,
         R.string.byteType to ByteVariable::class,
         R.string.shortType to ShortVariable::class,
         R.string.intType to IntegerVariable::class,

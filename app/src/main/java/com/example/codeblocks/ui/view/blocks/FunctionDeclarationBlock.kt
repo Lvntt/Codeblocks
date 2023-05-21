@@ -1,5 +1,7 @@
 package com.example.codeblocks.ui.view.blocks
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,64 +112,82 @@ fun FunctionDeclarationBlock(
             )
 
             for (parameterIndex in paramsSignature.indices) {
-                VariableNameTextField(
-                    parameterName = paramsSignature[parameterIndex].first,
-                    onValueChange = {
-                        paramsSignature[parameterIndex] =
-                            Pair(it, paramsSignature[parameterIndex].second)
-                    },
-                    placeholderId = R.string.namePlaceholder,
-                    isEditable = isEditable
-                )
-
-                Spacer(
-                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-                )
-
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.colon),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        style = BlockRegularTextStyle
-                    )
+                val visibilityState =
+                    remember { MutableTransitionState(parameters.paramsVisibilityState[parameterIndex]) }.apply {
+                        targetState = true
+                    }
+                LaunchedEffect(visibilityState.currentState && !parameters.paramsVisibilityState[parameterIndex]) {
+                    if (visibilityState.currentState && !parameters.paramsVisibilityState[parameterIndex]) {
+                        parameters.paramsVisibilityState[parameterIndex] = true
+                    }
                 }
+                AnimatedVisibility(visibleState = visibilityState) {
+                    Row {
+                        VariableNameTextField(
+                            parameterName = paramsSignature[parameterIndex].first,
+                            onValueChange = {
+                                paramsSignature[parameterIndex] =
+                                    Pair(it, paramsSignature[parameterIndex].second)
+                            },
+                            placeholderId = R.string.namePlaceholder,
+                            isEditable = isEditable
+                        )
 
-                Spacer(
-                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-                )
+                        Spacer(
+                            modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                        )
 
-                VariableTypesDropdownMenu(
-                    getCurrentType = { paramsSignature[parameterIndex].second },
-                    setCurrentType = {
-                        paramsSignature[parameterIndex] =
-                            Pair(paramsSignature[parameterIndex].first, it)
-                    },
-                    variableTypesMap = AvailableVariableTypes.typenameToKClass
-                )
+                        Box(
+                            modifier = modifier.fillMaxHeight(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.colon),
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                style = BlockRegularTextStyle
+                            )
+                        }
 
-                Spacer(
-                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-                )
+                        Spacer(
+                            modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                        )
 
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.comma),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        style = BlockRegularTextStyle
-                    )
+                        VariableTypesDropdownMenu(
+                            getCurrentType = { paramsSignature[parameterIndex].second },
+                            setCurrentType = {
+                                paramsSignature[parameterIndex] =
+                                    Pair(paramsSignature[parameterIndex].first, it)
+                            },
+                            variableTypesMap = AvailableVariableTypes.typenameToKClass
+                        )
+
+                        Spacer(
+                            modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                        )
+
+                        Box(
+                            modifier = modifier.fillMaxHeight(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.comma),
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                style = BlockRegularTextStyle
+                            )
+                        }
+
+                        Spacer(
+                            modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                        )
+                    }
                 }
-
-                Spacer(
-                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-                )
             }
 
             AddExpressionBlock {
-                paramsSignature.add(Pair(DefaultValues.EMPTY_STRING, IntegerVariable::class))
+                if (isEditable) {
+                    paramsSignature.add(Pair(DefaultValues.EMPTY_STRING, IntegerVariable::class))
+                    parameters.paramsVisibilityState.add(false)
+                }
             }
 
             Spacer(
