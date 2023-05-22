@@ -4,6 +4,7 @@ import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
 object VariableCasts {
+
     val castMap: Map<Pair<KClass<out Variable>, KClass<out Variable>>, (Variable) -> Variable> =
         mapOf(
             Pair(ByteVariable::class, ByteVariable::class) to { it },
@@ -386,4 +387,5 @@ object VariableCasts {
             return castLambda(variable)
         return null
     }
+
 }

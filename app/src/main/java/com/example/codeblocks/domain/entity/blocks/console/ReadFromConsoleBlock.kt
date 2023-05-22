@@ -20,7 +20,7 @@ class ReadFromConsoleBlock: ExpressionBlock(), KoinComponent {
     private val readFromConsoleUseCase: ReadFromConsoleUseCase by inject()
 
     override suspend fun executeAfterChecks(scope: Scope) {
-        val value = convertStringToVariableValue(readFromConsoleUseCase.readFromConsole())
+        val value = convertStringToVariableValue(readFromConsoleUseCase())
         returnedVariable = if (value != null) {
             val variable = VariableTypeMap.typeMap[value::class]?.primaryConstructor?.call(
                 DefaultValues.EMPTY_STRING) ?: /*TODO error handling*/ throw Exception()
