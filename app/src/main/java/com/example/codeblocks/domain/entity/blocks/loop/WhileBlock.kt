@@ -1,5 +1,6 @@
 package com.example.codeblocks.domain.entity.blocks.loop
 
+import android.util.Log
 import com.example.codeblocks.domain.entity.BlockWithNesting
 import com.example.codeblocks.domain.entity.NestedScope
 import com.example.codeblocks.domain.entity.ParamBundle
@@ -41,8 +42,8 @@ class WhileBlock : BlockWithNesting() {
                     stopCallingBlock = block.stopCallingBlock
                     return
                 } else if (block is StopExecutionBlock) {
-                    if (stopCallingBlock is BreakBlock) { return }
-                    if (stopCallingBlock is ContinueBlock) { break }
+                    if (block is BreakBlock) { return }
+                    if (block is ContinueBlock) { break }
                     stopCallingBlock = block
                     return
                 }

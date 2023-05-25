@@ -4,31 +4,31 @@ import com.example.codeblocks.domain.entity.blocks.function.FunctionBlock
 
 open class Scope {
 
-    protected val variables: MutableList<Variable> = mutableListOf()
+    protected val variables: MutableMap<String,Variable> = mutableMapOf()
 
-    private val functions: MutableList<FunctionBlock> = mutableListOf()
+    private val functions: MutableMap<String,FunctionBlock> = mutableMapOf()
 
     fun addVariable(variable: Variable) {
-        variables.add(variable)
+        if(variables[variable.name] != null) /*TODO error handling*/ throw Exception()
+        variables[variable.name] = variable
     }
 
     fun addFunction(function: FunctionBlock) {
-        functions.add(function)
+        if(functions[function.getName()] != null) /*TODO error handling*/ throw Exception()
+        functions[function.getName()] = function
     }
 
     open fun findVariable(name: String): Variable? {
-        return variables.find { it.name == name }
+        return variables[name]
     }
 
     open fun findFunction(name: String): FunctionBlock? {
-        return functions.find { it.getName() == name }
+        return functions[name]
     }
 
     open fun setVariable(name: String, variable: Variable) {
-        val index = variables.indexOfFirst { it.name == name }
-        if (index == -1) { /*TODO error handling*/ throw Exception() }
-
-        variables[index] = variable.copy(name)
+        if(variables[name] == null) /*TODO error handling*/ throw Exception()
+        variables[name] = variable.copy(name)
     }
 
 }

@@ -17,9 +17,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.codeblocks.R
+import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.BlockWithNestingData
+import com.example.codeblocks.presentation.block.parameters.IfBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.reorderable.ReorderableItem
@@ -34,6 +37,7 @@ import com.example.codeblocks.ui.theme.DefaultBlockElevation
 import com.example.codeblocks.ui.theme.EndIfBlockWidth
 import com.example.codeblocks.ui.theme.NestingBlockPaddingInt
 import com.example.codeblocks.ui.view.blocks.AddBlock
+import com.example.codeblocks.ui.view.blocks.SingleTextBlockView
 import com.example.codeblocks.ui.view.blocks.WhileLoopBlock
 import com.example.codeblocks.ui.view.common.BlockView
 import java.util.UUID
@@ -44,6 +48,7 @@ fun LazyListScope.nestedBlocks(
     navController: NavController,
     viewModel: CodeEditorViewModel,
     addBlockId: UUID? = null,
+    parentBlockId: UUID? = null,
     nestedBlocks: MutableList<BlockData>,
     reorderableState: ReorderableLazyListState,
     visible: Boolean = true
@@ -68,7 +73,7 @@ fun LazyListScope.nestedBlocks(
             AddBlock(
                 onClick = {
                     viewModel.setAddBlockCallback {
-                        viewModel.addNewBlockToList(it, nestedBlocks)
+                        viewModel.addNewBlockToList(it, nestedBlocks, parentBlockId)
                     }
                     navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
                 }
@@ -113,20 +118,12 @@ fun LazyListScope.block(
                             state = reorderableState,
                             onDragStartListener = {
                                 if (block is BlockWithNestingData) {
-                                    block.expanded = false
-                                    block.parentBlockList?.removeAt(block.parentBlockListIndex)
-                                    block.parentBlockList?.add(
-                                        block.parentBlockListIndex, block
-                                    )
+                                    viewModel.setBlockExpanded(false, block)
                                 }
                             },
                             onDragEndListener = {
                                 if (block is BlockWithNestingData) {
-                                    block.expanded = true
-                                    block.parentBlockList?.removeAt(block.parentBlockListIndex)
-                                    block.parentBlockList?.add(
-                                        block.parentBlockListIndex, block
-                                    )
+                                    viewModel.setBlockExpanded(true, block)
                                 }
                             })
                         .shadow(elevation.value, BlockElementShape)
@@ -169,6 +166,7 @@ private fun LazyListScope.blockWithNestingBottomPart(
         navController = navController,
         viewModel = viewModel,
         addBlockId = block.addBlockButtonId,
+        parentBlockId = block.id,
         nestedBlocks = block.nestedBlocksData,
         reorderableState = reorderableState,
         visible = block.expanded
@@ -190,6 +188,20 @@ private fun LazyListScope.blockWithNestingBottomPart(
                     )
                 }
 
+                IfBlock::class -> {
+                    if ((block.blockParametersData as IfBlockParameters).elseBlock == null) {
+                        AddBlock(
+                            onClick = {
+                                viewModel.addElseBlock(block)
+                            },
+                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                            labelId = R.string.addElseBranch
+                        )
+                    } else {
+                        SingleTextBlockView(descriptionStringRes = R.string.elseKeyword)
+                    }
+                }
+
                 else -> {
                     Box(
                         modifier = Modifier
@@ -200,6 +212,33 @@ private fun LazyListScope.blockWithNestingBottomPart(
                             .padding(BlockPadding)
                     )
                 }
+            }
+        }
+    }
+
+    if (block.blockClass == IfBlock::class) {
+        val elseBlock = (block.blockParametersData as IfBlockParameters).elseBlock ?: return
+        nestedBlocks(
+            nestingLevel = nestingLevel + 1,
+            navController = navController,
+            viewModel = viewModel,
+            addBlockId = elseBlock.addBlockButtonId,
+            parentBlockId = elseBlock.id,
+            nestedBlocks = elseBlock.nestedBlocksData,
+            reorderableState = reorderableState,
+            visible = block.expanded
+        )
+        item(key = elseBlock.bottomBorderId) {
+            Row(modifier = Modifier.animateItemPlacement()) {
+                Spacer(modifier = Modifier.width((NestingBlockPaddingInt * nestingLevel).dp))
+                Box(
+                    modifier = Modifier
+                        .height(BlockHeight)
+                        .width(EndIfBlockWidth)
+                        .clip(BlockElementShape)
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(BlockPadding)
+                )
             }
         }
     }

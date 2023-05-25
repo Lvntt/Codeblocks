@@ -29,6 +29,8 @@
     <string name="greaterOperator">&gt;</string>
     <string name="greaterOrEqualOperator">≥</string>
     <string name="inequalityOperator">≠</string>
+    <string name="andOperator">&amp;&amp;</string>
+    <string name="orOperator">||</string>
     <string name="openingBracket">(</string>
     <string name="closingBracket">)</string>
     <string name="print">print</string>
@@ -52,6 +54,9 @@
     <string name="comma">,</string>
     <string name="call">call</string>
     <string name="forKeyword">for</string>
+    <string name="addElseBranch">add else branch</string>
+    <string name="elseKeyword">else</string>
+    <string name="castKeyword">as</string>
     <string name="gotIt">got it!</string>
     <string name="deleteModeSnackbarDescription">click on a block to delete it!</string>
     <string name="exitDeleteMode">Exit delete mode</string>

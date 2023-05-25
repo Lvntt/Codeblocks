@@ -8,12 +8,15 @@ import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.NotEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.AndBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.OrBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
@@ -65,6 +68,9 @@ object AvailableBlocks {
         MoreCheckBlock::class,
         MoreOrEqualCheckBlock::class,
         NotEqualCheckBlock::class,
+        AndBlock::class,
+        OrBlock::class,
+        CastBlock::class,
         ReadFromConsoleBlock::class,
         FunctionCallBlock::class
     )

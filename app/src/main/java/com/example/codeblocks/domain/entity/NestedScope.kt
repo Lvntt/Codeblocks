@@ -13,11 +13,10 @@ class NestedScope(private val parentScope: Scope) : Scope() {
     }
 
     override fun setVariable(name: String, variable: Variable) {
-        val index = variables.indexOfFirst { it.name == name }
-        if (index != -1) {
-            variables[index] = variable.copy(name)
-        } else {
+        if(variables[name] == null) {
             parentScope.setVariable(name, variable)
+        } else {
+            variables[name] = variable.copy(name)
         }
     }
 

@@ -26,6 +26,7 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import com.example.codeblocks.presentation.block.parameters.IfBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
@@ -43,7 +44,7 @@ fun IfExpressionBlock(
     modifier: Modifier = Modifier,
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit = {},
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
-    parameters: SingleExpressionParameter = SingleExpressionParameter(),
+    parameters: IfBlockParameters = IfBlockParameters(),
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {

@@ -8,12 +8,15 @@ import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.NotEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.AndBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.OrBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
@@ -22,9 +25,11 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Rem
 import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import com.example.codeblocks.presentation.block.parameters.CastExpressionParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
+import com.example.codeblocks.ui.view.blocks.CastExpressionBlock
 import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
@@ -163,6 +168,26 @@ fun ComposableByExpressionBlockClass(
             )
         }
 
+        AndBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.andOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+        
+        OrBlock::class -> {
+            OperatorExpressionBlock(
+                navController = navController,
+                blockOperator = stringResource(id = R.string.orOperator),
+                parameters = parametersExpression.blockParametersData as OperatorExpressionBlockParameters,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType
+            )
+        }
+
         ReadFromConsoleBlock::class -> {
             InputFromConsoleBlock()
         }
@@ -173,6 +198,14 @@ fun ComposableByExpressionBlockClass(
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
                 parameters = parametersExpression.blockParametersData as FunctionCallParameters
+            )
+        }
+        CastBlock::class -> {
+            CastExpressionBlock(
+                navController = navController,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType,
+                parameters = parametersExpression.blockParametersData as CastExpressionParameters
             )
         }
     }
