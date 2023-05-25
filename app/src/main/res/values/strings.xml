@@ -52,4 +52,7 @@
     <string name="comma">,</string>
     <string name="call">call</string>
     <string name="forKeyword">for</string>
+    <string name="gotIt">got it!</string>
+    <string name="deleteModeSnackbarDescription">click on a block to delete it!</string>
+    <string name="exitDeleteMode">Exit delete mode</string>
 </resources>

@@ -45,12 +45,14 @@ fun ComposableByExpressionBlockClass(
                 parameters = parametersExpression.blockParametersData as StringExpressionParameter
             )
         }
+
         VariableByValueBlock::class -> {
             VariableExpressionBlock(
                 placeholderId = R.string.valuePlaceholder,
                 parameters = parametersExpression.blockParametersData as StringExpressionParameter
             )
         }
+
         PlusBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -60,6 +62,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         MinusBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -69,6 +72,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         DivisionBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -78,6 +82,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         MultiplicationBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -87,6 +92,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         RemainderBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -96,6 +102,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         EqualityCheckBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -105,6 +112,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         LessCheckBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -114,6 +122,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         LessOrEqualCheckBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -123,6 +132,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         MoreCheckBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -132,6 +142,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         MoreOrEqualCheckBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -141,6 +152,7 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         NotEqualCheckBlock::class -> {
             OperatorExpressionBlock(
                 navController = navController,
@@ -150,9 +162,11 @@ fun ComposableByExpressionBlockClass(
                 createBlockDataByType = createBlockDataByType
             )
         }
+
         ReadFromConsoleBlock::class -> {
             InputFromConsoleBlock()
         }
+
         FunctionCallBlock::class -> {
             FunctionCallBlock(
                 navController = navController,

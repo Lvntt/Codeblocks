@@ -92,7 +92,7 @@ fun FunctionCallBlock(
             modifier = modifier.width(SpacerBetweenInnerElementsWidth)
         )
 
-        for(parameter in parameters.passedParameters) {
+        for (parameter in parameters.passedParameters) {
             ComposableByExpressionBlockClass(
                 navController = navController,
                 parametersExpression = parameter,
