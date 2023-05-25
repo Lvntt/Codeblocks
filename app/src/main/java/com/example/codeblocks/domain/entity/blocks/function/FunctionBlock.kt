@@ -26,8 +26,7 @@ class FunctionBlock : BlockWithNesting(), Returnable {
         returnedVariable = null
 
         val nestedScope = NestedScope(scope)
-        if (paramValues !is LoadedFunctionParams) { /*TODO error handling*/ throw Exception()
-        }
+        if (paramValues !is LoadedFunctionParams) { /*TODO error handling*/ throw Exception() }
         (paramValues as LoadedFunctionParams).variableList.forEachIndexed { index, variable ->
             nestedScope.addVariable(
                 castVariable(
@@ -41,11 +40,25 @@ class FunctionBlock : BlockWithNesting(), Returnable {
         for (block in nestedBlocks) {
             block.setupScope(nestedScope)
             block.execute()
-            if (!(block is StopExecutionBlock || block is BlockWithNesting && block.stopCallingBlock is StopExecutionBlock)) continue
+            if (!(block is StopExecutionBlock || block is BlockWithNesting && block.stopCallingBlock is StopExecutionBlock)) { continue }
             if (!(block is FunctionReturnBlock || block is BlockWithNesting && block.stopCallingBlock is FunctionReturnBlock)) { /*TODO error handling*/ throw Exception() }
-            if (block is BlockWithNesting) block.stopCallingBlock = null
+
+            val returnBlock: FunctionReturnBlock
+            if (block is BlockWithNesting) {
+                returnBlock = block.stopCallingBlock as FunctionReturnBlock
+                block.stopCallingBlock = null
+            } else {
+                returnBlock = block as FunctionReturnBlock
+            }
+
+            if (paramBundle !is FunctionSignature) { /*TODO error handling*/ throw Exception() }
+            val variableToReturn = returnBlock.returnResult ?: /*TODO error handling*/ throw Exception()
+            if (!typeCanBeSeamlesslyConverted(variableToReturn, (paramBundle as FunctionSignature).returnType))
+            { /*TODO error handling*/ throw Exception() }
+            returnedVariable = castVariable(variableToReturn, (paramBundle as FunctionSignature).returnType)
             return
         }
+
         returnedVariable =
             (paramBundle as FunctionSignature).returnType.primaryConstructor?.call(DefaultValues.EMPTY_STRING)
     }
@@ -71,14 +84,6 @@ class FunctionBlock : BlockWithNesting(), Returnable {
     ))
 
     fun getName(): String = (paramBundle as FunctionSignature).name
-
-    fun callReturn(returnedVariable: Variable) {
-        if (paramBundle !is FunctionSignature) { /*TODO error handling*/ throw Exception() }
-        if (!typeCanBeSeamlesslyConverted(returnedVariable, (paramBundle as FunctionSignature).returnType))
-        { /*TODO error handling*/ throw Exception() }
-
-        this.returnedVariable = castVariable(returnedVariable, (paramBundle as FunctionSignature).returnType)
-    }
 
     override suspend fun getReturnedValue(): Variable? {
         execute()

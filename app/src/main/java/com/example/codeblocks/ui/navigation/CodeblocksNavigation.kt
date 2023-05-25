@@ -16,7 +16,7 @@ import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.AvailableBlocks
 import com.example.codeblocks.ui.view.screens.BlocksAdditionScreen
 import com.example.codeblocks.ui.view.screens.ConsoleScreen
-import com.example.codeblocks.ui.view.screens.EditorScreen
+import com.example.codeblocks.ui.view.screens.editor.EditorScreen
 import com.example.codeblocks.ui.view.screens.ExpressionAdditionScreen
 import com.example.codeblocks.ui.view.screens.OverviewScreen
 import org.koin.androidx.compose.koinViewModel
@@ -27,6 +27,7 @@ object CodeblocksDestinations {
     const val OVERVIEW_ROUTE = "overview"
     const val BLOCKS_ADDITION_ROUTE = "blocks_addition"
     const val EXPRESSION_ADDITION_ROUTE = "expression_addition"
+    const val BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE = "blocks_without_nesting_addition"
 }
 
 @Composable
@@ -60,6 +61,13 @@ fun Navigation(
         composable(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE) {
             ExpressionAdditionScreen(
                 availableExpressions = AvailableBlocks.availableExpressions,
+                navController = navController,
+                viewModel = viewModel
+            )
+        }
+        composable(CodeblocksDestinations.BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE) {
+            BlocksAdditionScreen(
+                availableBlocks = AvailableBlocks.availableBlocksWithoutNesting,
                 navController = navController,
                 viewModel = viewModel
             )

@@ -31,5 +31,4 @@ class ReadFromConsoleBlock: ExpressionBlock(), KoinComponent {
         }
     }
 
-
 }

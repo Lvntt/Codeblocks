@@ -34,6 +34,7 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Min
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
@@ -41,6 +42,7 @@ import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.ExpressionBlockHeight
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.theme.SmallBlockMinimumWidth
+import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
@@ -67,6 +69,7 @@ fun ExpressionAdditionScreen(
                         viewModel.executeCallback(it)
                         navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
                     }
+
                     Box(
                         modifier = modifier
                             .height(ExpressionBlockHeight)
@@ -85,6 +88,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             VariableByValueBlock::class -> {
                                 VariableExpressionBlock(
                                     placeholderId = R.string.valuePlaceholder,
@@ -94,6 +98,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             PlusBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -104,6 +109,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             MinusBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -114,6 +120,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             DivisionBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -124,6 +131,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             MultiplicationBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -134,6 +142,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             RemainderBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -144,6 +153,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             EqualityCheckBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -154,6 +164,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             LessCheckBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -164,6 +175,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             LessOrEqualCheckBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -174,6 +186,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             MoreCheckBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -184,6 +197,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             MoreOrEqualCheckBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -194,6 +208,7 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             NotEqualCheckBlock::class -> {
                                 OperatorExpressionBlock(
                                     navController = navController,
@@ -204,11 +219,22 @@ fun ExpressionAdditionScreen(
                                     isEditable = false
                                 )
                             }
+
                             ReadFromConsoleBlock::class -> {
                                 InputFromConsoleBlock(
                                     onAddBlockClick = {
                                         onClick(currentBlockClass)
                                     }
+                                )
+                            }
+
+                            FunctionCallBlock::class -> {
+                                FunctionCallBlock(
+                                    navController = navController,
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
                                 )
                             }
                         }

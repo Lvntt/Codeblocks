@@ -28,15 +28,17 @@ class WhileBlock : BlockWithNesting() {
             val booleanValue = (returnedValue as BooleanVariable).getValue() ?: /*TODO error handling*/ throw Exception()
 
             if (!booleanValue) { return }
+
             val nestedScope = NestedScope(scope)
             for (block in nestedBlocks) {
                 block.setupScope(nestedScope)
                 block.execute()
+
                 if (block is BlockWithNesting && block.stopCallingBlock != null) {
+                    block.stopCallingBlock = null
                     if (block.stopCallingBlock is BreakBlock) { return }
                     if (block.stopCallingBlock is ContinueBlock) { break }
                     stopCallingBlock = block.stopCallingBlock
-                    block.stopCallingBlock = null
                     return
                 } else if (block is StopExecutionBlock) {
                     if (stopCallingBlock is BreakBlock) { return }

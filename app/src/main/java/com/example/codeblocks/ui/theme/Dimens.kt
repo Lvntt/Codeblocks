@@ -19,3 +19,5 @@ val TextFieldHeight = 48.dp
 val TextFieldPadding = 8.dp
 val TextFieldMinimumWidth = 100.dp
 val ConsolePadding = 8.dp
+val BlockDraggingElevation = 16.dp
+val DefaultBlockElevation = 0.dp

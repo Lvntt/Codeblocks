@@ -19,10 +19,13 @@ import com.example.codeblocks.domain.entity.blocks.expression.operators.math.Min
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.PlusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.RemainderBlock
+import com.example.codeblocks.domain.entity.blocks.function.FunctionCallBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
+import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
@@ -149,6 +152,14 @@ fun ComposableByExpressionBlockClass(
         }
         ReadFromConsoleBlock::class -> {
             InputFromConsoleBlock()
+        }
+        FunctionCallBlock::class -> {
+            FunctionCallBlock(
+                navController = navController,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType,
+                parameters = parametersExpression.blockParametersData as FunctionCallParameters
+            )
         }
     }
 }

@@ -13,6 +13,7 @@ class ConsoleViewModel(
     getConsoleOutputUseCase: GetConsoleOutputUseCase,
     isInputRequestedUseCase: IsInputRequestedUseCase
 ) : ViewModel() {
+
     private val _consoleOutput = getConsoleOutputUseCase()
     val consoleOutput: Flow<AnnotatedString>
         get() = _consoleOutput
@@ -23,4 +24,5 @@ class ConsoleViewModel(
 
     fun submitInput(message: String) =
         writeToConsoleUseCase.writeInputToConsole(message)
+
 }
