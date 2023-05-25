@@ -14,7 +14,6 @@ import com.example.codeblocks.reorderable.reorderable
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.view.blocks.StartBlock
-import com.example.codeblocks.ui.view.screens.editor.nestedBlocks
 
 @Composable
 fun EditorScreen(

@@ -57,4 +57,7 @@
     <string name="addElseBranch">add else branch</string>
     <string name="elseKeyword">else</string>
     <string name="castKeyword">as</string>
+    <string name="gotIt">got it!</string>
+    <string name="deleteModeSnackbarDescription">click on a block to delete it!</string>
+    <string name="exitDeleteMode">Exit delete mode</string>
 </resources>

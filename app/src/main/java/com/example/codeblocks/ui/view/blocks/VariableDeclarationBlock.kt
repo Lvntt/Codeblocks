@@ -41,13 +41,9 @@ fun VariableDeclarationBlock(
     isEditable: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
     Box(
         modifier = modifier
-            .height(BlockHeight)
-            .widthIn(BlockMinimumWidth, Dp.Infinity)
-            .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(BlockPadding)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
@@ -56,6 +52,11 @@ fun VariableDeclarationBlock(
                     onAddBlockClick()
                 }
             }
+            .height(BlockHeight)
+            .widthIn(BlockMinimumWidth, Dp.Infinity)
+            .clip(BlockElementShape)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(BlockPadding)
     ) {
         Row(
             modifier = modifier.fillMaxSize(),
@@ -75,7 +76,8 @@ fun VariableDeclarationBlock(
             VariableTypesDropdownMenu(
                 getCurrentType = { parameters.type },
                 setCurrentType = { parameters.type = it },
-                variableTypesMap = AvailableVariableTypes.typenameToKClass
+                variableTypesMap = AvailableVariableTypes.typenameToKClass,
+                isEditable = isEditable
             )
 
             Spacer(
