@@ -26,13 +26,17 @@ class IfBlock : BlockWithNesting() {
         val booleanValue = (returnedValue as BooleanVariable).getValue() ?: /*TODO error handling*/ throw Exception()
 
         if (!booleanValue) {
-
             if ((paramBundle as IfExpressionBlockBundle).elseBlock == null) { return }
             (paramBundle as IfExpressionBlockBundle).elseBlock?.setupScope(scope)
             (paramBundle as IfExpressionBlockBundle).elseBlock?.execute()
-            return
 
+            if((paramBundle as IfExpressionBlockBundle).elseBlock?.stopCallingBlock != null) {
+                stopCallingBlock = (paramBundle as IfExpressionBlockBundle).elseBlock?.stopCallingBlock
+                (paramBundle as IfExpressionBlockBundle).elseBlock?.stopCallingBlock = null
+            }
+            return
         }
+
         val nestedScope = NestedScope(scope)
         for (block in nestedBlocks) {
             block.setupScope(nestedScope)

@@ -52,4 +52,6 @@
     <string name="comma">,</string>
     <string name="call">call</string>
     <string name="forKeyword">for</string>
+    <string name="addElseBranch">add else branch</string>
+    <string name="elseKeyword">else</string>
 </resources>

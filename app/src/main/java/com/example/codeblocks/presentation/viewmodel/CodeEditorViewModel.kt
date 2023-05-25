@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.BlockWithNesting
 import com.example.codeblocks.domain.entity.Program
+import com.example.codeblocks.domain.entity.blocks.conditional.ElseBlock
 import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
@@ -44,6 +45,7 @@ import com.example.codeblocks.presentation.block.parameters.ForLoopBlockParamete
 import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionReturnParameters
+import com.example.codeblocks.presentation.block.parameters.IfBlockParameters
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
@@ -90,7 +92,7 @@ class CodeEditorViewModel(
         NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
         PrintToConsoleBlock::class to SingleExpressionParameter::class,
         ReadFromConsoleBlock::class to EmptyParameters::class,
-        IfBlock::class to SingleExpressionParameter::class,
+        IfBlock::class to IfBlockParameters::class,
         WhileBlock::class to SingleExpressionParameter::class,
         DoWhileBlock::class to SingleExpressionParameter::class,
         BreakBlock::class to EmptyParameters::class,
@@ -98,7 +100,8 @@ class CodeEditorViewModel(
         FunctionReturnBlock::class to FunctionReturnParameters::class,
         FunctionDeclaratorBlock::class to FunctionDeclarationParameters::class,
         FunctionCallBlock::class to FunctionCallParameters::class,
-        ForBlock::class to ForLoopBlockParameters::class
+        ForBlock::class to ForLoopBlockParameters::class,
+        ElseBlock::class to EmptyParameters::class
     )
 
     private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -144,9 +147,20 @@ class CodeEditorViewModel(
         addTo.last().parentBlockListIndex = addTo.lastIndex
         addBlockToMap(addTo.last())
         if (addTo.last() is BlockWithNestingData) {
-            registerAddButton((addTo.last() as BlockWithNestingData))
-            registerBlockWithNestingBottomBorder((addTo.last() as BlockWithNestingData))
+            registerAddButton(addTo.last() as BlockWithNestingData)
+            registerBlockWithNestingBottomBorder(addTo.last() as BlockWithNestingData)
         }
+    }
+
+    fun addElseBlock(ifBlock: BlockWithNestingData) {
+        if (ifBlock.blockClass != IfBlock::class || ifBlock.blockParametersData !is IfBlockParameters) return
+        ifBlock.blockParametersData.elseBlock =
+            createBlockDataByType(ElseBlock::class) as BlockWithNestingData?
+        ifBlock.parentBlockList?.removeAt(ifBlock.parentBlockListIndex)
+        ifBlock.parentBlockList?.add(ifBlock.parentBlockListIndex, ifBlock)
+        val elseBlock = ifBlock.blockParametersData.elseBlock ?: return
+        registerAddButton(elseBlock)
+        _bottomBlockBorderMap[elseBlock.bottomBorderId] = ifBlock
     }
 
     fun removeBlockFromList(id: UUID) {
@@ -162,6 +176,12 @@ class CodeEditorViewModel(
             parentContainer[blockIndex].parentBlockListIndex--
         }
         removeBlockFromMap(id)
+
+        if(block.blockClass == IfBlock::class) {
+            val elseBlock = (block.blockParametersData as IfBlockParameters).elseBlock ?: return
+            unregisterAddButton(elseBlock.addBlockButtonId)
+            unregisterBlockWithNestingBottomBorder(elseBlock.bottomBorderId)
+        }
     }
 
     private fun registerAddButton(blockWithNestingData: BlockWithNestingData) {
@@ -227,17 +247,27 @@ class CodeEditorViewModel(
         toExtract: BlockData
     ): Boolean {
         val blockWithNesting = _bottomBlockBorderMap[blockWithNestingBottomBorderId] ?: return false
-        val parentBlockContainer = blockWithNesting.parentBlockList ?: return false
+        val elseBlockIsPresent =
+            blockWithNesting.blockClass == IfBlock::class
+                    && (blockWithNesting.blockParametersData as IfBlockParameters).elseBlock != null
+                    && blockWithNesting.bottomBorderId == blockWithNestingBottomBorderId
+        val parentBlockContainer =
+            if (elseBlockIsPresent) {
+                ((blockWithNesting.blockParametersData as IfBlockParameters).elseBlock as BlockWithNestingData).nestedBlocksData
+            } else {
+                blockWithNesting.parentBlockList ?: return false
+            }
         val nestedBlockContainer = toExtract.parentBlockList ?: return false
 
+        val toInsertIndex = if (elseBlockIsPresent) 0 else blockWithNesting.parentBlockListIndex + 1
         nestedBlockContainer.removeAt(nestedBlockContainer.lastIndex)
-        parentBlockContainer.add(blockWithNesting.parentBlockListIndex + 1, toExtract)
+        parentBlockContainer.add(toInsertIndex, toExtract)
 
-        for (blockIndex in blockWithNesting.parentBlockListIndex + 2..parentBlockContainer.lastIndex) {
+        for (blockIndex in toInsertIndex + 1..parentBlockContainer.lastIndex) {
             parentBlockContainer[blockIndex].parentBlockListIndex++
         }
         toExtract.parentBlockList = parentBlockContainer
-        toExtract.parentBlockListIndex = blockWithNesting.parentBlockListIndex + 1
+        toExtract.parentBlockListIndex = toInsertIndex
         return true
     }
 

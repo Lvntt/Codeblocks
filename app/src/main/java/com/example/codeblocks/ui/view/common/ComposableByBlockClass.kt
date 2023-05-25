@@ -31,6 +31,7 @@ import com.example.codeblocks.presentation.block.parameters.ForLoopBlockParamete
 import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionReturnParameters
+import com.example.codeblocks.presentation.block.parameters.IfBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
@@ -92,7 +93,7 @@ fun BlockView(
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
-                parameters = block.blockParametersData as SingleExpressionParameter,
+                parameters = block.blockParametersData as IfBlockParameters,
             )
         }
 
