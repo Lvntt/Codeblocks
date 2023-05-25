@@ -12,5 +12,7 @@ enum class OperatorType {
     MORE,
     MORE_OR_EQUAL,
     LESS,
-    LESS_OR_EQUAL
+    LESS_OR_EQUAL,
+    CONJUNCTION,
+    DISJUNCTION
 }
