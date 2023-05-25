@@ -11,5 +11,7 @@ data class VariableDeclarationBlockParameters(
     var type: KClass<out Variable> = IntegerVariable::class,
     var name: String = DefaultValues.EMPTY_STRING
 ) : BlockParameters() {
+
     override fun createBundle(): ParamBundle = CreateVariableBundle(name, type)
+
 }

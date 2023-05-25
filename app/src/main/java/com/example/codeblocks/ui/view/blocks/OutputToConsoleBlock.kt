@@ -76,16 +76,11 @@ fun OutputToConsoleBlock(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.print),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.print),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
@@ -110,16 +105,11 @@ fun OutputToConsoleBlock(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
             )
 
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.toConsole),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.toConsole),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
         }
     }
 }

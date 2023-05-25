@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +25,7 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
-import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
+import com.example.codeblocks.presentation.block.parameters.ForLoopBlockParameters
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockHeight
@@ -34,25 +33,38 @@ import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
+import com.example.codeblocks.ui.view.common.BlockView
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import kotlin.reflect.KClass
 
 @Composable
-fun IfExpressionBlock(
+fun ForLoopBlock(
     navController: NavController,
     modifier: Modifier = Modifier,
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit = {},
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
-    parameters: SingleExpressionParameter = SingleExpressionParameter(),
+    parameters: ForLoopBlockParameters = ForLoopBlockParameters(),
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddExpressionClick = {
         setAddBlockCallback {
-            parameters.expression = createBlockDataByType(it) as ExpressionBlockData
+            parameters.expressionBlock = createBlockDataByType(it) as ExpressionBlockData
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+    val onAddInitBlockClick = {
+        setAddBlockCallback {
+            parameters.initBlock = createBlockDataByType(it)
+        }
+        navController.navigate(CodeblocksDestinations.BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE)
+    }
+    val onAddPostIterationBlockClick = {
+        setAddBlockCallback {
+            parameters.postIterationBlock = createBlockDataByType(it)
+        }
+        navController.navigate(CodeblocksDestinations.BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE)
     }
 
     Box(
@@ -61,7 +73,6 @@ fun IfExpressionBlock(
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(BlockPadding)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
@@ -76,8 +87,12 @@ fun IfExpressionBlock(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Spacer(
+                modifier = modifier.width(BlockPadding)
+            )
+
             Text(
-                text = stringResource(id = R.string.ifKeyword),
+                text = stringResource(id = R.string.forKeyword),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = BlockRegularTextStyle
             )
@@ -86,7 +101,46 @@ fun IfExpressionBlock(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
             )
 
-            val parametersExpression = parameters.expression
+            Text(
+                text = stringResource(id = R.string.openingBracket),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
+
+            val initBlock = parameters.initBlock
+            if(initBlock == null) {
+                Spacer(
+                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                )
+
+                AddExpressionBlock(
+                    isEditable = isEditable,
+                    onClick = { onAddInitBlockClick() }
+                )
+
+                Spacer(
+                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                )
+            } else {
+                BlockView(
+                    block = initBlock,
+                    navController = navController,
+                    setAddBlockCallback = setAddBlockCallback,
+                    createBlockDataByType = createBlockDataByType
+                )
+            }
+
+            Text(
+                text = stringResource(id = R.string.semicolon),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
+
+            Spacer(
+                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+            )
+
+            val parametersExpression = parameters.expressionBlock
             if (parametersExpression == null) {
                 AddExpressionBlock(
                     isEditable = isEditable,
@@ -106,9 +160,42 @@ fun IfExpressionBlock(
             )
 
             Text(
-                text = stringResource(id = R.string.thenKeyword),
+                text = stringResource(id = R.string.semicolon),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = BlockRegularTextStyle
+            )
+
+            val postIterationBlock = parameters.postIterationBlock
+            if(postIterationBlock == null) {
+                Spacer(
+                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                )
+
+                AddExpressionBlock(
+                    isEditable = isEditable,
+                    onClick = { onAddPostIterationBlockClick() }
+                )
+
+                Spacer(
+                    modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+                )
+            } else {
+                BlockView(
+                    block = postIterationBlock,
+                    navController = navController,
+                    setAddBlockCallback = setAddBlockCallback,
+                    createBlockDataByType = createBlockDataByType
+                )
+            }
+
+            Text(
+                text = stringResource(id = R.string.closingBracket),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
+
+            Spacer(
+                modifier = modifier.width(BlockPadding)
             )
         }
     }

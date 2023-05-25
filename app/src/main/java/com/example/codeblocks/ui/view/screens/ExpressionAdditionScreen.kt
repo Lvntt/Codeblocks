@@ -69,6 +69,7 @@ fun ExpressionAdditionScreen(
                         viewModel.executeCallback(it)
                         navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
                     }
+
                     Box(
                         modifier = modifier
                             .height(ExpressionBlockHeight)

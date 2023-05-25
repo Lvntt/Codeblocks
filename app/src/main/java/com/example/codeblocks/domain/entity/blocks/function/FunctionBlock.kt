@@ -26,8 +26,7 @@ class FunctionBlock : BlockWithNesting(), Returnable {
         returnedVariable = null
 
         val nestedScope = NestedScope(scope)
-        if (paramValues !is LoadedFunctionParams) { /*TODO error handling*/ throw Exception()
-        }
+        if (paramValues !is LoadedFunctionParams) { /*TODO error handling*/ throw Exception() }
         (paramValues as LoadedFunctionParams).variableList.forEachIndexed { index, variable ->
             nestedScope.addVariable(
                 castVariable(
@@ -41,8 +40,9 @@ class FunctionBlock : BlockWithNesting(), Returnable {
         for (block in nestedBlocks) {
             block.setupScope(nestedScope)
             block.execute()
-            if (!(block is StopExecutionBlock || block is BlockWithNesting && block.stopCallingBlock is StopExecutionBlock)) continue
+            if (!(block is StopExecutionBlock || block is BlockWithNesting && block.stopCallingBlock is StopExecutionBlock)) { continue }
             if (!(block is FunctionReturnBlock || block is BlockWithNesting && block.stopCallingBlock is FunctionReturnBlock)) { /*TODO error handling*/ throw Exception() }
+
             val returnBlock: FunctionReturnBlock
             if (block is BlockWithNesting) {
                 returnBlock = block.stopCallingBlock as FunctionReturnBlock
@@ -50,6 +50,7 @@ class FunctionBlock : BlockWithNesting(), Returnable {
             } else {
                 returnBlock = block as FunctionReturnBlock
             }
+
             if (paramBundle !is FunctionSignature) { /*TODO error handling*/ throw Exception() }
             val variableToReturn = returnBlock.returnResult ?: /*TODO error handling*/ throw Exception()
             if (!typeCanBeSeamlesslyConverted(variableToReturn, (paramBundle as FunctionSignature).returnType))
@@ -57,6 +58,7 @@ class FunctionBlock : BlockWithNesting(), Returnable {
             returnedVariable = castVariable(variableToReturn, (paramBundle as FunctionSignature).returnType)
             return
         }
+
         returnedVariable =
             (paramBundle as FunctionSignature).returnType.primaryConstructor?.call(DefaultValues.EMPTY_STRING)
     }

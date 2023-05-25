@@ -26,7 +26,7 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
-import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
+import com.example.codeblocks.presentation.block.parameters.FunctionReturnParameters
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockHeight
@@ -43,7 +43,7 @@ fun ReturnBlock(
     modifier: Modifier = Modifier,
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit = {},
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
-    parameters: SingleExpressionParameter = SingleExpressionParameter(),
+    parameters: FunctionReturnParameters = FunctionReturnParameters(),
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
@@ -76,16 +76,11 @@ fun ReturnBlock(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.returnKeyword),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.returnKeyword),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)

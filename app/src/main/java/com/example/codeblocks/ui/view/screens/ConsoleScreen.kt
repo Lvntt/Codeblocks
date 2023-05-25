@@ -24,6 +24,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import com.example.codeblocks.domain.entity.DefaultValues
 import com.example.codeblocks.presentation.viewmodel.ConsoleViewModel
 import com.example.codeblocks.ui.theme.ConsoleInput
 import com.example.codeblocks.ui.theme.ConsoleOutput
@@ -65,7 +66,7 @@ fun ConsoleScreen(
                     ),
                     keyboardActions = KeyboardActions(onDone = {
                         viewModel.submitInput(input)
-                        input = ""
+                        input = DefaultValues.EMPTY_STRING
                     }),
                     singleLine = true
                 )

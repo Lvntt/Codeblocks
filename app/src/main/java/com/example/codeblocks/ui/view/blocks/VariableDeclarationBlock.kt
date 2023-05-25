@@ -62,16 +62,11 @@ fun VariableDeclarationBlock(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.create),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.create),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
@@ -87,15 +82,11 @@ fun VariableDeclarationBlock(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
             )
 
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.variable),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.variable),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)

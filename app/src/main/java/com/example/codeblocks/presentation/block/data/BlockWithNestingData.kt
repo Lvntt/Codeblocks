@@ -16,6 +16,7 @@ data class BlockWithNestingData(
     val bottomBorderId: UUID = UUID.randomUUID(),
     var expanded: Boolean = true
 ) : BlockData() {
+
     override fun createBlock(): Block {
         val block = blockClass.createInstance()
         block.setParams(blockParametersData.createBundle())
@@ -24,4 +25,5 @@ data class BlockWithNestingData(
         }
         return block
     }
+
 }

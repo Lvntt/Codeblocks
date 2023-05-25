@@ -10,6 +10,7 @@ data class VariableAssignmentBlockParameters(
     var name: String = DefaultValues.EMPTY_STRING,
     var expression: ExpressionBlockData? = null
 ) : BlockParameters() {
+
     override fun createBundle(): ParamBundle {
         val expression = expression
             ?: // TODO catch in vm
@@ -19,4 +20,5 @@ data class VariableAssignmentBlockParameters(
             expression.createBlock() as ExpressionBlock
         )
     }
+
 }

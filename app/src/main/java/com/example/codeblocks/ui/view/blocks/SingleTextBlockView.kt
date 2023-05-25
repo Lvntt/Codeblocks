@@ -1,5 +1,6 @@
 package com.example.codeblocks.ui.view.blocks
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -29,7 +30,7 @@ import com.example.codeblocks.ui.theme.BlockRegularTextStyle
 fun SingleTextBlockView(
     modifier: Modifier = Modifier,
     onAddBlockClick: () -> Unit = {},
-    descriptionStringRes: Int,
+    @StringRes descriptionStringRes: Int,
     isEditable: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -51,19 +52,15 @@ fun SingleTextBlockView(
             }
     ) {
         Row(
+            modifier = modifier.fillMaxHeight(),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = modifier.fillMaxHeight(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = descriptionStringRes),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = descriptionStringRes),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
         }
     }
 }

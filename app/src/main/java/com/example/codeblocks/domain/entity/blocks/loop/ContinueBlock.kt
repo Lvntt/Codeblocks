@@ -6,6 +6,9 @@ import com.example.codeblocks.domain.entity.parambundles.EmptyParamBundle
 
 class ContinueBlock : StopExecutionBlock()
 {
+
     override val paramType = EmptyParamBundle::class
+
     override suspend fun executeAfterChecks(scope: Scope) {}
+
 }

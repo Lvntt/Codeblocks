@@ -29,6 +29,7 @@ import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
 import com.example.codeblocks.domain.entity.blocks.loop.BreakBlock
 import com.example.codeblocks.domain.entity.blocks.loop.ContinueBlock
 import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
+import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
 import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
@@ -39,8 +40,10 @@ import com.example.codeblocks.presentation.block.data.BlockWithNestingData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.data.SimpleBlockData
 import com.example.codeblocks.presentation.block.parameters.EmptyParameters
+import com.example.codeblocks.presentation.block.parameters.ForLoopBlockParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
+import com.example.codeblocks.presentation.block.parameters.FunctionReturnParameters
 import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
@@ -92,9 +95,10 @@ class CodeEditorViewModel(
         DoWhileBlock::class to SingleExpressionParameter::class,
         BreakBlock::class to EmptyParameters::class,
         ContinueBlock::class to EmptyParameters::class,
-        FunctionReturnBlock::class to SingleExpressionParameter::class,
+        FunctionReturnBlock::class to FunctionReturnParameters::class,
         FunctionDeclaratorBlock::class to FunctionDeclarationParameters::class,
-        FunctionCallBlock::class to FunctionCallParameters::class
+        FunctionCallBlock::class to FunctionCallParameters::class,
+        ForBlock::class to ForLoopBlockParameters::class
     )
 
     private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -120,7 +124,8 @@ class CodeEditorViewModel(
                 )
             } else if (type.isSubclassOf(ExpressionBlock::class)) {
                 ExpressionBlockData(
-                    type as KClass<out ExpressionBlock>, blockParameters.createInstance()
+                    type as KClass<out ExpressionBlock>,
+                    blockParameters.createInstance()
                 )
             } else {
                 SimpleBlockData(
@@ -138,7 +143,7 @@ class CodeEditorViewModel(
         addTo.last().parentBlockList = addTo
         addTo.last().parentBlockListIndex = addTo.lastIndex
         addBlockToMap(addTo.last())
-        if(addTo.last() is BlockWithNestingData) {
+        if (addTo.last() is BlockWithNestingData) {
             registerAddButton((addTo.last() as BlockWithNestingData))
             registerBlockWithNestingBottomBorder((addTo.last() as BlockWithNestingData))
         }
@@ -147,12 +152,13 @@ class CodeEditorViewModel(
     fun removeBlockFromList(id: UUID) {
         val block = _blockMap[id] ?: return
         val parentContainer = block.parentBlockList ?: return
+
         parentContainer.removeAt(block.parentBlockListIndex)
-        if(block is BlockWithNestingData) {
+        if (block is BlockWithNestingData) {
             unregisterAddButton(block.addBlockButtonId)
             unregisterBlockWithNestingBottomBorder(block.bottomBorderId)
         }
-        for(blockIndex in block.parentBlockListIndex..parentContainer.lastIndex) {
+        for (blockIndex in block.parentBlockListIndex..parentContainer.lastIndex) {
             parentContainer[blockIndex].parentBlockListIndex--
         }
         removeBlockFromMap(id)
@@ -168,7 +174,8 @@ class CodeEditorViewModel(
     }
 
     private fun registerBlockWithNestingBottomBorder(blockWithNestingData: BlockWithNestingData) {
-        _bottomBlockBorderMap[blockWithNestingData.bottomBorderId] = blockWithNestingData
+        _bottomBlockBorderMap[blockWithNestingData.bottomBorderId] =
+            blockWithNestingData
     }
 
     private fun unregisterBlockWithNestingBottomBorder(id: UUID) {
@@ -184,35 +191,48 @@ class CodeEditorViewModel(
     }
 
     fun moveBlock(from: ItemPosition, to: ItemPosition): Boolean {
-        val firstUUID = from.key ?: return false
-        val secondUUID = to.key ?: return false
-        val firstBlockData = _blockMap[firstUUID] ?: return false
-        val secondBlockData = _blockMap[secondUUID]
-            ?: if (_addBlockButtonMap[secondUUID] != null && from.index > to.index) {
-                return tryInsertIntoBlockWithNestingFromBottom(secondUUID, firstBlockData)
-            } else if (_bottomBlockBorderMap[secondUUID] != null && from.index < to.index) {
-                return tryExtractFromBlockWithNestingAtBottom(secondUUID, firstBlockData)
-            } else {
-                return false
-            }
+        val fromUUID = from.key ?: return false
+        val toUUID = to.key ?: return false
+        val fromBlockData = _blockMap[fromUUID] ?: return false
+        if (abs(from.index - to.index) > 2) return false
+        val toBlockData = _blockMap[toUUID]
+            ?: return tryToSwapWithNonBlockElement(from, to, toUUID, fromBlockData)
         if (abs(from.index - to.index) > 1) return false
-        if (secondBlockData is BlockWithNestingData && from.index < to.index) {
-            return tryInsertIntoBlockWithNestingFromTop(secondBlockData, firstBlockData)
+        if (toBlockData is BlockWithNestingData && from.index < to.index) {
+            return tryInsertIntoBlockWithNestingFromTop(toBlockData, fromBlockData)
         }
-        if (secondBlockData is BlockWithNestingData && from.index > to.index) {
-            return tryExtractFromBlockWithNestingAtTop(secondBlockData, firstBlockData)
+        if (toBlockData is BlockWithNestingData && from.index > to.index) {
+            return tryExtractFromBlockWithNestingAtTop(toBlockData, fromBlockData)
         }
-        return trySwapTwoElements(firstBlockData, secondBlockData)
+        return trySwapTwoElements(fromBlockData, toBlockData)
+    }
+
+    private fun tryToSwapWithNonBlockElement(
+        from: ItemPosition,
+        to: ItemPosition,
+        toUUID: Any,
+        fromBlockData: BlockData
+    ): Boolean {
+        return if (_addBlockButtonMap[toUUID] != null && from.index > to.index) {
+            tryInsertIntoBlockWithNestingFromBottom(toUUID, fromBlockData)
+        } else if (_bottomBlockBorderMap[toUUID] != null && from.index < to.index) {
+            tryExtractFromBlockWithNestingAtBottom(toUUID, fromBlockData)
+        } else {
+            false
+        }
     }
 
     private fun tryExtractFromBlockWithNestingAtBottom(
-        blockWithNestingBottomBorderId: Any, toExtract: BlockData
+        blockWithNestingBottomBorderId: Any,
+        toExtract: BlockData
     ): Boolean {
         val blockWithNesting = _bottomBlockBorderMap[blockWithNestingBottomBorderId] ?: return false
         val parentBlockContainer = blockWithNesting.parentBlockList ?: return false
         val nestedBlockContainer = toExtract.parentBlockList ?: return false
+
         nestedBlockContainer.removeAt(nestedBlockContainer.lastIndex)
         parentBlockContainer.add(blockWithNesting.parentBlockListIndex + 1, toExtract)
+
         for (blockIndex in blockWithNesting.parentBlockListIndex + 2..parentBlockContainer.lastIndex) {
             parentBlockContainer[blockIndex].parentBlockListIndex++
         }
@@ -222,12 +242,15 @@ class CodeEditorViewModel(
     }
 
     private fun tryInsertIntoBlockWithNestingFromBottom(
-        blockWithNestingAddButtonId: Any, toInsert: BlockData
+        blockWithNestingAddButtonId: Any,
+        toInsert: BlockData
     ): Boolean {
         val nestedBlockContainer = _addBlockButtonMap[blockWithNestingAddButtonId] ?: return false
         val parentBlockContainer = toInsert.parentBlockList ?: return false
+
         parentBlockContainer.removeAt(toInsert.parentBlockListIndex)
         nestedBlockContainer.add(toInsert)
+
         for (blockIndex in toInsert.parentBlockListIndex..parentBlockContainer.lastIndex) {
             parentBlockContainer[blockIndex].parentBlockListIndex--
         }
@@ -237,12 +260,15 @@ class CodeEditorViewModel(
     }
 
     private fun tryInsertIntoBlockWithNestingFromTop(
-        blockWithNesting: BlockWithNestingData, toInsert: BlockData
+        blockWithNesting: BlockWithNestingData,
+        toInsert: BlockData
     ): Boolean {
         val nestedBlockContainer = blockWithNesting.nestedBlocksData
         val parentBlockContainer = toInsert.parentBlockList ?: return false
+
         nestedBlockContainer.add(0, toInsert)
         parentBlockContainer.removeAt(toInsert.parentBlockListIndex)
+
         for (blockIndex in 1..nestedBlockContainer.lastIndex) {
             nestedBlockContainer[blockIndex].parentBlockListIndex++
         }
@@ -255,12 +281,15 @@ class CodeEditorViewModel(
     }
 
     private fun tryExtractFromBlockWithNestingAtTop(
-        from: BlockWithNestingData, toExtract: BlockData
+        from: BlockWithNestingData,
+        toExtract: BlockData
     ): Boolean {
         val parentBlockContainer = from.parentBlockList ?: return false
         val nestedBlockContainer = from.nestedBlocksData
+
         parentBlockContainer.add(from.parentBlockListIndex, toExtract)
         nestedBlockContainer.removeAt(0)
+
         for (blockIndex in from.parentBlockListIndex + 1..parentBlockContainer.lastIndex) {
             parentBlockContainer[blockIndex].parentBlockListIndex++
         }
@@ -273,15 +302,18 @@ class CodeEditorViewModel(
     }
 
     private fun trySwapTwoElements(
-        firstBlockData: BlockData, secondBlockData: BlockData
+        firstBlockData: BlockData,
+        secondBlockData: BlockData
     ): Boolean {
         val firstBlockParentList = firstBlockData.parentBlockList ?: return false
         val secondBlockParentList = secondBlockData.parentBlockList ?: return false
+        val firstBlockDataListIndex = firstBlockData.parentBlockListIndex
+
         firstBlockParentList.removeAt(firstBlockData.parentBlockListIndex)
         firstBlockParentList.add(firstBlockData.parentBlockListIndex, secondBlockData)
         secondBlockParentList.removeAt(secondBlockData.parentBlockListIndex)
         secondBlockParentList.add(secondBlockData.parentBlockListIndex, firstBlockData)
-        val firstBlockDataListIndex = firstBlockData.parentBlockListIndex
+
         firstBlockData.parentBlockList = secondBlockParentList
         secondBlockData.parentBlockList = firstBlockParentList
         firstBlockData.parentBlockListIndex = secondBlockData.parentBlockListIndex

@@ -48,6 +48,7 @@ fun FunctionDeclarationBlock(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val paramsSignature = parameters.paramsSignature
+
     Box(
         modifier = modifier
             .height(BlockHeight)
@@ -69,16 +70,11 @@ fun FunctionDeclarationBlock(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.function),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.function),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
@@ -97,15 +93,11 @@ fun FunctionDeclarationBlock(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
             )
 
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.openingBracket),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.openingBracket),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
@@ -122,7 +114,7 @@ fun FunctionDeclarationBlock(
                     }
                 }
                 AnimatedVisibility(visibleState = visibilityState) {
-                    Row {
+                    Row(modifier = modifier.fillMaxHeight()) {
                         VariableNameTextField(
                             parameterName = paramsSignature[parameterIndex].first,
                             onValueChange = {
@@ -194,29 +186,21 @@ fun FunctionDeclarationBlock(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
             )
 
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.closingBracket),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.closingBracket),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
             )
 
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.colon),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = BlockRegularTextStyle
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.colon),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)

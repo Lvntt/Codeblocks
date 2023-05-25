@@ -45,6 +45,8 @@
     <string name="nullType">nothing</string>
     <string name="function">function</string>
     <string name="colon">:</string>
+    <string name="semicolon">;</string>
     <string name="comma">,</string>
     <string name="call">call</string>
+    <string name="forKeyword">for</string>
 </resources>

@@ -27,6 +27,7 @@ object CodeblocksDestinations {
     const val OVERVIEW_ROUTE = "overview"
     const val BLOCKS_ADDITION_ROUTE = "blocks_addition"
     const val EXPRESSION_ADDITION_ROUTE = "expression_addition"
+    const val BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE = "blocks_without_nesting_addition"
 }
 
 @Composable
@@ -60,6 +61,13 @@ fun Navigation(
         composable(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE) {
             ExpressionAdditionScreen(
                 availableExpressions = AvailableBlocks.availableExpressions,
+                navController = navController,
+                viewModel = viewModel
+            )
+        }
+        composable(CodeblocksDestinations.BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE) {
+            BlocksAdditionScreen(
+                availableBlocks = AvailableBlocks.availableBlocksWithoutNesting,
                 navController = navController,
                 viewModel = viewModel
             )

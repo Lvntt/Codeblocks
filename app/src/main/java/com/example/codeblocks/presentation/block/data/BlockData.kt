@@ -7,6 +7,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 abstract class BlockData {
+
     var parentBlockList: MutableList<BlockData>? = null
     var parentBlockListIndex: Int = -1
     val id: UUID = UUID.randomUUID()
@@ -18,4 +19,5 @@ abstract class BlockData {
         block.setParams(blockParametersData.createBundle())
         return block
     }
+
 }

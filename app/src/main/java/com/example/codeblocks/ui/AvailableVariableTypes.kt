@@ -22,15 +22,8 @@ object AvailableVariableTypes {
         R.string.booleanType to BooleanVariable::class,
     )
 
-    val functionTypenameToKClass = mapOf(
+    val functionTypenameToKClass = typenameToKClass.plus(mapOf(
         R.string.nullType to NullVariable::class,
-        R.string.byteType to ByteVariable::class,
-        R.string.shortType to ShortVariable::class,
-        R.string.intType to IntegerVariable::class,
-        R.string.longType to LongVariable::class,
-        R.string.floatType to FloatVariable::class,
-        R.string.doubleType to DoubleVariable::class,
-        R.string.booleanType to BooleanVariable::class,
-    )
+    ))
 
 }

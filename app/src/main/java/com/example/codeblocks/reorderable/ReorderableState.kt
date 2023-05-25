@@ -15,7 +15,6 @@
  */
 package com.example.codeblocks.reorderable
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -32,7 +31,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.min
 import kotlin.math.sign

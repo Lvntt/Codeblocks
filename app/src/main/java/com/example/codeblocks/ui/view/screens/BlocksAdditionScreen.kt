@@ -27,6 +27,7 @@ import com.example.codeblocks.domain.entity.blocks.function.FunctionReturnBlock
 import com.example.codeblocks.domain.entity.blocks.loop.BreakBlock
 import com.example.codeblocks.domain.entity.blocks.loop.ContinueBlock
 import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
+import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
 import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
@@ -37,6 +38,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
+import com.example.codeblocks.ui.view.blocks.ForLoopBlock
 import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.FunctionDeclarationBlock
 import com.example.codeblocks.ui.view.blocks.IfExpressionBlock
@@ -69,6 +71,7 @@ fun BlocksAdditionScreen(
                         viewModel.executeCallback(currentBlockClass)
                         navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
                     }
+
                     when (currentBlockClass) {
                         CreateVariableBlock::class -> {
                             VariableDeclarationBlock(
@@ -163,6 +166,14 @@ fun BlocksAdditionScreen(
                                     isEditable = false
                                 )
                             }
+                        }
+
+                        ForBlock::class -> {
+                            ForLoopBlock(
+                                navController = navController,
+                                onAddBlockClick = onClick,
+                                isEditable = false
+                            )
                         }
                     }
                 }

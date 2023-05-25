@@ -7,5 +7,7 @@ import com.example.codeblocks.domain.entity.parambundles.expression.VariableBund
 data class StringExpressionParameter(
     var name: String = DefaultValues.EMPTY_STRING
 ) : BlockParameters() {
+
     override fun createBundle(): ParamBundle = VariableBundle(name)
+
 }

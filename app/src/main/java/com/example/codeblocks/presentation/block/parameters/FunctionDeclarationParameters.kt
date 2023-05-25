@@ -14,6 +14,7 @@ data class FunctionDeclarationParameters(
     var paramsSignature: MutableList<Pair<String, KClass<out Variable>>> = mutableStateListOf(),
     val paramsVisibilityState: MutableList<Boolean> = mutableListOf()
 ): BlockParameters() {
+
     override fun createBundle(): ParamBundle {
         val functionSignature = FunctionSignature(name, returnType)
         paramsSignature.forEach {
@@ -21,4 +22,5 @@ data class FunctionDeclarationParameters(
         }
         return functionSignature
     }
+
 }
