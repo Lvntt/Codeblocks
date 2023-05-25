@@ -50,24 +50,29 @@ fun LazyListScope.nestedBlocks(
 ) {
     if (!visible) return
 
+    val isDeleteMode = viewModel.isDeleteMode.value
+
     nestedBlocks.forEach { block ->
         block(
             nestingLevel = nestingLevel,
             navController = navController,
             viewModel = viewModel,
             block = block,
+            isDeleteMode = isDeleteMode,
             reorderableState = reorderableState
         )
     }
     item(key = addBlockId) {
         Row(modifier = Modifier.animateItemPlacement()) {
             Spacer(modifier = Modifier.width((NestingBlockPaddingInt * nestingLevel).dp))
-            AddBlock(onClick = {
-                viewModel.setAddBlockCallback {
-                    viewModel.addNewBlockToList(it, nestedBlocks)
+            AddBlock(
+                onClick = {
+                    viewModel.setAddBlockCallback {
+                        viewModel.addNewBlockToList(it, nestedBlocks)
+                    }
+                    navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
                 }
-                navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
-            })
+            )
         }
     }
 }
@@ -77,8 +82,13 @@ fun LazyListScope.block(
     navController: NavController,
     viewModel: CodeEditorViewModel,
     block: BlockData,
+    isDeleteMode: Boolean,
     reorderableState: ReorderableLazyListState,
 ) {
+    val onDeleteBlock: (UUID) -> Unit = {
+        viewModel.removeBlockFromList(it)
+    }
+
     item(
         contentType = block::class,
         key = block.id
@@ -125,6 +135,8 @@ fun LazyListScope.block(
                     BlockView(
                         block = block,
                         navController = navController,
+                        isDeleteMode = isDeleteMode,
+                        onDeleteBlock = onDeleteBlock,
                         setAddBlockCallback = viewModel::setAddBlockCallback,
                         createBlockDataByType = viewModel::createBlockDataByType
                     )

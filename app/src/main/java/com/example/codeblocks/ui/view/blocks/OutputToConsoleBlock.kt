@@ -57,11 +57,6 @@ fun OutputToConsoleBlock(
 
     Box(
         modifier = modifier
-            .height(BlockHeight)
-            .widthIn(BlockMinimumWidth, Dp.Infinity)
-            .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(BlockPadding)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
@@ -70,6 +65,11 @@ fun OutputToConsoleBlock(
                     onAddBlockClick()
                 }
             }
+            .height(BlockHeight)
+            .widthIn(BlockMinimumWidth, Dp.Infinity)
+            .clip(BlockElementShape)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(BlockPadding)
     ) {
         Row(
             modifier = modifier.fillMaxSize(),

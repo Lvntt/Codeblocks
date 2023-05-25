@@ -1,6 +1,7 @@
 package com.example.codeblocks.ui.view.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import com.example.codeblocks.R
@@ -49,24 +51,40 @@ import com.example.codeblocks.ui.view.blocks.SingleTextBlockView
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
 import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
 import com.example.codeblocks.ui.view.blocks.WhileLoopBlock
+import java.util.UUID
 import kotlin.reflect.KClass
 
 @Composable
 fun BlockView(
     block: BlockData,
     navController: NavController,
+    isDeleteMode: Boolean = false,
+    onDeleteBlock: (UUID) -> Unit = {},
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit,
     createBlockDataByType: (KClass<out Block>) -> BlockData?
 ) {
+
     when (block.blockClass) {
         CreateVariableBlock::class -> {
             VariableDeclarationBlock(
-                parameters = block.blockParametersData as VariableDeclarationBlockParameters
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
+                parameters = block.blockParametersData as VariableDeclarationBlockParameters,
             )
         }
 
         SetVariableBlock::class -> {
             VariableAssignmentBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
@@ -76,6 +94,12 @@ fun BlockView(
 
         PrintToConsoleBlock::class -> {
             OutputToConsoleBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
@@ -84,11 +108,24 @@ fun BlockView(
         }
 
         ReadFromConsoleBlock::class -> {
-            InputFromConsoleBlock()
+            InputFromConsoleBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
+            )
         }
 
         IfBlock::class -> {
             IfExpressionBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
@@ -98,6 +135,12 @@ fun BlockView(
 
         WhileBlock::class -> {
             WhileLoopBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
@@ -107,33 +150,63 @@ fun BlockView(
 
         DoWhileBlock::class -> {
             SingleTextBlockView(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 descriptionStringRes = R.string.doKeyword
             )
         }
 
         BreakBlock::class -> {
             SingleTextBlockView(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 descriptionStringRes = R.string.breakKeyword
             )
         }
 
         ContinueBlock::class -> {
             SingleTextBlockView(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 descriptionStringRes = R.string.continueKeyword
             )
         }
 
         FunctionReturnBlock::class -> {
             ReturnBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
-                parameters = block.blockParametersData as FunctionReturnParameters,
+                parameters = block.blockParametersData as FunctionReturnParameters
             )
         }
 
         FunctionDeclaratorBlock::class -> {
             FunctionDeclarationBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 parameters = block.blockParametersData as FunctionDeclarationParameters
             )
         }
@@ -148,6 +221,12 @@ fun BlockView(
                     .padding(BlockPadding)
             ) {
                 FunctionCallBlock(
+                    modifier = Modifier.deleteOnClick(
+                        isDeleteMode = isDeleteMode,
+                        onDeleteBlock = {
+                            onDeleteBlock(block.id)
+                        }
+                    ),
                     navController = navController,
                     setAddBlockCallback = setAddBlockCallback,
                     createBlockDataByType = createBlockDataByType,
@@ -158,6 +237,12 @@ fun BlockView(
 
         ForBlock::class -> {
             ForLoopBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
@@ -166,3 +251,17 @@ fun BlockView(
         }
     }
 }
+
+fun Modifier.deleteOnClick(isDeleteMode: Boolean, onDeleteBlock: () -> Unit) =
+    this.then(
+        if (isDeleteMode) {
+            Modifier.pointerInput(Unit) {
+                awaitPointerEventScope {
+                    awaitFirstDown(requireUnconsumed = false)
+                    onDeleteBlock()
+                }
+            }
+        } else {
+            Modifier
+        }
+    )

@@ -37,17 +37,17 @@ fun AddBlock(
     val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
-            .height(BlockHeight)
-            .widthIn(SmallBlockMinimumWidth, Dp.Infinity)
-            .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
-            .padding(BlockPadding)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
             ) {
                 onClick()
-            },
+            }
+            .height(BlockHeight)
+            .widthIn(SmallBlockMinimumWidth, Dp.Infinity)
+            .clip(BlockElementShape)
+            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .padding(BlockPadding),
         contentAlignment = Alignment.Center
     ) {
         Row(

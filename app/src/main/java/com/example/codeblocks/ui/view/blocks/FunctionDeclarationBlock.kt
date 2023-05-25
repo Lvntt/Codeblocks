@@ -51,11 +51,6 @@ fun FunctionDeclarationBlock(
 
     Box(
         modifier = modifier
-            .height(BlockHeight)
-            .widthIn(BlockMinimumWidth, Dp.Infinity)
-            .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(BlockPadding)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
@@ -64,6 +59,11 @@ fun FunctionDeclarationBlock(
                     onAddBlockClick()
                 }
             }
+            .height(BlockHeight)
+            .widthIn(BlockMinimumWidth, Dp.Infinity)
+            .clip(BlockElementShape)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(BlockPadding)
     ) {
         Row(
             modifier = modifier.fillMaxSize(),
@@ -150,7 +150,8 @@ fun FunctionDeclarationBlock(
                                 paramsSignature[parameterIndex] =
                                     Pair(paramsSignature[parameterIndex].first, it)
                             },
-                            variableTypesMap = AvailableVariableTypes.typenameToKClass
+                            variableTypesMap = AvailableVariableTypes.typenameToKClass,
+                            isEditable = isEditable
                         )
 
                         Spacer(
@@ -209,7 +210,8 @@ fun FunctionDeclarationBlock(
             VariableTypesDropdownMenu(
                 getCurrentType = { parameters.returnType },
                 setCurrentType = { parameters.returnType = it },
-                variableTypesMap = AvailableVariableTypes.functionTypenameToKClass
+                variableTypesMap = AvailableVariableTypes.functionTypenameToKClass,
+                isEditable = isEditable
             )
         }
     }

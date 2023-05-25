@@ -21,3 +21,9 @@ val ConsoleRegularTextStyle = TextStyle(
     fontFamily = JetBrainsMono,
     fontWeight = FontWeight.Normal
 )
+
+val SnackbarTextStyle = TextStyle(
+    fontSize = 14.sp,
+    fontFamily = Oxygen,
+    fontWeight = FontWeight.Normal
+)

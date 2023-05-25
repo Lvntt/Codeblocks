@@ -32,7 +32,8 @@ fun VariableTypesDropdownMenu(
     getCurrentType: () -> KClass<out Variable>,
     setCurrentType: (KClass<out Variable>) -> Unit,
     variableTypesMap: Map<Int, KClass<out Variable>>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isEditable: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val chosenTypeStringRes =
@@ -40,6 +41,16 @@ fun VariableTypesDropdownMenu(
     val availableVariableTypes = variableTypesMap.keys.toList()
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
     var dropdownMenuSelectedItem by remember { mutableStateOf(chosenTypeStringRes) }
+
+    var customModifier = modifier
+    if (isEditable) {
+        customModifier = customModifier.clickable(
+            interactionSource = interactionSource,
+            indication = null
+        ) {
+            dropdownMenuExpanded = true
+        }
+    }
 
     Box(
         modifier = modifier
@@ -52,13 +63,7 @@ fun VariableTypesDropdownMenu(
         Text(
             text = stringResource(id = dropdownMenuSelectedItem),
             color = MaterialTheme.colorScheme.onBackground,
-            modifier = modifier
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    dropdownMenuExpanded = true
-                },
+            modifier = customModifier,
             style = BlockAccentedTextStyle
         )
         DropdownMenu(
@@ -67,19 +72,19 @@ fun VariableTypesDropdownMenu(
                 dropdownMenuExpanded = false
             }
         ) {
-            availableVariableTypes.forEach { s ->
+            availableVariableTypes.forEach { type ->
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = stringResource(id = s),
+                            text = stringResource(id = type),
                             style = BlockRegularTextStyle
                         )
                     },
                     onClick = {
-                        val blockKClass = variableTypesMap[s]
+                        val blockKClass = variableTypesMap[type]
                         if (blockKClass != null) {
                             setCurrentType(blockKClass)
-                            dropdownMenuSelectedItem = s
+                            dropdownMenuSelectedItem = type
                             dropdownMenuExpanded = false
                         }
                     }

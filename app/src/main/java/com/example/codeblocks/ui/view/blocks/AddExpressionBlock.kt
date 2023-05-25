@@ -31,22 +31,24 @@ fun AddExpressionBlock(
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    var customModifier = modifier
+    if (isEditable) {
+        customModifier = customModifier.clickable(
+            interactionSource = interactionSource,
+            indication = null
+        ) {
+            onClick()
+        }
+    }
+
     Box(
-        modifier = modifier
+        modifier = customModifier
             .height(AddExpressionButtonSize)
             .width(AddExpressionButtonSize)
             .aspectRatio(1f)
             .clip(BlockElementShape)
             .background(MaterialTheme.colorScheme.tertiaryContainer)
-            .padding(BlockPadding)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                if (isEditable) {
-                    onClick()
-                }
-            },
+            .padding(BlockPadding),
         contentAlignment = Alignment.Center
     ) {
         Row(

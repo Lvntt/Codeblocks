@@ -48,18 +48,21 @@ fun ForLoopBlock(
     isEditable: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
     val onAddExpressionClick = {
         setAddBlockCallback {
             parameters.expressionBlock = createBlockDataByType(it) as ExpressionBlockData
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
     }
+
     val onAddInitBlockClick = {
         setAddBlockCallback {
             parameters.initBlock = createBlockDataByType(it)
         }
         navController.navigate(CodeblocksDestinations.BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE)
     }
+
     val onAddPostIterationBlockClick = {
         setAddBlockCallback {
             parameters.postIterationBlock = createBlockDataByType(it)
@@ -69,10 +72,6 @@ fun ForLoopBlock(
 
     Box(
         modifier = modifier
-            .height(BlockHeight)
-            .widthIn(BlockMinimumWidth, Dp.Infinity)
-            .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
@@ -81,6 +80,10 @@ fun ForLoopBlock(
                     onAddBlockClick()
                 }
             }
+            .height(BlockHeight)
+            .widthIn(BlockMinimumWidth, Dp.Infinity)
+            .clip(BlockElementShape)
+            .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row(
             modifier = modifier.fillMaxHeight(),
@@ -108,7 +111,7 @@ fun ForLoopBlock(
             )
 
             val initBlock = parameters.initBlock
-            if(initBlock == null) {
+            if (initBlock == null) {
                 Spacer(
                     modifier = modifier.width(SpacerBetweenInnerElementsWidth)
                 )
@@ -166,7 +169,7 @@ fun ForLoopBlock(
             )
 
             val postIterationBlock = parameters.postIterationBlock
-            if(postIterationBlock == null) {
+            if (postIterationBlock == null) {
                 Spacer(
                     modifier = modifier.width(SpacerBetweenInnerElementsWidth)
                 )

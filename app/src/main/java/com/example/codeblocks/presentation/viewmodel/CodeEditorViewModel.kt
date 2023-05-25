@@ -1,6 +1,9 @@
 package com.example.codeblocks.presentation.viewmodel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.codeblocks.domain.entity.Block
@@ -66,6 +69,10 @@ class CodeEditorViewModel(
 
     val rootProgramBlocks: MutableList<BlockData> = mutableStateListOf()
     val rootAddBlockButtonId: UUID = UUID.randomUUID()
+
+    private val _isDeleteMode: MutableState<Boolean> = mutableStateOf(false)
+    val isDeleteMode: State<Boolean> get() = _isDeleteMode
+
     private val _blockMap: MutableMap<UUID, BlockData> = mutableMapOf()
     private val _addBlockButtonMap: MutableMap<UUID, MutableList<BlockData>> = mutableMapOf()
     private val _bottomBlockBorderMap: MutableMap<UUID, BlockWithNestingData> = mutableMapOf()
@@ -332,6 +339,10 @@ class CodeEditorViewModel(
             program.execute()
             writeToConsoleUseCase.writeOutputToConsole("\nProcess finished with exit code 0")
         }
+    }
+
+    fun changeDeleteMode() {
+        _isDeleteMode.value = !_isDeleteMode.value
     }
 
 }
