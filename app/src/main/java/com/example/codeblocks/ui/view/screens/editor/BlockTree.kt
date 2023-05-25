@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.codeblocks.R
-import com.example.codeblocks.domain.entity.blocks.conditional.ElseBlock
 import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.loop.DoWhileBlock
 import com.example.codeblocks.presentation.block.data.BlockData
@@ -49,6 +48,7 @@ fun LazyListScope.nestedBlocks(
     navController: NavController,
     viewModel: CodeEditorViewModel,
     addBlockId: UUID? = null,
+    parentBlockId: UUID? = null,
     nestedBlocks: MutableList<BlockData>,
     reorderableState: ReorderableLazyListState,
     visible: Boolean = true
@@ -69,7 +69,7 @@ fun LazyListScope.nestedBlocks(
             Spacer(modifier = Modifier.width((NestingBlockPaddingInt * nestingLevel).dp))
             AddBlock(onClick = {
                 viewModel.setAddBlockCallback {
-                    viewModel.addNewBlockToList(it, nestedBlocks)
+                    viewModel.addNewBlockToList(it, nestedBlocks, parentBlockId)
                 }
                 navController.navigate(CodeblocksDestinations.BLOCKS_ADDITION_ROUTE)
             })
@@ -108,20 +108,12 @@ fun LazyListScope.block(
                             state = reorderableState,
                             onDragStartListener = {
                                 if (block is BlockWithNestingData) {
-                                    block.expanded = false
-                                    block.parentBlockList?.removeAt(block.parentBlockListIndex)
-                                    block.parentBlockList?.add(
-                                        block.parentBlockListIndex, block
-                                    )
+                                    viewModel.setBlockExpanded(false, block)
                                 }
                             },
                             onDragEndListener = {
                                 if (block is BlockWithNestingData) {
-                                    block.expanded = true
-                                    block.parentBlockList?.removeAt(block.parentBlockListIndex)
-                                    block.parentBlockList?.add(
-                                        block.parentBlockListIndex, block
-                                    )
+                                    viewModel.setBlockExpanded(true, block)
                                 }
                             })
                         .shadow(elevation.value, BlockElementShape)
@@ -162,6 +154,7 @@ private fun LazyListScope.blockWithNestingBottomPart(
         navController = navController,
         viewModel = viewModel,
         addBlockId = block.addBlockButtonId,
+        parentBlockId = block.id,
         nestedBlocks = block.nestedBlocksData,
         reorderableState = reorderableState,
         visible = block.expanded
@@ -218,6 +211,7 @@ private fun LazyListScope.blockWithNestingBottomPart(
             navController = navController,
             viewModel = viewModel,
             addBlockId = elseBlock.addBlockButtonId,
+            parentBlockId = elseBlock.id,
             nestedBlocks = elseBlock.nestedBlocksData,
             reorderableState = reorderableState,
             visible = block.expanded

@@ -31,8 +31,8 @@ class DoWhileBlock  : BlockWithNesting() {
                     stopCallingBlock = block.stopCallingBlock
                     return
                 } else if (block is StopExecutionBlock) {
-                    if (stopCallingBlock is BreakBlock) { return }
-                    if (stopCallingBlock is ContinueBlock) { break }
+                    if (block is BreakBlock) { return }
+                    if (block is ContinueBlock) { break }
                     stopCallingBlock = block
                     return
                 }

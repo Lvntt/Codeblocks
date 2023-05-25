@@ -23,12 +23,15 @@ import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.EqualityCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.LessOrEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.MoreOrEqualCheckBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.comparison.NotEqualCheckBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.AndBlock
+import com.example.codeblocks.domain.entity.blocks.expression.operators.logic.OrBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.DivisionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MinusBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.math.MultiplicationBlock
@@ -42,6 +45,7 @@ import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.ExpressionBlockHeight
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.theme.SmallBlockMinimumWidth
+import com.example.codeblocks.ui.view.blocks.CastExpressionBlock
 import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
@@ -220,6 +224,28 @@ fun ExpressionAdditionScreen(
                                 )
                             }
 
+                            AndBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.andOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+
+                            OrBlock::class -> {
+                                OperatorExpressionBlock(
+                                    navController = navController,
+                                    blockOperator = stringResource(id = R.string.orOperator),
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+
                             ReadFromConsoleBlock::class -> {
                                 InputFromConsoleBlock(
                                     onAddBlockClick = {
@@ -230,6 +256,16 @@ fun ExpressionAdditionScreen(
 
                             FunctionCallBlock::class -> {
                                 FunctionCallBlock(
+                                    navController = navController,
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+
+                            CastBlock::class -> {
+                                CastExpressionBlock(
                                     navController = navController,
                                     onAddBlockClick = {
                                         onClick(currentBlockClass)

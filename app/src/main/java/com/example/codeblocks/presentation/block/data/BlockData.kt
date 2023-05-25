@@ -8,7 +8,7 @@ import kotlin.reflect.full.createInstance
 
 abstract class BlockData {
 
-    var parentBlockList: MutableList<BlockData>? = null
+    var parentBlockId: UUID? = null
     var parentBlockListIndex: Int = -1
     val id: UUID = UUID.randomUUID()
     abstract val blockClass: KClass<out Block>
