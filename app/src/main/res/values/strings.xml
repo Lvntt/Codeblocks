@@ -36,6 +36,9 @@
     <string name="readFromConsole">read from console</string>
     <string name="ifKeyword">if</string>
     <string name="thenKeyword">then</string>
+    <string name="manageFabDescription">Manage</string>
+    <string name="runFabDescription">Run program</string>
+    <string name="deleteModeFabDescription">Delete mode</string>
     <string name="whileKeyword">while</string>
     <string name="doKeyword">do</string>
     <string name="doWhile">do while</string>
