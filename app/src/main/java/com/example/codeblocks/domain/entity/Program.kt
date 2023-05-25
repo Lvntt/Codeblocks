@@ -11,6 +11,9 @@ class Program : Executable {
         blocks.forEach {
             it.setupScope(scope)
             it.execute()
+            if (it is StopExecutionBlock || it is BlockWithNesting && it.stopCallingBlock is StopExecutionBlock) {
+                /*TODO error handling*/ throw Exception()
+            }
         }
     }
 

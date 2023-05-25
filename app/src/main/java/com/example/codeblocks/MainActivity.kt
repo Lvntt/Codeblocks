@@ -101,6 +101,7 @@ class MainActivity : ComponentActivity() {
                     val systemUiController = rememberSystemUiController()
                     val defaultBackground = MaterialTheme.colorScheme.background
                     val color = remember { Animatable(defaultBackground) }
+
                     LaunchedEffect(currentRoute) {
                         when (currentRoute) {
                             CodeblocksDestinations.CONSOLE_ROUTE -> color.animateTo(ConsoleBackground)
@@ -111,6 +112,7 @@ class MainActivity : ComponentActivity() {
                     SideEffect {
                         systemUiController.setStatusBarColor(color.value)
                     }
+
                     Box(
                         modifier = Modifier
                             .padding(innerPadding)

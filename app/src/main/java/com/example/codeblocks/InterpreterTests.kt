@@ -22,7 +22,6 @@ import com.example.codeblocks.domain.entity.parambundles.expression.SingleExpres
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.VariableBundle
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionParamValues
-import com.example.codeblocks.domain.entity.parambundles.function.FunctionReturnBundle
 import com.example.codeblocks.domain.entity.parambundles.function.FunctionSignature
 import com.example.codeblocks.domain.entity.parambundles.variable.CreateVariableBundle
 import com.example.codeblocks.domain.entity.parambundles.variable.SetVariableBundle
@@ -60,8 +59,8 @@ fun fibonacciTest(n: String): Program {
     secondIf.setParams(secondIfExpression)
     val firstReturnBlock = FunctionReturnBlock()
     val secondReturnBlock = FunctionReturnBlock()
-    val firstReturnExpression = FunctionReturnBundle("fib",zeroValueBlock)
-    val secondReturnExpression = FunctionReturnBundle("fib",oneValueBlock)
+    val firstReturnExpression = SingleExpressionBlockBundle(zeroValueBlock)
+    val secondReturnExpression = SingleExpressionBlockBundle(oneValueBlock)
     firstReturnBlock.setParams(firstReturnExpression)
     secondReturnBlock.setParams(secondReturnExpression)
     firstIf.nestedBlocks.add(firstReturnBlock)
@@ -83,7 +82,7 @@ fun fibonacciTest(n: String): Program {
     firstFunctionCallBlock.setParams(firstFunctionCallExpBundle)
     secondFunctionCallBlock.setParams(secondFunctionCallExpBundle)
     thirdReturnExpressionBlock.setParams(TwoExpressionBlockBundle(firstFunctionCallBlock, secondFunctionCallBlock))
-    thirdReturnBlock.setParams(FunctionReturnBundle("fib",thirdReturnExpressionBlock))
+    thirdReturnBlock.setParams(SingleExpressionBlockBundle(thirdReturnExpressionBlock))
     fibFunctionDeclarator.nestedBlocks.add(thirdReturnBlock)
     program.blocks.add(fibFunctionDeclarator)
     val printFibBlock = PrintToConsoleBlock()

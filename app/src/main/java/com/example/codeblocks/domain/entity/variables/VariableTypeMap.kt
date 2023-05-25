@@ -22,7 +22,6 @@ object VariableTypeMap {
 
     @JvmStatic
     fun convertStringToVariableValue(string: String): Any? {
-
         if (string.matches(floatRegex)){
             return string.toFloat()
         }
