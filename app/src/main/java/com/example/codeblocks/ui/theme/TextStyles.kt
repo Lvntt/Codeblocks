@@ -27,3 +27,21 @@ val SnackbarTextStyle = TextStyle(
     fontFamily = Oxygen,
     fontWeight = FontWeight.Normal
 )
+
+val CardRegularTextStyle = TextStyle(
+    fontSize = 18.sp,
+    fontFamily = Oxygen,
+    fontWeight = FontWeight.Normal
+)
+
+val CardAccentedTextStyle = TextStyle(
+    fontSize = 18.sp,
+    fontFamily = Oxygen,
+    fontWeight = FontWeight.Bold
+)
+
+val CardTitleTextStyle = TextStyle(
+    fontSize = 21.sp,
+    fontFamily = Oxygen,
+    fontWeight = FontWeight.Bold
+)

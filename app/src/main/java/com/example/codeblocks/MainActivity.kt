@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -63,6 +65,7 @@ import com.example.codeblocks.ui.theme.FadeInInitialAlpha
 import com.example.codeblocks.ui.theme.FadeOutTweenDurationMillis
 import com.example.codeblocks.ui.theme.SnackbarPadding
 import com.example.codeblocks.ui.theme.SnackbarTextStyle
+import com.example.codeblocks.ui.view.dialog.SaveFileDialog
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.androidx.compose.koinViewModel
 
@@ -78,8 +81,22 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val backStackEntry = navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry.value?.destination?.route
+                val context = LocalContext.current
                 var isFabExpanded by remember { mutableStateOf(false) }
+                var saveFileDialogOpened by remember { mutableStateOf(false) }
                 var snackbarVisibleState by remember { mutableStateOf(false) }
+
+                if (saveFileDialogOpened) {
+                    SaveFileDialog(
+                        onDismiss = {
+                            saveFileDialogOpened = false
+                        },
+                        onSave = { filename ->
+                            viewModel.saveProgram(filename, context)
+                            saveFileDialogOpened = false
+                        }
+                    )
+                }
 
                 Column {
                     AnimatedVisibility(
@@ -163,6 +180,15 @@ class MainActivity : ComponentActivity() {
                                                     Alignment.Bottom
                                                 )
                                             ) {
+                                                FabMenuButton(
+                                                    fabMenuItem = FabMenuItem(
+                                                        R.string.saveProgram,
+                                                        Icons.Default.Add
+                                                    ),
+                                                    onClick = {
+                                                        saveFileDialogOpened = true
+                                                    }
+                                                )
                                                 FabMenuButton(
                                                     fabMenuItem = FabMenuItem(
                                                         R.string.deleteModeFabDescription,

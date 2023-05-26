@@ -27,3 +27,6 @@ val FabMenuSpaceBetweenItems = 16.dp
 val EnterAnimationDensity = (-40).dp
 val FadeInInitialAlpha = 0.3f
 val FadeOutTweenDurationMillis = 150
+val CardPadding = 16.dp
+val SpacerBetweenCardsHeight = 16.dp
+val CardTextPadding = 8.dp

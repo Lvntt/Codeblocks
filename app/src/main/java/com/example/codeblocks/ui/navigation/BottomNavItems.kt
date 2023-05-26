@@ -7,6 +7,7 @@ object BottomNavItems {
     private const val EDITOR_BUTTON_NAME = "Editor"
     private const val CONSOLE_BUTTON_NAME = "Console"
     private const val OVERVIEW_BUTTON_NAME = "Overview"
+    private const val SAVED_PROGRAMS_BUTTON_NAME = "Saved programs"
 
     private val bottomNavItems = listOf(
         BottomNavItem(
@@ -18,6 +19,11 @@ object BottomNavItems {
             name = CONSOLE_BUTTON_NAME,
             route = CodeblocksDestinations.CONSOLE_ROUTE,
             iconId = R.drawable.console_icon
+        ),
+        BottomNavItem(
+            name = SAVED_PROGRAMS_BUTTON_NAME,
+            route = CodeblocksDestinations.SAVED_PROGRAMS_ROUTE,
+            iconId = R.drawable.save_icon
         ),
         BottomNavItem(
             name = OVERVIEW_BUTTON_NAME,

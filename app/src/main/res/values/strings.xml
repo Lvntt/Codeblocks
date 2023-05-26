@@ -60,4 +60,15 @@
     <string name="gotIt">got it!</string>
     <string name="deleteModeSnackbarDescription">click on a block to delete it!</string>
     <string name="exitDeleteMode">Exit delete mode</string>
+    <string name="saveProgram">Save program</string>
+    <string name="enterFileName">Enter a file name</string>
+    <string name="filename">File name</string>
+    <string name="save">Save</string>
+    <string name="noSavedPrograms">There is no saved programs yet!</string>
+    <string name="yourSavedPrograms">Your saved programs:</string>
+    <string name="codeblocksApp">Codeblocks app</string>
+    <string name="madeBy">made by:</string>
+    <string name="ruslanGafarov">Ruslan Gafarov</string>
+    <string name="matveySeregin">Matvey Seregin</string>
+    <string name="yuriyEliseev">Yuriy Eliseev</string>
 </resources>
