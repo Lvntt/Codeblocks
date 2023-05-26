@@ -5,6 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -86,4 +88,22 @@ fun CodeblocksTheme(
         colorScheme = colors,
         content = content
     )
+}
+
+enum class NestingColor {
+    Container,
+    OnContainer,
+    Nested,
+    OnNested
+    ;
+
+    val color: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = when (this) {
+            Container -> if (!isSystemInDarkTheme()) light_WithNestingContainer else dark_WithNestingContainer
+            OnContainer -> if (!isSystemInDarkTheme()) light_onWithNestingContainer else dark_onWithNestingContainer
+            Nested -> if (!isSystemInDarkTheme()) light_Nested else dark_Nested
+            OnNested -> if (!isSystemInDarkTheme()) light_onNested else dark_onNested
+        }
 }

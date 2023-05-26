@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -33,6 +32,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import kotlin.reflect.KClass
@@ -68,7 +68,7 @@ fun WhileLoopBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(NestingColor.Container.color)
             .padding(BlockPadding)
     ) {
         Row(
@@ -78,7 +78,7 @@ fun WhileLoopBlock(
         ) {
             Text(
                 text = stringResource(id = R.string.whileKeyword),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -89,11 +89,13 @@ fun WhileLoopBlock(
             val parametersExpression = parameters.expression
             if (parametersExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = true,
                     isEditable = isEditable,
                     onClick = { onAddExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = true,
                     navController = navController,
                     parametersExpression = parametersExpression,
                     setAddBlockCallback = setAddBlockCallback,

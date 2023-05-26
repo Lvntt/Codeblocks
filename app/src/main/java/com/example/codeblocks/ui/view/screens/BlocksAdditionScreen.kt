@@ -114,6 +114,7 @@ fun BlocksAdditionScreen(
 
                         DoWhileBlock::class -> {
                             SingleTextBlockView(
+                                isInBlockWithNesting = true,
                                 onAddBlockClick = onClick,
                                 descriptionStringRes = R.string.doWhile,
                                 isEditable = false

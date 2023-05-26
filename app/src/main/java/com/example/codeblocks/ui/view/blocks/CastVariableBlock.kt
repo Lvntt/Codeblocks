@@ -24,6 +24,7 @@ import com.example.codeblocks.presentation.block.parameters.CastExpressionParame
 import com.example.codeblocks.ui.AvailableVariableTypes
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import com.example.codeblocks.ui.view.common.VariableTypesDropdownMenu
@@ -37,7 +38,8 @@ fun CastExpressionBlock(
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
     parameters: CastExpressionParameters = CastExpressionParameters(),
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddExpressionClick = {
@@ -45,6 +47,12 @@ fun CastExpressionBlock(
             parameters.expressionToCast = createBlockDataByType(it) as ExpressionBlockData
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
     }
 
     Row(
@@ -58,7 +66,7 @@ fun CastExpressionBlock(
                     onAddBlockClick()
                 }
             }
-            .background(MaterialTheme.colorScheme.primaryContainer),
+            .background(containerColor),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -66,11 +74,13 @@ fun CastExpressionBlock(
         val parametersLeftOperandExpression = parameters.expressionToCast
         if (parametersLeftOperandExpression == null) {
             AddExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 isEditable = isEditable,
                 onClick = { onAddExpressionClick() }
             )
         } else {
             ComposableByExpressionBlockClass(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 parametersExpression = parametersLeftOperandExpression,
                 setAddBlockCallback = setAddBlockCallback,
@@ -92,6 +102,7 @@ fun CastExpressionBlock(
         )
 
         VariableTypesDropdownMenu(
+            isInBlockWithNesting = isInBlockWithNesting,
             getCurrentType = { parameters.castTo },
             setCurrentType = { parameters.castTo = it },
             variableTypesMap = AvailableVariableTypes.typenameToKClass

@@ -33,6 +33,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import com.example.codeblocks.ui.view.common.VariableNameTextField
@@ -46,7 +47,8 @@ fun VariableAssignmentBlock(
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
     parameters: VariableAssignmentBlockParameters = VariableAssignmentBlockParameters(),
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddExpressionClick = {
@@ -54,6 +56,18 @@ fun VariableAssignmentBlock(
             parameters.expression = createBlockDataByType(it) as ExpressionBlockData
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
     }
 
     Box(
@@ -69,7 +83,7 @@ fun VariableAssignmentBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(containerColor)
             .padding(BlockPadding)
     ) {
         Row(
@@ -79,7 +93,7 @@ fun VariableAssignmentBlock(
         ) {
             Text(
                 text = stringResource(id = R.string.set),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -88,6 +102,7 @@ fun VariableAssignmentBlock(
             )
 
             VariableNameTextField(
+                isInBlockWithNesting = isInBlockWithNesting,
                 parameterName = parameters.name,
                 onValueChange = {
                     parameters.name = it
@@ -102,7 +117,7 @@ fun VariableAssignmentBlock(
 
             Text(
                 text = stringResource(id = R.string.to),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -113,11 +128,13 @@ fun VariableAssignmentBlock(
             val parametersExpression = parameters.expression
             if (parametersExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     isEditable = isEditable,
                     onClick = { onAddExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     navController = navController,
                     parametersExpression = parametersExpression,
                     setAddBlockCallback = setAddBlockCallback,

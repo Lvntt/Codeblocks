@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,6 +31,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.BlockView
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
@@ -83,7 +83,7 @@ fun ForLoopBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(NestingColor.Container.color)
     ) {
         Row(
             modifier = modifier.fillMaxHeight(),
@@ -96,7 +96,7 @@ fun ForLoopBlock(
 
             Text(
                 text = stringResource(id = R.string.forKeyword),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -106,7 +106,7 @@ fun ForLoopBlock(
 
             Text(
                 text = stringResource(id = R.string.openingBracket),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -117,6 +117,7 @@ fun ForLoopBlock(
                 )
 
                 AddExpressionBlock(
+                    isInBlockWithNesting = true,
                     isEditable = isEditable,
                     onClick = { onAddInitBlockClick() }
                 )
@@ -126,6 +127,7 @@ fun ForLoopBlock(
                 )
             } else {
                 BlockView(
+                    isInBlockWithNesting = true,
                     block = initBlock,
                     navController = navController,
                     setAddBlockCallback = setAddBlockCallback,
@@ -135,7 +137,7 @@ fun ForLoopBlock(
 
             Text(
                 text = stringResource(id = R.string.semicolon),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -146,11 +148,13 @@ fun ForLoopBlock(
             val parametersExpression = parameters.expressionBlock
             if (parametersExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = true,
                     isEditable = isEditable,
                     onClick = { onAddExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = true,
                     navController = navController,
                     parametersExpression = parametersExpression,
                     setAddBlockCallback = setAddBlockCallback,
@@ -164,7 +168,7 @@ fun ForLoopBlock(
 
             Text(
                 text = stringResource(id = R.string.semicolon),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -175,6 +179,7 @@ fun ForLoopBlock(
                 )
 
                 AddExpressionBlock(
+                    isInBlockWithNesting = true,
                     isEditable = isEditable,
                     onClick = { onAddPostIterationBlockClick() }
                 )
@@ -184,6 +189,7 @@ fun ForLoopBlock(
                 )
             } else {
                 BlockView(
+                    isInBlockWithNesting = true,
                     block = postIterationBlock,
                     navController = navController,
                     setAddBlockCallback = setAddBlockCallback,
@@ -193,7 +199,7 @@ fun ForLoopBlock(
 
             Text(
                 text = stringResource(id = R.string.closingBracket),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +34,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.VariableNameTextField
 import com.example.codeblocks.ui.view.common.VariableTypesDropdownMenu
@@ -62,7 +62,7 @@ fun FunctionDeclarationBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(NestingColor.Container.color)
             .padding(BlockPadding)
     ) {
         Row(
@@ -72,7 +72,7 @@ fun FunctionDeclarationBlock(
         ) {
             Text(
                 text = stringResource(id = R.string.function),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -81,6 +81,7 @@ fun FunctionDeclarationBlock(
             )
 
             VariableNameTextField(
+                isInBlockWithNesting = true,
                 parameterName = parameters.name,
                 onValueChange = {
                     parameters.name = it
@@ -95,7 +96,7 @@ fun FunctionDeclarationBlock(
 
             Text(
                 text = stringResource(id = R.string.openingBracket),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -116,6 +117,7 @@ fun FunctionDeclarationBlock(
                 AnimatedVisibility(visibleState = visibilityState) {
                     Row(modifier = modifier.fillMaxHeight()) {
                         VariableNameTextField(
+                            isInBlockWithNesting = true,
                             parameterName = paramsSignature[parameterIndex].first,
                             onValueChange = {
                                 paramsSignature[parameterIndex] =
@@ -135,7 +137,7 @@ fun FunctionDeclarationBlock(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.colon),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                color = NestingColor.OnContainer.color,
                                 style = BlockRegularTextStyle
                             )
                         }
@@ -145,6 +147,7 @@ fun FunctionDeclarationBlock(
                         )
 
                         VariableTypesDropdownMenu(
+                            isInBlockWithNesting = true,
                             getCurrentType = { paramsSignature[parameterIndex].second },
                             setCurrentType = {
                                 paramsSignature[parameterIndex] =
@@ -164,7 +167,7 @@ fun FunctionDeclarationBlock(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.comma),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                color = NestingColor.OnContainer.color,
                                 style = BlockRegularTextStyle
                             )
                         }
@@ -177,6 +180,7 @@ fun FunctionDeclarationBlock(
             }
 
             AddExpressionBlock(
+                isInBlockWithNesting = true,
                 onClick = {
                     if (isEditable) {
                         paramsSignature.add(Pair(DefaultValues.EMPTY_STRING, IntegerVariable::class))
@@ -191,7 +195,7 @@ fun FunctionDeclarationBlock(
 
             Text(
                 text = stringResource(id = R.string.closingBracket),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -201,7 +205,7 @@ fun FunctionDeclarationBlock(
 
             Text(
                 text = stringResource(id = R.string.colon),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = NestingColor.OnContainer.color,
                 style = BlockRegularTextStyle
             )
 
@@ -210,6 +214,7 @@ fun FunctionDeclarationBlock(
             )
 
             VariableTypesDropdownMenu(
+                isInBlockWithNesting = true,
                 getCurrentType = { parameters.returnType },
                 setCurrentType = { parameters.returnType = it },
                 variableTypesMap = AvailableVariableTypes.functionTypenameToKClass,

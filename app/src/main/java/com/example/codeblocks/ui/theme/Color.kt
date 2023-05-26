@@ -67,6 +67,16 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 val seed = Color(0xFF405AA9)
 
+val WithNesting = Color(0xFF336B00)
+val light_WithNestingContainer = Color(0xFFAEE087)
+val light_onWithNestingContainer = Color(0xFF123800)
+val light_Nested = Color(0xFFF8FFEB)
+val light_onNested = Color(0xFF9AFB55)
+val dark_Nested = Color(0xFF80DD3A)
+val dark_onNested = Color(0xFF173800)
+val dark_WithNestingContainer = Color(0xFF255100)
+val dark_onWithNestingContainer = Color(0xFF9AFB55)
+
 val ConsoleBackground = Color(red = 43, green = 43, blue = 43)
 val ConsoleOutput = Color(red = 187, green = 187, blue = 187)
 val ConsoleInput = Color(red = 0, green = 127, blue = 0)

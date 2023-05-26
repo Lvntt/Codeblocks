@@ -33,6 +33,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import kotlin.reflect.KClass
@@ -45,7 +46,8 @@ fun ReturnBlock(
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
     parameters: FunctionReturnParameters = FunctionReturnParameters(),
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddExpressionClick = {
@@ -53,6 +55,18 @@ fun ReturnBlock(
             parameters.expression = createBlockDataByType(it) as ExpressionBlockData
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
     }
 
     Box(
@@ -68,7 +82,7 @@ fun ReturnBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(containerColor)
             .padding(BlockPadding)
     ) {
         Row(
@@ -78,7 +92,7 @@ fun ReturnBlock(
         ) {
             Text(
                 text = stringResource(id = R.string.returnKeyword),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -89,11 +103,13 @@ fun ReturnBlock(
             val parametersExpression = parameters.expression
             if (parametersExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     isEditable = isEditable,
                     onClick = { onAddExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     navController = navController,
                     parametersExpression = parametersExpression,
                     setAddBlockCallback = setAddBlockCallback,
