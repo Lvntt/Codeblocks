@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import com.example.codeblocks.ui.theme.AddExpressionButtonSize
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockPadding
@@ -28,7 +29,8 @@ import com.example.codeblocks.ui.theme.BlockPadding
 fun AddExpressionBlock(
     modifier: Modifier = Modifier,
     isEditable: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    containerColor: Color = MaterialTheme.colorScheme.tertiaryContainer
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var customModifier = modifier
@@ -47,7 +49,7 @@ fun AddExpressionBlock(
             .width(AddExpressionButtonSize)
             .aspectRatio(1f)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .background(containerColor)
             .padding(BlockPadding),
         contentAlignment = Alignment.Center
     ) {

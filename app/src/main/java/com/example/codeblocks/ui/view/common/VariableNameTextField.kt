@@ -58,7 +58,10 @@ fun VariableNameTextField(
             },
             modifier = modifier.widthIn(TextFieldMinimumWidth, Dp.Infinity),
             singleLine = true,
-            textStyle = BlockAccentedTextStyle.copy(textAlign = TextAlign.Center),
+            textStyle = BlockAccentedTextStyle.copy(
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
+            ),
             decorationBox = { innerTextField ->
                 if (textFieldContent.isEmpty()) {
                     Text(

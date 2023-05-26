@@ -26,10 +26,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import com.example.codeblocks.domain.entity.DefaultValues
 import com.example.codeblocks.presentation.viewmodel.ConsoleViewModel
-import com.example.codeblocks.ui.theme.ConsoleInput
-import com.example.codeblocks.ui.theme.ConsoleOutput
 import com.example.codeblocks.ui.theme.ConsolePadding
 import com.example.codeblocks.ui.theme.ConsoleRegularTextStyle
+import com.example.codeblocks.ui.theme.ConsoleInput
+import com.example.codeblocks.ui.theme.ConsoleOutput
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -52,7 +52,9 @@ fun ConsoleScreen(
         Column {
             if (text.isNotEmpty()) {
                 Text(
-                    text = text, color = ConsoleOutput, style = ConsoleRegularTextStyle
+                    text = text,
+                    color = ConsoleOutput,
+                    style = ConsoleRegularTextStyle
                 )
             }
             if (inputRequested) {

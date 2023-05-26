@@ -16,7 +16,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -83,25 +85,32 @@ class MainActivity : ComponentActivity() {
                     AnimatedVisibility(
                         visible = snackbarVisibleState && currentRoute == CodeblocksDestinations.EDITOR_ROUTE
                     ) {
-                        Snackbar(
-                            modifier = Modifier.padding(SnackbarPadding),
-                            action = {
-                                Button(
-                                    onClick = {
-                                        snackbarVisibleState = false
-                                    }
-                                ) {
-                                    Text(
-                                        text = stringResource(id = R.string.gotIt),
-                                        style = SnackbarTextStyle
-                                    )
-                                }
-                            }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background),
+                            horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.deleteModeSnackbarDescription),
-                                style = SnackbarTextStyle
-                            )
+                            Snackbar(
+                                modifier = Modifier.padding(SnackbarPadding),
+                                action = {
+                                    Button(
+                                        onClick = {
+                                            snackbarVisibleState = false
+                                        }
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.gotIt),
+                                            style = SnackbarTextStyle
+                                        )
+                                    }
+                                }
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.deleteModeSnackbarDescription),
+                                    style = SnackbarTextStyle
+                                )
+                            }
                         }
                     }
 

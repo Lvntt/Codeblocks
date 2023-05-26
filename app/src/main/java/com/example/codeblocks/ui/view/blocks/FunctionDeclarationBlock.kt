@@ -176,12 +176,14 @@ fun FunctionDeclarationBlock(
                 }
             }
 
-            AddExpressionBlock {
-                if (isEditable) {
-                    paramsSignature.add(Pair(DefaultValues.EMPTY_STRING, IntegerVariable::class))
-                    parameters.paramsVisibilityState.add(false)
+            AddExpressionBlock(
+                onClick = {
+                    if (isEditable) {
+                        paramsSignature.add(Pair(DefaultValues.EMPTY_STRING, IntegerVariable::class))
+                        parameters.paramsVisibilityState.add(false)
+                    }
                 }
-            }
+            )
 
             Spacer(
                 modifier = modifier.width(SpacerBetweenInnerElementsWidth)
