@@ -50,7 +50,7 @@ fun AddBlock(
             .height(BlockHeight)
             .widthIn(SmallBlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .background(backgroundColor)
             .padding(BlockPadding),
         contentAlignment = Alignment.Center
     ) {

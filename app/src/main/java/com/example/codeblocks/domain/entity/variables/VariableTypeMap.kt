@@ -5,10 +5,10 @@ import kotlin.reflect.KClass
 
 object VariableTypeMap {
 
-    private val floatRegex = Regex("^-?[0-9]+[.][0-9]+[fF]$")
-    private val doubleRegex = Regex("^-?[0-9]+[.][0-9]+$")
-    private val integerRegex = Regex("^-?[0-9]+$")
-    private val booleanRegex = Regex("^(?:true|false)$")
+    private val floatRegex = Regex("""^\s*-?[0-9]+[.][0-9]+[fF]\s*$""")
+    private val doubleRegex = Regex("""^\s*-?[0-9]+[.][0-9]+\s*$""")
+    private val integerRegex = Regex("^\\s*-?[0-9]+\\s*$")
+    private val booleanRegex = Regex("^\\s*(?:true|false)\\s*$")
 
     val typeMap = mapOf<KClass<out Any>, KClass<out Variable>>(
         Byte::class to ByteVariable::class,
@@ -21,7 +21,7 @@ object VariableTypeMap {
     )
 
     @JvmStatic
-    fun convertStringToVariableValue(string: String): Any? {
+    fun convertStringToPrimitiveValue(string: String): Any? {
         if (string.matches(floatRegex)){
             return string.toFloat()
         }

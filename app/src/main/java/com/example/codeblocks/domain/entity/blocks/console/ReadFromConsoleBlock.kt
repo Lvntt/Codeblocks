@@ -7,7 +7,7 @@ import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.parambundles.EmptyParamBundle
 import com.example.codeblocks.domain.entity.variables.NullVariable
 import com.example.codeblocks.domain.entity.variables.VariableTypeMap
-import com.example.codeblocks.domain.entity.variables.VariableTypeMap.convertStringToVariableValue
+import com.example.codeblocks.domain.entity.variables.VariableTypeMap.convertStringToPrimitiveValue
 import com.example.codeblocks.domain.usecases.ReadFromConsoleUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -20,7 +20,7 @@ class ReadFromConsoleBlock: ExpressionBlock(), KoinComponent {
     private val readFromConsoleUseCase: ReadFromConsoleUseCase by inject()
 
     override suspend fun executeAfterChecks(scope: Scope) {
-        val value = convertStringToVariableValue(readFromConsoleUseCase())
+        val value = convertStringToPrimitiveValue(readFromConsoleUseCase())
         returnedVariable = if (value != null) {
             val variable = VariableTypeMap.typeMap[value::class]?.primaryConstructor?.call(
                 DefaultValues.EMPTY_STRING) ?: /*TODO error handling*/ throw Exception()

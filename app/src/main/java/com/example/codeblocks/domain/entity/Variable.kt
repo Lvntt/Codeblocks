@@ -12,11 +12,15 @@ abstract class Variable(val name: String) : Returnable {
 
     protected abstract fun setValueAfterChecks(value: Any?)
 
-    fun setValue(value: Any?) {
+    open fun setValue(value: Any?) {
         if (value != null && value::class != valueType) { /*TODO error handling*/ throw Exception() }
         setValueAfterChecks(value)
     }
 
     override suspend fun getReturnedValue(): Variable? = this
+
+    override fun toString(): String {
+        return getValue().toString()
+    }
 
 }

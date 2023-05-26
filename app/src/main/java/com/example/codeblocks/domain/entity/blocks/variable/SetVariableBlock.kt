@@ -22,6 +22,7 @@ class SetVariableBlock : Block() {
             scope.setVariable(originalVariable.name, castVariable(returnResult,originalVariable::class)!!)
         } else {
             //TODO error handling
+            throw Exception()
         }
     }
 

@@ -60,4 +60,16 @@
     <string name="gotIt">got it!</string>
     <string name="deleteModeSnackbarDescription">click on a block to delete it!</string>
     <string name="exitDeleteMode">Exit delete mode</string>
+    <string name="listType">list</string>
+    <string name="add">add</string>
+    <string name="remove">remove</string>
+    <string name="elementFrom">\'th element from</string>
+    <string name="setBlockMidPart">\'th element of</string>
+    <string name="insert">insert</string>
+    <string name="intoPos">into position</string>
+    <string name="of">of</string>
+    <string name="get">get</string>
+    <string name="listExpressionLeftPart">list of</string>
+    <string name="squaredOpeningBracket">[</string>
+    <string name="squaredClosingBracket">]</string>
 </resources>

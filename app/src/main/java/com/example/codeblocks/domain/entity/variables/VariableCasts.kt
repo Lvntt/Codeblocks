@@ -315,7 +315,8 @@ object VariableCasts {
                 castedVariable.setValue(null)
                 castedVariable
             },
-            Pair(NullVariable::class, NullVariable::class) to { it }
+            Pair(NullVariable::class, NullVariable::class) to { it },
+            Pair(ListVariable::class, ListVariable::class) to { it }
         )
     private val typeCompatibilityMap: Map<Pair<KClass<out Variable>, KClass<out Variable>>, (Variable) -> Boolean> =
         mapOf(
@@ -367,7 +368,8 @@ object VariableCasts {
             Pair(NullVariable::class, FloatVariable::class) to { true },
             Pair(NullVariable::class, DoubleVariable::class) to { true },
             Pair(NullVariable::class, BooleanVariable::class) to { true },
-            Pair(NullVariable::class, NullVariable::class) to { true }
+            Pair(NullVariable::class, NullVariable::class) to { true },
+            Pair(ListVariable::class, ListVariable::class) to { true }
         )
 
     @JvmStatic

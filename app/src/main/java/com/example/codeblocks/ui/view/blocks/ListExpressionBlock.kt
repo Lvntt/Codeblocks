@@ -20,35 +20,29 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
-import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
+import com.example.codeblocks.presentation.block.parameters.ListExpressionParameters
+import com.example.codeblocks.ui.AvailableVariableTypes
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
+import com.example.codeblocks.ui.view.common.VariableTypesDropdownMenu
 import kotlin.reflect.KClass
 
 @Composable
-fun OperatorExpressionBlock(
+fun ListExpressionBlock(
     navController: NavController,
-    blockOperator: String,
     modifier: Modifier = Modifier,
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit = {},
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
-    parameters: TwoExpressionBlockParameters = TwoExpressionBlockParameters(),
+    parameters: ListExpressionParameters = ListExpressionParameters(),
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val onAddLeftOperandClick = {
+    val onAddElementClick = {
         setAddBlockCallback {
-            parameters.firstExpression = createBlockDataByType(it) as ExpressionBlockData
-        }
-        navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
-    }
-
-    val onAddRightOperandClick = {
-        setAddBlockCallback {
-            parameters.secondExpression = createBlockDataByType(it) as ExpressionBlockData
+            parameters.expressionList.add(createBlockDataByType(it) as ExpressionBlockData)
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
     }
@@ -68,9 +62,8 @@ fun OperatorExpressionBlock(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Text(
-            text = stringResource(id = R.string.openingBracket),
+            text = stringResource(id = R.string.listExpressionLeftPart),
             style = BlockRegularTextStyle
         )
 
@@ -78,27 +71,18 @@ fun OperatorExpressionBlock(
             modifier = modifier.width(SpacerBetweenInnerElementsWidth)
         )
 
-        val parametersLeftOperandExpression = parameters.firstExpression
-        if (parametersLeftOperandExpression == null) {
-            AddExpressionBlock(
-                isEditable = isEditable,
-                onClick = { onAddLeftOperandClick() }
-            )
-        } else {
-            ComposableByExpressionBlockClass(
-                navController = navController,
-                parametersExpression = parametersLeftOperandExpression,
-                setAddBlockCallback = setAddBlockCallback,
-                createBlockDataByType = createBlockDataByType
-            )
-        }
+        VariableTypesDropdownMenu(
+            getCurrentType = { parameters.type },
+            setCurrentType = { parameters.type = it },
+            variableTypesMap = AvailableVariableTypes.listTypenameToKClass
+        )
 
         Spacer(
             modifier = modifier.width(SpacerBetweenInnerElementsWidth)
         )
 
         Text(
-            text = blockOperator,
+            text = stringResource(id = R.string.squaredOpeningBracket),
             style = BlockRegularTextStyle
         )
 
@@ -106,27 +90,40 @@ fun OperatorExpressionBlock(
             modifier = modifier.width(SpacerBetweenInnerElementsWidth)
         )
 
-        val parametersRightOperandExpression = parameters.secondExpression
-        if (parametersRightOperandExpression == null) {
-            AddExpressionBlock(
-                isEditable = isEditable,
-                onClick = { onAddRightOperandClick() }
-            )
-        } else {
+        for (element in parameters.expressionList) {
             ComposableByExpressionBlockClass(
                 navController = navController,
-                parametersExpression = parametersRightOperandExpression,
+                parametersExpression = element,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType
             )
+
+            Spacer(
+                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+            )
+
+            Text(
+                text = stringResource(id = R.string.comma),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = BlockRegularTextStyle
+            )
+
+            Spacer(
+                modifier = modifier.width(SpacerBetweenInnerElementsWidth)
+            )
         }
+
+        AddExpressionBlock(
+            isEditable = isEditable,
+            onClick = { onAddElementClick() }
+        )
 
         Spacer(
             modifier = modifier.width(SpacerBetweenInnerElementsWidth)
         )
 
         Text(
-            text = stringResource(id = R.string.closingBracket),
+            text = stringResource(id = R.string.squaredClosingBracket),
             style = BlockRegularTextStyle
         )
     }
