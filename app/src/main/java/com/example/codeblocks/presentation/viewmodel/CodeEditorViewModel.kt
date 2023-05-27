@@ -508,9 +508,7 @@ class CodeEditorViewModel(
     }
 
     fun saveProgram(filename: String, context: Context) {
-        val gson = GsonBuilder().registerTypeAdapter(KClass::class.java, KClassAdapter)
-            .registerTypeAdapterFactory(_blockDataTypeAdapter)
-            .registerTypeAdapterFactory(_blockParametersTypeAdapter).create()
+        val gson = GsonBuilder().registerTypeAdapter(KClass::class.java, KClassAdapter).create()
 
         val file = File(context.filesDir, filename)
         val jsonProgram = gson.toJson(rootProgramBlocks)
@@ -549,6 +547,7 @@ class CodeEditorViewModel(
             _addBlockButtonMap.clear()
             _bottomBlockBorderMap.clear()
             registerLoadedProgramLevel(rootProgramBlocks, null)
+            rootProgramBlocks
         } catch (e: Exception) {
             Log.d("VIEWMODEL", "Couldn't import program: ${e.message}")
             // TODO handle
