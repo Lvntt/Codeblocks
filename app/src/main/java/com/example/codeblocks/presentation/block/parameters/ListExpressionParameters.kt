@@ -11,7 +11,8 @@ import kotlin.reflect.KClass
 
 data class ListExpressionParameters(
     var type: KClass<out Variable> = IntegerVariable::class,
-    var expressionList: MutableList<ExpressionBlockData> = mutableStateListOf()
+    var expressionList: MutableList<ExpressionBlockData> = mutableStateListOf(),
+    override val paramType: KClass<out BlockParameters> = ListExpressionParameters::class
 ) : BlockParameters() {
 
     override fun createBundle(): ParamBundle {

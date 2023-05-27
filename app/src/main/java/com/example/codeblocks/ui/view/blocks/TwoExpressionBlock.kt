@@ -33,6 +33,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import kotlin.reflect.KClass
@@ -47,7 +48,8 @@ fun TwoExpressionBlock(
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true,
     @StringRes startTextId: Int,
-    @StringRes midTextId: Int
+    @StringRes midTextId: Int,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddFirstExpressionClick = {
@@ -63,6 +65,18 @@ fun TwoExpressionBlock(
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
     }
 
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
+
     Box(
         modifier = modifier
             .clickable(
@@ -76,7 +90,7 @@ fun TwoExpressionBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(containerColor)
             .padding(BlockPadding)
     ) {
         Row(
@@ -86,7 +100,7 @@ fun TwoExpressionBlock(
         ) {
             Text(
                 text = stringResource(id = startTextId),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -97,11 +111,13 @@ fun TwoExpressionBlock(
             val variableExpression = parameters.firstExpression
             if (variableExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     isEditable = isEditable,
                     onClick = { onAddFirstExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     navController = navController,
                     parametersExpression = variableExpression,
                     setAddBlockCallback = setAddBlockCallback,
@@ -115,7 +131,7 @@ fun TwoExpressionBlock(
 
             Text(
                 text = stringResource(id = midTextId),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -126,11 +142,13 @@ fun TwoExpressionBlock(
             val listExpression = parameters.secondExpression
             if (listExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     isEditable = isEditable,
                     onClick = { onAddSecondExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     navController = navController,
                     parametersExpression = listExpression,
                     setAddBlockCallback = setAddBlockCallback,

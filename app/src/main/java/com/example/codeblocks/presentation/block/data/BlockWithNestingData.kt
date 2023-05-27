@@ -11,6 +11,7 @@ import kotlin.reflect.full.createInstance
 data class BlockWithNestingData(
     override val blockClass: KClass<out Block>,
     override val blockParametersData: BlockParameters,
+    override val type: KClass<out BlockData> = BlockWithNestingData::class,
     val nestedBlocksData: MutableList<BlockData> = mutableStateListOf(),
     val addBlockButtonId: UUID = UUID.randomUUID(),
     val bottomBorderId: UUID = UUID.randomUUID(),

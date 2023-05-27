@@ -33,6 +33,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import kotlin.reflect.KClass
@@ -48,7 +49,8 @@ fun ThreeExpressionBlock(
     isEditable: Boolean = true,
     @StringRes startTextId: Int,
     @StringRes midTextId: Int,
-    @StringRes endTextId: Int
+    @StringRes endTextId: Int,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddFirstExpressionClick = {
@@ -70,6 +72,18 @@ fun ThreeExpressionBlock(
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
     }
 
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
+
     Box(
         modifier = modifier
             .clickable(
@@ -83,7 +97,7 @@ fun ThreeExpressionBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(containerColor)
             .padding(BlockPadding)
     ) {
         Row(
@@ -93,7 +107,7 @@ fun ThreeExpressionBlock(
         ) {
             Text(
                 text = stringResource(id = startTextId),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -104,11 +118,13 @@ fun ThreeExpressionBlock(
             val firstExpression = parameters.firstExpression
             if (firstExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     isEditable = isEditable,
                     onClick = { onAddFirstExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     navController = navController,
                     parametersExpression = firstExpression,
                     setAddBlockCallback = setAddBlockCallback,
@@ -122,7 +138,7 @@ fun ThreeExpressionBlock(
 
             Text(
                 text = stringResource(id = midTextId),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -133,11 +149,13 @@ fun ThreeExpressionBlock(
             val secondExpression = parameters.secondExpression
             if (secondExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     isEditable = isEditable,
                     onClick = { onAddSecondExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     navController = navController,
                     parametersExpression = secondExpression,
                     setAddBlockCallback = setAddBlockCallback,
@@ -151,7 +169,7 @@ fun ThreeExpressionBlock(
 
             Text(
                 text = stringResource(id = endTextId),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -162,11 +180,13 @@ fun ThreeExpressionBlock(
             val thirdExpression = parameters.thirdExpression
             if (thirdExpression == null) {
                 AddExpressionBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     isEditable = isEditable,
                     onClick = { onAddThirdExpressionClick() }
                 )
             } else {
                 ComposableByExpressionBlockClass(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     navController = navController,
                     parametersExpression = thirdExpression,
                     setAddBlockCallback = setAddBlockCallback,

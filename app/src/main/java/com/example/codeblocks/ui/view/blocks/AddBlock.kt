@@ -46,6 +46,12 @@ fun AddBlock(
         MaterialTheme.colorScheme.tertiaryContainer
     }
 
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onTertiaryContainer
+    }
+
     Box(
         modifier = modifier
             .clickable(
@@ -68,11 +74,12 @@ fun AddBlock(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Add,
+                tint = onContainerColor,
                 contentDescription = null
             )
             Text(
                 text = stringResource(id = labelId),
-                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                color = onContainerColor,
                 style = BlockAccentedTextStyle
             )
         }

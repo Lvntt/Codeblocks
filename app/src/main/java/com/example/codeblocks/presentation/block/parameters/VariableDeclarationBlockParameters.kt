@@ -9,7 +9,8 @@ import kotlin.reflect.KClass
 
 data class VariableDeclarationBlockParameters(
     var type: KClass<out Variable> = IntegerVariable::class,
-    var name: String = DefaultValues.EMPTY_STRING
+    var name: String = DefaultValues.EMPTY_STRING,
+    override val paramType: KClass<out BlockParameters> = VariableDeclarationBlockParameters::class
 ) : BlockParameters() {
 
     override fun createBundle(): ParamBundle = CreateVariableBundle(name, type)

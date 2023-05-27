@@ -77,6 +77,7 @@ fun FunctionCallBlock(
     ) {
         Text(
             text = stringResource(id = R.string.call),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
 
@@ -100,6 +101,7 @@ fun FunctionCallBlock(
 
         Text(
             text = stringResource(id = R.string.openingBracket),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
 
@@ -143,6 +145,7 @@ fun FunctionCallBlock(
 
         Text(
             text = stringResource(id = R.string.closingBracket),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
     }

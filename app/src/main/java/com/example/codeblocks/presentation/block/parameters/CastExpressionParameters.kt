@@ -10,7 +10,8 @@ import kotlin.reflect.KClass
 
 data class CastExpressionParameters(
     var expressionToCast: ExpressionBlockData? = null,
-    var castTo: KClass<out Variable> = IntegerVariable::class
+    var castTo: KClass<out Variable> = IntegerVariable::class,
+    override val paramType: KClass<out BlockParameters> = CastExpressionParameters::class
 ) : BlockParameters() {
 
     override fun createBundle(): ParamBundle {

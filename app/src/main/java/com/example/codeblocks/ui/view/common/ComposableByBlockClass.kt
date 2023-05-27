@@ -279,6 +279,7 @@ fun BlockView(
 
         CreateListBlock::class -> {
             VariableDeclarationBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -292,6 +293,7 @@ fun BlockView(
 
         AddElementToListBlock::class -> {
             TwoExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -309,6 +311,7 @@ fun BlockView(
 
         RemoveElementFromListBlock::class -> {
             TwoExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -326,37 +329,39 @@ fun BlockView(
 
         SetListElementBlock::class -> {
             ThreeExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
+                navController = navController,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
                         onDeleteBlock(block.id)
                     }
                 ),
-                navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
                 parameters = block.blockParametersData as ThreeExpressionBlockParameters,
                 startTextId = R.string.set,
                 midTextId = R.string.setBlockMidPart,
-                endTextId = R.string.to
+                endTextId = R.string.to,
             )
         }
 
         InsertListElementBlock::class -> {
             ThreeExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
+                navController = navController,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
                         onDeleteBlock(block.id)
                     }
                 ),
-                navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
                 parameters = block.blockParametersData as ThreeExpressionBlockParameters,
                 startTextId = R.string.insert,
                 midTextId = R.string.intoPos,
-                endTextId = R.string.of
+                endTextId = R.string.of,
             )
         }
     }

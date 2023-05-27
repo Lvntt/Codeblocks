@@ -5,11 +5,13 @@ import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.ForExpressionBlockBundle
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import kotlin.reflect.KClass
 
 data class ForLoopBlockParameters(
     var initBlock: BlockData? = null,
     var expressionBlock: ExpressionBlockData? = null,
-    var postIterationBlock: BlockData? = null
+    var postIterationBlock: BlockData? = null,
+    override val paramType: KClass<out BlockParameters> = ForLoopBlockParameters::class
 ): BlockParameters() {
 
     override fun createBundle(): ParamBundle {

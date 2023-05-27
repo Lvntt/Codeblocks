@@ -5,11 +5,13 @@ import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.ThreeExpressionBundle
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
+import kotlin.reflect.KClass
 
 data class ThreeExpressionBlockParameters(
     var firstExpression: ExpressionBlockData? = null,
     var secondExpression: ExpressionBlockData? = null,
     var thirdExpression: ExpressionBlockData? = null,
+    override val paramType: KClass<out BlockParameters> = ThreeExpressionBlockParameters::class
 ) : BlockParameters() {
 
     override fun createBundle(): ParamBundle {

@@ -8,6 +8,7 @@ import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListElementByIndexBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListExpressionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListSizeBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
@@ -86,7 +87,8 @@ object AvailableBlocks {
         ReadFromConsoleBlock::class,
         FunctionCallBlock::class,
         ListElementByIndexBlock::class,
-        ListExpressionBlock::class
+        ListExpressionBlock::class,
+        ListSizeBlock::class
     )
 
 }

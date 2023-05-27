@@ -3,6 +3,7 @@ package com.example.codeblocks.ui.view.blocks
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -49,6 +50,16 @@ fun AddExpressionBlock(
         MaterialTheme.colorScheme.tertiaryContainer
     }
 
+    val onContainerColor = if (isInBlockWithNesting) {
+        if(!isSystemInDarkTheme()) {
+            MaterialTheme.colorScheme.onPrimaryContainer
+        } else {
+            NestingColor.OnNested.color
+        }
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
+
     Box(
         modifier = customModifier
             .height(AddExpressionButtonSize)
@@ -66,6 +77,7 @@ fun AddExpressionBlock(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Add,
+                tint = onContainerColor,
                 contentDescription = null
             )
         }

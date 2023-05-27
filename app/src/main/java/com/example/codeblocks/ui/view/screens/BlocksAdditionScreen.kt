@@ -219,7 +219,7 @@ fun BlocksAdditionScreen(
                                 isEditable = false,
                                 startTextId = R.string.set,
                                 midTextId = R.string.setBlockMidPart,
-                                endTextId = R.string.to
+                                endTextId = R.string.to,
                             )
                         }
 
@@ -230,7 +230,7 @@ fun BlocksAdditionScreen(
                                 isEditable = false,
                                 startTextId = R.string.insert,
                                 midTextId = R.string.intoPos,
-                                endTextId = R.string.of
+                                endTextId = R.string.of,
                             )
                         }
                     }

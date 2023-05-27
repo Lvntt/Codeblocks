@@ -24,6 +24,7 @@ import com.example.codeblocks.presentation.block.parameters.ListExpressionParame
 import com.example.codeblocks.ui.AvailableVariableTypes
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import com.example.codeblocks.ui.view.common.VariableTypesDropdownMenu
@@ -37,7 +38,8 @@ fun ListExpressionBlock(
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
     parameters: ListExpressionParameters = ListExpressionParameters(),
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddElementClick = {
@@ -45,6 +47,18 @@ fun ListExpressionBlock(
             parameters.expressionList.add(createBlockDataByType(it) as ExpressionBlockData)
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
     }
 
     Row(
@@ -58,12 +72,13 @@ fun ListExpressionBlock(
                     onAddBlockClick()
                 }
             }
-            .background(MaterialTheme.colorScheme.primaryContainer),
+            .background(containerColor),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = stringResource(id = R.string.listExpressionLeftPart),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
 
@@ -83,6 +98,7 @@ fun ListExpressionBlock(
 
         Text(
             text = stringResource(id = R.string.squaredOpeningBracket),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
 
@@ -92,6 +108,7 @@ fun ListExpressionBlock(
 
         for (element in parameters.expressionList) {
             ComposableByExpressionBlockClass(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 parametersExpression = element,
                 setAddBlockCallback = setAddBlockCallback,
@@ -104,7 +121,7 @@ fun ListExpressionBlock(
 
             Text(
                 text = stringResource(id = R.string.comma),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -114,6 +131,7 @@ fun ListExpressionBlock(
         }
 
         AddExpressionBlock(
+            isInBlockWithNesting = isInBlockWithNesting,
             isEditable = isEditable,
             onClick = { onAddElementClick() }
         )
@@ -124,6 +142,7 @@ fun ListExpressionBlock(
 
         Text(
             text = stringResource(id = R.string.squaredClosingBracket),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
     }
