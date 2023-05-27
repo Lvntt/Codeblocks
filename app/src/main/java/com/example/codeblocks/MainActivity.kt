@@ -80,8 +80,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             CodeblocksTheme {
                 val viewModel = koinViewModel<CodeEditorViewModel>()
-                val listState = rememberReorderableLazyListState(onMove = viewModel::moveBlock)
-                val rowState = rememberLazyListState()
                 val navController = rememberNavController()
                 val backStackEntry = navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry.value?.destination?.route
@@ -288,6 +286,8 @@ class MainActivity : ComponentActivity() {
                         val systemUiController = rememberSystemUiController()
                         val defaultBackground = MaterialTheme.colorScheme.background
                         val color = remember { Animatable(defaultBackground) }
+                        val listState = rememberReorderableLazyListState(onMove = viewModel::moveBlock)
+                        val rowState = rememberLazyListState()
 
                         LaunchedEffect(currentRoute) {
                             when (currentRoute) {

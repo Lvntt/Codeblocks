@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.reorderable.ReorderableLazyListState
-import com.example.codeblocks.reorderable.rememberReorderableLazyListState
 import com.example.codeblocks.reorderable.reorderable
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
@@ -33,7 +32,7 @@ fun EditorScreen(
 ) {
     val blocks = viewModel.rootProgramBlocks
     Crossfade(targetState = viewModel.isLoading) {
-        when(it.value) {
+        when (it.value) {
             true -> {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -43,6 +42,7 @@ fun EditorScreen(
                     CircularProgressIndicator(modifier = Modifier.size(ProgressBarSize))
                 }
             }
+
             false -> {
                 LazyRow(
                     state = rowState,
