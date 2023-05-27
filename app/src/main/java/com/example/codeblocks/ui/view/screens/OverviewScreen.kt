@@ -29,17 +29,10 @@ fun OverviewScreen(
             text = stringResource(id = R.string.codeblocksApp),
             style = CardTitleTextStyle
         )
-        Spacer(modifier = modifier.height(SpacerBetweenCardsHeight))
         Text(
             text = stringResource(id = R.string.madeBy),
             style = CardRegularTextStyle
         )
-        Spacer(modifier = modifier.height(SpacerBetweenCardsHeight))
-        Text(
-            text = stringResource(id = R.string.madeBy),
-            style = CardRegularTextStyle
-        )
-        Spacer(modifier = modifier.height(SpacerBetweenCardsHeight))
         Spacer(modifier = modifier.height(SpacerBetweenCardsHeight))
         Text(
             text = stringResource(id = R.string.ruslanGafarov),
