@@ -253,7 +253,8 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 CodeblocksDestinations.BLOCKS_ADDITION_ROUTE,
-                                CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE -> {
+                                CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE,
+                                CodeblocksDestinations.BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE -> {
                                     ExtendedFloatingActionButton(
                                         onClick = {
                                             navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)

@@ -68,4 +68,6 @@ open class ListVariable(name: String, val elementType: KClass<out Variable>) : V
         return value.list[index]
     }
 
+    fun getSize(): Int = value.list.size
+
 }

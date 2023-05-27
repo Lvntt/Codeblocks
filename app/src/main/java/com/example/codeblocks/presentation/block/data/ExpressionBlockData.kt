@@ -6,5 +6,6 @@ import kotlin.reflect.KClass
 
 data class ExpressionBlockData(
     override val blockClass: KClass<out ExpressionBlock>,
-    override val blockParametersData: BlockParameters
+    override val blockParametersData: BlockParameters,
+    override val type: KClass<out BlockData> = ExpressionBlockData::class
 ) : BlockData()

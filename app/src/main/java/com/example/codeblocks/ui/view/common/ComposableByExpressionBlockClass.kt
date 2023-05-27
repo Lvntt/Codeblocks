@@ -8,6 +8,7 @@ import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListElementByIndexBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListExpressionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListSizeBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
@@ -30,6 +31,7 @@ import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.CastExpressionParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.ListExpressionParameters
+import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.ui.view.blocks.CastExpressionBlock
@@ -37,6 +39,7 @@ import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.ListElementExpressionBlock
 import com.example.codeblocks.ui.view.blocks.ListExpressionBlock
+import com.example.codeblocks.ui.view.blocks.ListSizeExpressionBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
 import kotlin.reflect.KClass
@@ -210,11 +213,14 @@ fun ComposableByExpressionBlockClass(
         }
 
         ReadFromConsoleBlock::class -> {
-            InputFromConsoleBlock()
+            InputFromConsoleBlock(
+                isInBlockWithNesting = isInBlockWithNesting
+            )
         }
 
         FunctionCallBlock::class -> {
             FunctionCallBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
@@ -234,6 +240,7 @@ fun ComposableByExpressionBlockClass(
 
         ListElementByIndexBlock::class -> {
             ListElementExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
                 setAddBlockCallback = setAddBlockCallback,
@@ -243,10 +250,21 @@ fun ComposableByExpressionBlockClass(
 
         ListExpressionBlock::class -> {
             ListExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
                 parameters = parametersExpression.blockParametersData as ListExpressionParameters
+            )
+        }
+
+        ListSizeBlock::class -> {
+            ListSizeExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
+                navController = navController,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType,
+                parameters = parametersExpression.blockParametersData as SingleExpressionParameter
             )
         }
     }

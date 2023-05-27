@@ -11,6 +11,7 @@ abstract class BlockData {
     var parentBlockId: UUID? = null
     var parentBlockListIndex: Int = -1
     val id: UUID = UUID.randomUUID()
+    abstract val type: KClass<out BlockData>
     abstract val blockClass: KClass<out Block>
     abstract val blockParametersData: BlockParameters
 

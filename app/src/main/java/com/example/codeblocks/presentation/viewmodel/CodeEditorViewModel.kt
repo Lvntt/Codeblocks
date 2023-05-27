@@ -18,6 +18,7 @@ import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListElementByIndexBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListExpressionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListSizeBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
@@ -55,6 +56,7 @@ import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.BlockWithNestingData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.data.SimpleBlockData
+import com.example.codeblocks.presentation.block.parameters.BlockParameters
 import com.example.codeblocks.presentation.block.parameters.CastExpressionParameters
 import com.example.codeblocks.presentation.block.parameters.EmptyParameters
 import com.example.codeblocks.presentation.block.parameters.ForLoopBlockParameters
@@ -63,19 +65,28 @@ import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationP
 import com.example.codeblocks.presentation.block.parameters.FunctionReturnParameters
 import com.example.codeblocks.presentation.block.parameters.IfBlockParameters
 import com.example.codeblocks.presentation.block.parameters.ListExpressionParameters
-import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.ThreeExpressionBlockParameters
+import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.reorderable.ItemPosition
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.reflect.Type
 import java.util.UUID
 import kotlin.math.abs
 import kotlin.reflect.KClass
@@ -96,6 +107,67 @@ class CodeEditorViewModel(
     private val _blockMap: MutableMap<UUID, BlockData> = mutableMapOf()
     private val _addBlockButtonMap: MutableMap<UUID, BlockWithNestingData> = mutableMapOf()
     private val _bottomBlockBorderMap: MutableMap<UUID, BlockWithNestingData> = mutableMapOf()
+
+    private val _blockDataTypeAdapter = RuntimeTypeAdapterFactory.of(BlockData::class.java, "type")
+        .registerSubtype(
+            BlockWithNestingData::class.java,
+            BlockWithNestingData::class.qualifiedName
+        )
+        .registerSubtype(ExpressionBlockData::class.java, ExpressionBlockData::class.qualifiedName)
+        .registerSubtype(SimpleBlockData::class.java, SimpleBlockData::class.qualifiedName)
+
+    private val _blockParametersTypeAdapter =
+        RuntimeTypeAdapterFactory.of(BlockParameters::class.java, "paramType")
+            .registerSubtype(
+                CastExpressionParameters::class.java,
+                CastExpressionParameters::class.qualifiedName
+            )
+            .registerSubtype(EmptyParameters::class.java, EmptyParameters::class.qualifiedName)
+            .registerSubtype(
+                ForLoopBlockParameters::class.java,
+                ForLoopBlockParameters::class.qualifiedName
+            )
+            .registerSubtype(
+                FunctionCallParameters::class.java,
+                FunctionCallParameters::class.qualifiedName
+            )
+            .registerSubtype(
+                FunctionDeclarationParameters::class.java,
+                FunctionDeclarationParameters::class.qualifiedName
+            )
+            .registerSubtype(
+                FunctionReturnParameters::class.java,
+                FunctionReturnParameters::class.qualifiedName
+            )
+            .registerSubtype(IfBlockParameters::class.java, IfBlockParameters::class.qualifiedName)
+            .registerSubtype(
+                ListExpressionParameters::class.java,
+                ListExpressionParameters::class.qualifiedName
+            )
+            .registerSubtype(
+                SingleExpressionParameter::class.java,
+                SingleExpressionParameter::class.qualifiedName
+            )
+            .registerSubtype(
+                StringExpressionParameter::class.java,
+                StringExpressionParameter::class.qualifiedName
+            )
+            .registerSubtype(
+                ThreeExpressionBlockParameters::class.java,
+                ThreeExpressionBlockParameters::class.qualifiedName
+            )
+            .registerSubtype(
+                TwoExpressionBlockParameters::class.java,
+                TwoExpressionBlockParameters::class.qualifiedName
+            )
+            .registerSubtype(
+                VariableAssignmentBlockParameters::class.java,
+                VariableAssignmentBlockParameters::class.qualifiedName
+            )
+            .registerSubtype(
+                VariableDeclarationBlockParameters::class.java,
+                VariableDeclarationBlockParameters::class.qualifiedName
+            )
 
     private var _currentAddBlockCallback: (KClass<out Block>) -> Unit = {}
 
@@ -136,7 +208,8 @@ class CodeEditorViewModel(
         SetListElementBlock::class to ThreeExpressionBlockParameters::class,
         InsertListElementBlock::class to ThreeExpressionBlockParameters::class,
         ListElementByIndexBlock::class to TwoExpressionBlockParameters::class,
-        ListExpressionBlock::class to ListExpressionParameters::class
+        ListExpressionBlock::class to ListExpressionParameters::class,
+        ListSizeBlock::class to SingleExpressionParameter::class
     )
 
     private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -176,7 +249,11 @@ class CodeEditorViewModel(
         }
     }
 
-    fun addNewBlockToList(blockType: KClass<out Block>, addTo: MutableList<BlockData>, parentBlockId: UUID?) {
+    fun addNewBlockToList(
+        blockType: KClass<out Block>,
+        addTo: MutableList<BlockData>,
+        parentBlockId: UUID?
+    ) {
         addTo.add(createBlockDataByType(blockType) as BlockData)
         addTo.last().parentBlockId = parentBlockId
         addTo.last().parentBlockListIndex = addTo.lastIndex
@@ -213,7 +290,7 @@ class CodeEditorViewModel(
         }
         removeBlockFromMap(id)
 
-        if(block.blockClass == IfBlock::class) {
+        if (block.blockClass == IfBlock::class) {
             val elseBlock = (block.blockParametersData as IfBlockParameters).elseBlock ?: return
             unregisterAddButton(elseBlock.addBlockButtonId)
             unregisterBlockWithNestingBottomBorder(elseBlock.bottomBorderId)
@@ -247,9 +324,9 @@ class CodeEditorViewModel(
     }
 
     private fun nestedBlockListByBlockId(id: UUID?): MutableList<BlockData>? =
-        if(id == null) {
+        if (id == null) {
             rootProgramBlocks
-        } else if(_blockMap[id]!=null && _blockMap[id] is BlockWithNestingData) {
+        } else if (_blockMap[id] != null && _blockMap[id] is BlockWithNestingData) {
             (_blockMap[id] as BlockWithNestingData).nestedBlocksData
         } else {
             null
@@ -319,10 +396,11 @@ class CodeEditorViewModel(
         for (blockIndex in toInsertIndex + 1..parentBlockContainer.lastIndex) {
             parentBlockContainer[blockIndex].parentBlockListIndex++
         }
-        if(!elseBlockIsPresent) {
+        if (!elseBlockIsPresent) {
             toExtract.parentBlockId = blockWithNesting.parentBlockId
         } else {
-            toExtract.parentBlockId = (blockWithNesting.blockParametersData as IfBlockParameters).elseBlock?.id
+            toExtract.parentBlockId =
+                (blockWithNesting.blockParametersData as IfBlockParameters).elseBlock?.id
         }
         toExtract.parentBlockListIndex = toInsertIndex
         return true
@@ -393,8 +471,10 @@ class CodeEditorViewModel(
         firstBlockData: BlockData,
         secondBlockData: BlockData
     ): Boolean {
-        val firstBlockParentList = nestedBlockListByBlockId(firstBlockData.parentBlockId) ?: return false
-        val secondBlockParentList = nestedBlockListByBlockId(secondBlockData.parentBlockId) ?: return false
+        val firstBlockParentList =
+            nestedBlockListByBlockId(firstBlockData.parentBlockId) ?: return false
+        val secondBlockParentList =
+            nestedBlockListByBlockId(secondBlockData.parentBlockId) ?: return false
         val firstBlockDataListIndex = firstBlockData.parentBlockListIndex
         val firstBlockParentId = firstBlockData.parentBlockId
 
@@ -428,11 +508,12 @@ class CodeEditorViewModel(
     }
 
     fun saveProgram(filename: String, context: Context) {
-        val gson = Gson()
+        val gson = GsonBuilder().registerTypeAdapter(KClass::class.java, KClassAdapter)
+            .registerTypeAdapterFactory(_blockDataTypeAdapter)
+            .registerTypeAdapterFactory(_blockParametersTypeAdapter).create()
 
         val file = File(context.filesDir, filename)
         val jsonProgram = gson.toJson(rootProgramBlocks)
-        Log.d("VIEWMODEL", jsonProgram)
 
         try {
             val fileOutputStream = FileOutputStream(file)
@@ -455,15 +536,66 @@ class CodeEditorViewModel(
     }
 
     fun openSavedProgram(savedProgram: File) {
-        val gson = Gson()
+        val gson = GsonBuilder().registerTypeAdapter(KClass::class.java, KClassAdapter)
+            .registerTypeAdapterFactory(_blockDataTypeAdapter)
+            .registerTypeAdapterFactory(_blockParametersTypeAdapter).create()
 
         try {
             val importedRootProgramBlocks = savedProgram.readText()
-            rootProgramBlocks = gson.fromJson(importedRootProgramBlocks, Array<BlockData>::class.java).toMutableList()
+            rootProgramBlocks =
+                gson.fromJson(importedRootProgramBlocks, Array<BlockData>::class.java)
+                    .toMutableList()
+            _blockMap.clear()
+            _addBlockButtonMap.clear()
+            _bottomBlockBorderMap.clear()
+            registerLoadedProgramLevel(rootProgramBlocks, null)
         } catch (e: Exception) {
             Log.d("VIEWMODEL", "Couldn't import program: ${e.message}")
             // TODO handle
         }
+    }
+
+    private fun registerLoadedProgramLevel(blockList: List<BlockData>, parentBlockId: UUID?) {
+        blockList.forEach {
+            it.parentBlockId = parentBlockId
+            addBlockToMap(it)
+            if (it is BlockWithNestingData) {
+                registerAddButton(it)
+                registerBlockWithNestingBottomBorder(it)
+                if (it.blockClass == IfBlock::class && it.blockParametersData is IfBlockParameters && (it.blockParametersData as IfBlockParameters).elseBlock != null) {
+                    val elseBlock = (it.blockParametersData as IfBlockParameters).elseBlock!!
+                    addBlockToMap(elseBlock)
+                    registerAddButton(elseBlock)
+                    _bottomBlockBorderMap[elseBlock.bottomBorderId] = it
+                }
+                registerLoadedProgramLevel(it.nestedBlocksData, it.id)
+            }
+        }
+    }
+
+}
+
+object KClassAdapter : JsonSerializer<KClass<*>>, JsonDeserializer<KClass<*>> {
+    override fun serialize(
+        src: KClass<*>?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement {
+        if (src != null) {
+            return JsonPrimitive(src.qualifiedName)
+        }
+        return JsonNull.INSTANCE
+    }
+
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): KClass<*> {
+        if (json != null) {
+            return Class.forName(json.asString).kotlin
+        }
+        return Any::class
     }
 
 }

@@ -61,6 +61,12 @@ fun OperatorExpressionBlock(
         MaterialTheme.colorScheme.primaryContainer
     }
 
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
+
     Row(
         modifier = modifier
             .fillMaxSize()
@@ -79,6 +85,7 @@ fun OperatorExpressionBlock(
 
         Text(
             text = stringResource(id = R.string.openingBracket),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
 
@@ -109,6 +116,7 @@ fun OperatorExpressionBlock(
 
         Text(
             text = blockOperator,
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
 
@@ -139,6 +147,7 @@ fun OperatorExpressionBlock(
 
         Text(
             text = stringResource(id = R.string.closingBracket),
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
     }

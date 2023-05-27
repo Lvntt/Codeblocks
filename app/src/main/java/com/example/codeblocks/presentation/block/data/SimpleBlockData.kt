@@ -6,5 +6,6 @@ import kotlin.reflect.KClass
 
 data class SimpleBlockData(
     override val blockClass: KClass<out Block>,
-    override val blockParametersData: BlockParameters
+    override val blockParametersData: BlockParameters,
+    override val type: KClass<out BlockData> = SimpleBlockData::class
 ) : BlockData()

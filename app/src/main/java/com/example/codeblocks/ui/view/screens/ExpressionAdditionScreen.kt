@@ -23,6 +23,7 @@ import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListElementByIndexBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ListExpressionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListSizeBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
@@ -53,6 +54,7 @@ import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.ListElementExpressionBlock
 import com.example.codeblocks.ui.view.blocks.ListExpressionBlock
+import com.example.codeblocks.ui.view.blocks.ListSizeExpressionBlock
 import com.example.codeblocks.ui.view.blocks.OperatorExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableExpressionBlock
 import kotlin.reflect.KClass
@@ -298,6 +300,16 @@ fun ExpressionAdditionScreen(
 
                             ListExpressionBlock::class -> {
                                 ListExpressionBlock(
+                                    navController = navController,
+                                    onAddBlockClick = {
+                                        onClick(currentBlockClass)
+                                    },
+                                    isEditable = false
+                                )
+                            }
+
+                            ListSizeBlock::class -> {
+                                ListSizeExpressionBlock(
                                     navController = navController,
                                     onAddBlockClick = {
                                         onClick(currentBlockClass)

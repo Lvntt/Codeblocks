@@ -20,7 +20,7 @@ import com.example.codeblocks.R
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
-import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
+import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
 import com.example.codeblocks.ui.theme.NestingColor
@@ -29,27 +29,20 @@ import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import kotlin.reflect.KClass
 
 @Composable
-fun ListElementExpressionBlock(
+fun ListSizeExpressionBlock(
     navController: NavController,
     modifier: Modifier = Modifier,
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit = {},
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
-    parameters: TwoExpressionBlockParameters = TwoExpressionBlockParameters(),
+    parameters: SingleExpressionParameter = SingleExpressionParameter(),
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true,
     isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val onAddIndexClick = {
-        setAddBlockCallback {
-            parameters.firstExpression = createBlockDataByType(it) as ExpressionBlockData
-        }
-        navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
-    }
-
     val onAddListClick = {
         setAddBlockCallback {
-            parameters.secondExpression = createBlockDataByType(it) as ExpressionBlockData
+            parameters.expression = createBlockDataByType(it) as ExpressionBlockData
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
     }
@@ -83,7 +76,7 @@ fun ListElementExpressionBlock(
     ) {
 
         Text(
-            text = stringResource(id = R.string.get),
+            text = stringResource(id = R.string.getSize),
             color = onContainerColor,
             style = BlockRegularTextStyle
         )
@@ -92,39 +85,8 @@ fun ListElementExpressionBlock(
             modifier = modifier.width(SpacerBetweenInnerElementsWidth)
         )
 
-        val indexExpression = parameters.firstExpression
-        if (indexExpression == null) {
-            AddExpressionBlock(
-                isInBlockWithNesting = isInBlockWithNesting,
-                isEditable = isEditable,
-                onClick = { onAddIndexClick() }
-            )
-        } else {
-            ComposableByExpressionBlockClass(
-                isInBlockWithNesting = isInBlockWithNesting,
-                navController = navController,
-                parametersExpression = indexExpression,
-                setAddBlockCallback = setAddBlockCallback,
-                createBlockDataByType = createBlockDataByType
-            )
-        }
-
-        Spacer(
-            modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-        )
-
-        Text(
-            text = stringResource(id = R.string.elementFrom),
-            color = onContainerColor,
-            style = BlockRegularTextStyle
-        )
-
-        Spacer(
-            modifier = modifier.width(SpacerBetweenInnerElementsWidth)
-        )
-
-        val listExpression = parameters.secondExpression
-        if (listExpression == null) {
+        val list = parameters.expression
+        if (list == null) {
             AddExpressionBlock(
                 isInBlockWithNesting = isInBlockWithNesting,
                 isEditable = isEditable,
@@ -134,10 +96,11 @@ fun ListElementExpressionBlock(
             ComposableByExpressionBlockClass(
                 isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
-                parametersExpression = listExpression,
+                parametersExpression = list,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType
             )
         }
+
     }
 }
