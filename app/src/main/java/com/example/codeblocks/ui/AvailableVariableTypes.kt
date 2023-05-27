@@ -24,8 +24,7 @@ object AvailableVariableTypes {
         R.string.doubleType to DoubleVariable::class,
         R.string.booleanType to BooleanVariable::class,
         R.string.stringType to StringVariable::class,
-        R.string.charType to CharVariable::class,
-        R.string.listType to ListVariable::class
+        R.string.charType to CharVariable::class
     )
 
     val functionTypenameToKClass = typenameToKClass.plus(
