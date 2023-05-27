@@ -1,5 +1,6 @@
 package com.example.codeblocks.ui.view.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -64,6 +65,14 @@ fun BlocksAdditionScreen(
     modifier: Modifier = Modifier,
     viewModel: CodeEditorViewModel
 ) {
+    BackHandler {
+        navController.navigate(CodeblocksDestinations.EDITOR_ROUTE) {
+            popUpTo(CodeblocksDestinations.EDITOR_ROUTE) {
+                inclusive = true
+            }
+        }
+    }
+
     LazyRow(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(BlockPadding)
@@ -76,7 +85,11 @@ fun BlocksAdditionScreen(
                 items(availableBlocks) { currentBlockClass ->
                     val onClick = {
                         viewModel.executeCallback(currentBlockClass)
-                        navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
+                        navController.navigate(CodeblocksDestinations.EDITOR_ROUTE) {
+                            popUpTo(CodeblocksDestinations.EDITOR_ROUTE) {
+                                inclusive = true
+                            }
+                        }
                     }
 
                     when (currentBlockClass) {

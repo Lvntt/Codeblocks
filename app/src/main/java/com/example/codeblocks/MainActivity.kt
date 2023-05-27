@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -51,6 +52,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.codeblocks.presentation.model.FabMenuItem
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
+import com.example.codeblocks.reorderable.rememberReorderableLazyListState
 import com.example.codeblocks.ui.fab.FabMenuButton
 import com.example.codeblocks.ui.navigation.BottomNavItems
 import com.example.codeblocks.ui.navigation.BottomNavigationBar
@@ -78,6 +80,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             CodeblocksTheme {
                 val viewModel = koinViewModel<CodeEditorViewModel>()
+                val listState = rememberReorderableLazyListState(onMove = viewModel::moveBlock)
+                val rowState = rememberLazyListState()
                 val navController = rememberNavController()
                 val backStackEntry = navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry.value?.destination?.route
@@ -257,7 +261,11 @@ class MainActivity : ComponentActivity() {
                                 CodeblocksDestinations.BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE -> {
                                     ExtendedFloatingActionButton(
                                         onClick = {
-                                            navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
+                                            navController.navigate(CodeblocksDestinations.EDITOR_ROUTE) {
+                                                popUpTo(CodeblocksDestinations.EDITOR_ROUTE) {
+                                                    inclusive = true
+                                                }
+                                            }
                                         },
                                         icon = {
                                             Icon(
@@ -299,7 +307,11 @@ class MainActivity : ComponentActivity() {
                                 .padding(innerPadding)
                                 .background(color.value)
                         ) {
-                            Navigation(navController = navController)
+                            Navigation(
+                                navController = navController,
+                                editorListState = listState,
+                                editorRowState = rowState
+                            )
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package com.example.codeblocks.ui.view.screens
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +12,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.codeblocks.R
@@ -30,9 +34,14 @@ import java.text.DateFormat
 fun SavedProgramsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    savedPrograms: Array<out File>?,
+    savedPrograms: State<Array<out File>?>,
+    getPrograms: (Context) -> Unit,
     onProgramClick: (File) -> Unit
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        getPrograms(context)
+    }
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -45,8 +54,8 @@ fun SavedProgramsScreen(
             Spacer(modifier = modifier.height(SpacerBetweenCardsHeight))
         }
 
-        if (savedPrograms != null) {
-            items(savedPrograms) {savedProgram ->
+        if (savedPrograms.value != null) {
+            items(savedPrograms.value!!) { savedProgram ->
                 SavedProgram(
                     navController = navController,
                     program = savedProgram,
