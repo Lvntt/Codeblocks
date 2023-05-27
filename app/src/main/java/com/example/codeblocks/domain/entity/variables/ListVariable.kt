@@ -1,5 +1,6 @@
 package com.example.codeblocks.domain.entity.variables
 
+import com.example.codeblocks.domain.entity.DefaultValues
 import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
@@ -8,14 +9,18 @@ data class MutableListValue(
     val list: MutableList<Variable> = mutableListOf()
 ) {
     override fun toString(): String {
-        return list.toString()
+        return if(elementType != CharVariable::class) {
+            list.toString()
+        } else {
+            list.joinToString(DefaultValues.EMPTY_STRING) { it.toString() }
+        }
     }
 }
 
-class ListVariable(name: String, val elementType: KClass<out Variable>) : Variable(name) {
+open class ListVariable(name: String, val elementType: KClass<out Variable>) : Variable(name) {
 
     override val valueType: KClass<out Any> = MutableListValue::class
-    private var value: MutableListValue = MutableListValue(elementType)
+    protected var value: MutableListValue = MutableListValue(elementType)
 
     override fun copy(newName: String): Variable {
         val newVariable = ListVariable(newName, elementType)
@@ -26,7 +31,7 @@ class ListVariable(name: String, val elementType: KClass<out Variable>) : Variab
     override fun getValue(): Any = value
 
     override fun setValue(value: Any?) {
-        if(value == null) { /*TODO error handling*/ throw Exception() }
+        if (value == null) { /*TODO error handling*/ throw Exception() }
         if (value::class != valueType) { /*TODO error handling*/ throw Exception() }
         if (((value as MutableListValue).elementType) != elementType) { /*TODO error handling*/ throw Exception() }
         setValueAfterChecks(value)

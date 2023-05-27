@@ -6,6 +6,7 @@ import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.parambundles.EmptyParamBundle
 import com.example.codeblocks.domain.entity.variables.NullVariable
+import com.example.codeblocks.domain.entity.variables.StringVariable
 import com.example.codeblocks.domain.entity.variables.VariableTypeMap
 import com.example.codeblocks.domain.entity.variables.VariableTypeMap.convertStringToPrimitiveValue
 import com.example.codeblocks.domain.usecases.ReadFromConsoleUseCase
@@ -24,7 +25,11 @@ class ReadFromConsoleBlock: ExpressionBlock(), KoinComponent {
         returnedVariable = if (value != null) {
             val variable = VariableTypeMap.typeMap[value::class]?.primaryConstructor?.call(
                 DefaultValues.EMPTY_STRING) ?: /*TODO error handling*/ throw Exception()
-            variable.setValue(value)
+            if (value !is String) {
+                variable.setValue(value)
+            } else {
+                (variable as StringVariable).setStringValue(value)
+            }
             variable
         } else {
             NullVariable(DefaultValues.EMPTY_STRING)

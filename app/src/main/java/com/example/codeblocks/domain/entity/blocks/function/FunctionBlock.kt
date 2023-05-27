@@ -10,6 +10,7 @@ import com.example.codeblocks.domain.entity.Returnable
 import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.StopExecutionBlock
 import com.example.codeblocks.domain.entity.Variable
+import com.example.codeblocks.domain.entity.variables.NullVariable
 import com.example.codeblocks.domain.entity.variables.VariableCasts.castVariable
 import com.example.codeblocks.domain.entity.variables.VariableCasts.typeCanBeSeamlesslyConverted
 import kotlin.reflect.KClass
@@ -59,8 +60,12 @@ class FunctionBlock : BlockWithNesting(), Returnable {
             return
         }
 
-        returnedVariable =
-            (paramBundle as FunctionSignature).returnType.primaryConstructor?.call(DefaultValues.EMPTY_STRING)
+        if ((paramBundle as FunctionSignature).returnType == NullVariable::class) {
+            returnedVariable =
+                (paramBundle as FunctionSignature).returnType.primaryConstructor?.call(DefaultValues.EMPTY_STRING)
+        } else {
+            /*TODO error handling*/ throw Exception()
+        }
     }
 
     fun setValues(paramBundle: ParamBundle) {

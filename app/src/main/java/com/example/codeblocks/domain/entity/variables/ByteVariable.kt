@@ -8,6 +8,10 @@ class ByteVariable(name: String) : Variable(name) {
     override val valueType: KClass<out Any> = Byte::class
     private var value: Byte? = null
 
+    init {
+        value = 0
+    }
+
     override fun getValue(): Byte? = value
 
     override fun setValueAfterChecks(value: Any?) {

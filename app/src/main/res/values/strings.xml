@@ -72,4 +72,6 @@
     <string name="listExpressionLeftPart">list of</string>
     <string name="squaredOpeningBracket">[</string>
     <string name="squaredClosingBracket">]</string>
+    <string name="stringType">string</string>
+    <string name="charType">char</string>
 </resources>

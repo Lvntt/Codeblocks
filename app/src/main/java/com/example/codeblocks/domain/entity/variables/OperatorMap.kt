@@ -46,7 +46,15 @@ object OperatorMap {
             Pair(Double::class, Int::class) to { first, second -> (first as Double) + (second as Int).toDouble() },
             Pair(Double::class, Long::class) to { first, second -> (first as Double) + (second as Long).toDouble() },
             Pair(Double::class, Float::class) to { first, second -> (first as Double) + (second as Float).toDouble() },
-            Pair(Double::class, Double::class) to { first, second -> (first as Double) + (second as Double) }
+            Pair(Double::class, Double::class) to { first, second -> (first as Double) + (second as Double) },
+
+            Pair(MutableListValue::class, MutableListValue::class) to { first, second ->
+                if ((first as MutableListValue).elementType != (second as MutableListValue).elementType) { /*TODO error handling*/ throw Exception() }
+                val result = MutableListValue((first as MutableListValue).elementType)
+                result.list.addAll((first as MutableListValue).list.map{ it.copy(it.name) })
+                result.list.addAll((second as MutableListValue).list.map{ it.copy(it.name) })
+                result
+            }
         ),
         OperatorType.SUBTRACTION to mapOf<Pair<KClass<out Any>, KClass<out Any>>, (Any, Any) -> Any>(
             Pair(Byte::class, Byte::class) to { first, second -> (first as Byte).toInt() - (second as Byte).toInt() },

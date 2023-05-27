@@ -8,6 +8,10 @@ class BooleanVariable(name: String) : Variable(name) {
     override val valueType: KClass<out Any> = Boolean::class
     private var value: Boolean? = null
 
+    init {
+        value = false
+    }
+
     override fun getValue(): Boolean? = value
 
     override fun setValueAfterChecks(value: Any?) {

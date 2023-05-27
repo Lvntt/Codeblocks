@@ -5,6 +5,7 @@ import com.example.codeblocks.domain.entity.ParamBundle
 import com.example.codeblocks.domain.entity.Scope
 import com.example.codeblocks.domain.entity.parambundles.expression.VariableBundle
 import com.example.codeblocks.domain.entity.variables.NullVariable
+import com.example.codeblocks.domain.entity.variables.StringVariable
 import com.example.codeblocks.domain.entity.variables.VariableTypeMap.convertStringToPrimitiveValue
 import com.example.codeblocks.domain.entity.variables.VariableTypeMap.typeMap
 import kotlin.reflect.KClass
@@ -19,7 +20,11 @@ class VariableByValueBlock : ExpressionBlock() {
         returnedVariable = if (value != null) {
             val variable = typeMap[value::class]?.primaryConstructor?.call(DefaultValues.EMPTY_STRING)
                 ?: /*TODO error handling*/ throw Exception()
-            variable.setValue(value)
+            if (value !is String) {
+                variable.setValue(value)
+            } else {
+                (variable as StringVariable).setStringValue(value)
+            }
             variable
         } else {
             NullVariable(DefaultValues.EMPTY_STRING)
