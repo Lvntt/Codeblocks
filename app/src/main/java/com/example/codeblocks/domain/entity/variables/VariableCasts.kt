@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 object VariableCasts {
 
-    val castMap: Map<Pair<KClass<out Variable>, KClass<out Variable>>, (Variable) -> Variable> =
+    private val castMap: Map<Pair<KClass<out Variable>, KClass<out Variable>>, (Variable) -> Variable> =
         mapOf(
             Pair(ByteVariable::class, ByteVariable::class) to { it },
             Pair(ByteVariable::class, ShortVariable::class) to {
@@ -79,6 +79,12 @@ object VariableCasts {
                 val value = (it as ShortVariable).getValue()
                 val castedVariable = BooleanVariable(it.name)
                 castedVariable.setValue(value != null && value.toInt() != 0)
+                castedVariable
+            },
+            Pair(IntegerVariable::class, CharVariable::class) to {
+                val value = (it as IntegerVariable).getValue()
+                val castedVariable = CharVariable(it.name)
+                castedVariable.setValue(value?.toChar())
                 castedVariable
             },
             Pair(IntegerVariable::class, ByteVariable::class) to {
@@ -315,7 +321,66 @@ object VariableCasts {
                 castedVariable.setValue(null)
                 castedVariable
             },
-            Pair(NullVariable::class, NullVariable::class) to { it }
+            Pair(NullVariable::class, CharVariable::class) to {
+                val castedVariable = CharVariable(it.name)
+                castedVariable.setValue(null)
+                castedVariable
+            },
+            Pair(NullVariable::class, NullVariable::class) to { it },
+            Pair(ListVariable::class, ListVariable::class) to { it },
+            Pair(CharVariable::class, CharVariable::class) to { it },
+            Pair(StringVariable::class, StringVariable::class) to { it },
+            Pair(CharVariable::class, IntegerVariable::class) to {
+                val value = (it as CharVariable).getValue()
+                val castedVariable = IntegerVariable(it.name)
+                castedVariable.setValue(value?.code)
+                castedVariable
+            },
+            Pair(ByteVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as ByteVariable).toString())
+                castedVariable
+            },
+            Pair(ShortVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as ShortVariable).toString())
+                castedVariable
+            },
+            Pair(IntegerVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as IntegerVariable).toString())
+                castedVariable
+            },
+            Pair(LongVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as LongVariable).toString())
+                castedVariable
+            },
+            Pair(FloatVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as FloatVariable).toString())
+                castedVariable
+            },
+            Pair(DoubleVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as DoubleVariable).toString())
+                castedVariable
+            },
+            Pair(BooleanVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as BooleanVariable).toString())
+                castedVariable
+            },
+            Pair(CharVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as CharVariable).toString())
+                castedVariable
+            },
+            Pair(NullVariable::class, StringVariable::class) to {
+                val castedVariable = StringVariable(it.name)
+                castedVariable.setStringValue((it as NullVariable).toString())
+                castedVariable
+            },
         )
     private val typeCompatibilityMap: Map<Pair<KClass<out Variable>, KClass<out Variable>>, (Variable) -> Boolean> =
         mapOf(
@@ -367,7 +432,16 @@ object VariableCasts {
             Pair(NullVariable::class, FloatVariable::class) to { true },
             Pair(NullVariable::class, DoubleVariable::class) to { true },
             Pair(NullVariable::class, BooleanVariable::class) to { true },
-            Pair(NullVariable::class, NullVariable::class) to { true }
+            Pair(NullVariable::class, CharVariable::class) to { true },
+            Pair(NullVariable::class, NullVariable::class) to { true },
+            Pair(ListVariable::class, ListVariable::class) to { true },
+            Pair(StringVariable::class, StringVariable::class) to { true },
+            Pair(CharVariable::class, CharVariable::class) to { true },
+            Pair(CharVariable::class, IntegerVariable::class) to { true },
+            Pair(IntegerVariable::class, CharVariable::class) to {
+                val value = (it as IntegerVariable).getValue()
+                value == null || value <= Char.MAX_VALUE.code && value >= Char.MIN_VALUE.code
+            }
         )
 
     @JvmStatic

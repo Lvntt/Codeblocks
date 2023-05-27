@@ -31,6 +31,11 @@ import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
 import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.AddElementToListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.CreateListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.InsertListElementBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.RemoveElementFromListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.SetListElementBlock
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
@@ -45,6 +50,8 @@ import com.example.codeblocks.ui.view.blocks.IfExpressionBlock
 import com.example.codeblocks.ui.view.blocks.OutputToConsoleBlock
 import com.example.codeblocks.ui.view.blocks.ReturnBlock
 import com.example.codeblocks.ui.view.blocks.SingleTextBlockView
+import com.example.codeblocks.ui.view.blocks.ThreeExpressionBlock
+import com.example.codeblocks.ui.view.blocks.TwoExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
 import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
 import com.example.codeblocks.ui.view.blocks.WhileLoopBlock
@@ -174,6 +181,56 @@ fun BlocksAdditionScreen(
                                 navController = navController,
                                 onAddBlockClick = onClick,
                                 isEditable = false
+                            )
+                        }
+
+                        CreateListBlock::class -> {
+                            VariableDeclarationBlock(
+                                onAddBlockClick = onClick,
+                                isEditable = false,
+                                descriptionId = R.string.listType
+                            )
+                        }
+
+                        AddElementToListBlock::class -> {
+                            TwoExpressionBlock(
+                                navController = navController,
+                                onAddBlockClick = onClick,
+                                isEditable = false,
+                                startTextId = R.string.add,
+                                midTextId = R.string.to
+                            )
+                        }
+
+                        RemoveElementFromListBlock::class -> {
+                            TwoExpressionBlock(
+                                navController = navController,
+                                onAddBlockClick = onClick,
+                                isEditable = false,
+                                startTextId = R.string.remove,
+                                midTextId = R.string.elementFrom
+                            )
+                        }
+
+                        SetListElementBlock::class -> {
+                            ThreeExpressionBlock(
+                                navController = navController,
+                                onAddBlockClick = onClick,
+                                isEditable = false,
+                                startTextId = R.string.set,
+                                midTextId = R.string.setBlockMidPart,
+                                endTextId = R.string.to
+                            )
+                        }
+
+                        InsertListElementBlock::class -> {
+                            ThreeExpressionBlock(
+                                navController = navController,
+                                onAddBlockClick = onClick,
+                                isEditable = false,
+                                startTextId = R.string.insert,
+                                midTextId = R.string.intoPos,
+                                endTextId = R.string.of
                             )
                         }
                     }

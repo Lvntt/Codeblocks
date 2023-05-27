@@ -16,6 +16,8 @@ import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListElementByIndexBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
@@ -42,6 +44,11 @@ import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
 import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.AddElementToListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.CreateListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.InsertListElementBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.RemoveElementFromListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.SetListElementBlock
 import com.example.codeblocks.domain.usecases.ClearConsoleUseCase
 import com.example.codeblocks.domain.usecases.WriteToConsoleUseCase
 import com.example.codeblocks.presentation.block.data.BlockData
@@ -55,9 +62,11 @@ import com.example.codeblocks.presentation.block.parameters.FunctionCallParamete
 import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionReturnParameters
 import com.example.codeblocks.presentation.block.parameters.IfBlockParameters
-import com.example.codeblocks.presentation.block.parameters.OperatorExpressionBlockParameters
+import com.example.codeblocks.presentation.block.parameters.ListExpressionParameters
+import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
 import com.example.codeblocks.presentation.block.parameters.StringExpressionParameter
+import com.example.codeblocks.presentation.block.parameters.ThreeExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.reorderable.ItemPosition
@@ -95,19 +104,19 @@ class CodeEditorViewModel(
         SetVariableBlock::class to VariableAssignmentBlockParameters::class,
         VariableByNameBlock::class to StringExpressionParameter::class,
         VariableByValueBlock::class to StringExpressionParameter::class,
-        PlusBlock::class to OperatorExpressionBlockParameters::class,
-        MinusBlock::class to OperatorExpressionBlockParameters::class,
-        DivisionBlock::class to OperatorExpressionBlockParameters::class,
-        MultiplicationBlock::class to OperatorExpressionBlockParameters::class,
-        RemainderBlock::class to OperatorExpressionBlockParameters::class,
-        EqualityCheckBlock::class to OperatorExpressionBlockParameters::class,
-        LessCheckBlock::class to OperatorExpressionBlockParameters::class,
-        LessOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
-        MoreCheckBlock::class to OperatorExpressionBlockParameters::class,
-        MoreOrEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
-        NotEqualCheckBlock::class to OperatorExpressionBlockParameters::class,
-        AndBlock::class to OperatorExpressionBlockParameters::class,
-        OrBlock::class to OperatorExpressionBlockParameters::class,
+        PlusBlock::class to TwoExpressionBlockParameters::class,
+        MinusBlock::class to TwoExpressionBlockParameters::class,
+        DivisionBlock::class to TwoExpressionBlockParameters::class,
+        MultiplicationBlock::class to TwoExpressionBlockParameters::class,
+        RemainderBlock::class to TwoExpressionBlockParameters::class,
+        EqualityCheckBlock::class to TwoExpressionBlockParameters::class,
+        LessCheckBlock::class to TwoExpressionBlockParameters::class,
+        LessOrEqualCheckBlock::class to TwoExpressionBlockParameters::class,
+        MoreCheckBlock::class to TwoExpressionBlockParameters::class,
+        MoreOrEqualCheckBlock::class to TwoExpressionBlockParameters::class,
+        NotEqualCheckBlock::class to TwoExpressionBlockParameters::class,
+        AndBlock::class to TwoExpressionBlockParameters::class,
+        OrBlock::class to TwoExpressionBlockParameters::class,
         PrintToConsoleBlock::class to SingleExpressionParameter::class,
         ReadFromConsoleBlock::class to EmptyParameters::class,
         IfBlock::class to IfBlockParameters::class,
@@ -120,7 +129,14 @@ class CodeEditorViewModel(
         FunctionCallBlock::class to FunctionCallParameters::class,
         ForBlock::class to ForLoopBlockParameters::class,
         ElseBlock::class to EmptyParameters::class,
-        CastBlock::class to CastExpressionParameters::class
+        CastBlock::class to CastExpressionParameters::class,
+        CreateListBlock::class to VariableDeclarationBlockParameters::class,
+        AddElementToListBlock::class to TwoExpressionBlockParameters::class,
+        RemoveElementFromListBlock::class to TwoExpressionBlockParameters::class,
+        SetListElementBlock::class to ThreeExpressionBlockParameters::class,
+        InsertListElementBlock::class to ThreeExpressionBlockParameters::class,
+        ListElementByIndexBlock::class to TwoExpressionBlockParameters::class,
+        ListExpressionBlock::class to ListExpressionParameters::class
     )
 
     private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->

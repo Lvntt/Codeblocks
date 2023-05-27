@@ -6,6 +6,8 @@ import com.example.codeblocks.domain.entity.blocks.conditional.IfBlock
 import com.example.codeblocks.domain.entity.blocks.console.PrintToConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.console.ReadFromConsoleBlock
 import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListElementByIndexBlock
+import com.example.codeblocks.domain.entity.blocks.expression.ListExpressionBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByNameBlock
 import com.example.codeblocks.domain.entity.blocks.expression.VariableByValueBlock
 import com.example.codeblocks.domain.entity.blocks.expression.operators.CastBlock
@@ -32,6 +34,11 @@ import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
 import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.AddElementToListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.CreateListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.InsertListElementBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.RemoveElementFromListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.SetListElementBlock
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -49,7 +56,12 @@ object AvailableBlocks {
         FunctionReturnBlock::class,
         FunctionDeclaratorBlock::class,
         FunctionCallBlock::class,
-        ForBlock::class
+        ForBlock::class,
+        CreateListBlock::class,
+        AddElementToListBlock::class,
+        RemoveElementFromListBlock::class,
+        SetListElementBlock::class,
+        InsertListElementBlock::class
     )
 
     val availableBlocksWithoutNesting = availableBlocks.filter { !(it.isSubclassOf(BlockWithNesting::class)) }
@@ -72,7 +84,9 @@ object AvailableBlocks {
         OrBlock::class,
         CastBlock::class,
         ReadFromConsoleBlock::class,
-        FunctionCallBlock::class
+        FunctionCallBlock::class,
+        ListElementByIndexBlock::class,
+        ListExpressionBlock::class
     )
 
 }

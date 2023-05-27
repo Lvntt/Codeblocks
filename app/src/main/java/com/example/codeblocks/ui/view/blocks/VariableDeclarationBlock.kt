@@ -1,5 +1,6 @@
 package com.example.codeblocks.ui.view.blocks
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -38,6 +39,7 @@ import com.example.codeblocks.ui.view.common.VariableTypesDropdownMenu
 fun VariableDeclarationBlock(
     modifier: Modifier = Modifier,
     parameters: VariableDeclarationBlockParameters = VariableDeclarationBlockParameters(),
+    @StringRes descriptionId: Int = R.string.variable,
     onAddBlockClick: () -> Unit = {},
     isEditable: Boolean = true,
     isInBlockWithNesting: Boolean = false
@@ -100,7 +102,7 @@ fun VariableDeclarationBlock(
             )
 
             Text(
-                text = stringResource(id = R.string.variable),
+                text = stringResource(id = descriptionId),
                 color = onContainerColor,
                 style = BlockRegularTextStyle
             )

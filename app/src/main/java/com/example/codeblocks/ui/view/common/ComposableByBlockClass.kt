@@ -28,13 +28,20 @@ import com.example.codeblocks.domain.entity.blocks.loop.ForBlock
 import com.example.codeblocks.domain.entity.blocks.loop.WhileBlock
 import com.example.codeblocks.domain.entity.blocks.variable.CreateVariableBlock
 import com.example.codeblocks.domain.entity.blocks.variable.SetVariableBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.AddElementToListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.CreateListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.InsertListElementBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.RemoveElementFromListBlock
+import com.example.codeblocks.domain.entity.blocks.variable.list.SetListElementBlock
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.parameters.ForLoopBlockParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionDeclarationParameters
 import com.example.codeblocks.presentation.block.parameters.FunctionReturnParameters
 import com.example.codeblocks.presentation.block.parameters.IfBlockParameters
+import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.SingleExpressionParameter
+import com.example.codeblocks.presentation.block.parameters.ThreeExpressionBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.ui.theme.BlockElementShape
@@ -50,6 +57,8 @@ import com.example.codeblocks.ui.view.blocks.InputFromConsoleBlock
 import com.example.codeblocks.ui.view.blocks.OutputToConsoleBlock
 import com.example.codeblocks.ui.view.blocks.ReturnBlock
 import com.example.codeblocks.ui.view.blocks.SingleTextBlockView
+import com.example.codeblocks.ui.view.blocks.ThreeExpressionBlock
+import com.example.codeblocks.ui.view.blocks.TwoExpressionBlock
 import com.example.codeblocks.ui.view.blocks.VariableAssignmentBlock
 import com.example.codeblocks.ui.view.blocks.VariableDeclarationBlock
 import com.example.codeblocks.ui.view.blocks.WhileLoopBlock
@@ -265,6 +274,89 @@ fun BlockView(
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,
                 parameters = block.blockParametersData as ForLoopBlockParameters,
+            )
+        }
+
+        CreateListBlock::class -> {
+            VariableDeclarationBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
+                parameters = block.blockParametersData as VariableDeclarationBlockParameters,
+                descriptionId = R.string.listType
+            )
+        }
+
+        AddElementToListBlock::class -> {
+            TwoExpressionBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
+                navController = navController,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType,
+                parameters = block.blockParametersData as TwoExpressionBlockParameters,
+                startTextId = R.string.add,
+                midTextId = R.string.to
+            )
+        }
+
+        RemoveElementFromListBlock::class -> {
+            TwoExpressionBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
+                navController = navController,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType,
+                parameters = block.blockParametersData as TwoExpressionBlockParameters,
+                startTextId = R.string.remove,
+                midTextId = R.string.elementFrom
+            )
+        }
+
+        SetListElementBlock::class -> {
+            ThreeExpressionBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
+                navController = navController,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType,
+                parameters = block.blockParametersData as ThreeExpressionBlockParameters,
+                startTextId = R.string.set,
+                midTextId = R.string.setBlockMidPart,
+                endTextId = R.string.to
+            )
+        }
+
+        InsertListElementBlock::class -> {
+            ThreeExpressionBlock(
+                modifier = Modifier.deleteOnClick(
+                    isDeleteMode = isDeleteMode,
+                    onDeleteBlock = {
+                        onDeleteBlock(block.id)
+                    }
+                ),
+                navController = navController,
+                setAddBlockCallback = setAddBlockCallback,
+                createBlockDataByType = createBlockDataByType,
+                parameters = block.blockParametersData as ThreeExpressionBlockParameters,
+                startTextId = R.string.insert,
+                midTextId = R.string.intoPos,
+                endTextId = R.string.of
             )
         }
     }

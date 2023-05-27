@@ -19,7 +19,7 @@ class PrintToConsoleBlock : Block(), KoinComponent {
         (paramBundle as SingleExpressionBlockBundle).expressionBlock.setupScope(scope)
         val returnResult = (paramBundle as SingleExpressionBlockBundle).expressionBlock.getReturnedValue() ?: /*TODO error handling*/ throw Exception()
 
-        writeToConsoleUseCase.writeOutputToConsole(returnResult.getValue().toString())
+        writeToConsoleUseCase.writeOutputToConsole(returnResult.toString())
     }
 
 }

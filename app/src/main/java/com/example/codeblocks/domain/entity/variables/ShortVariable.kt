@@ -8,6 +8,10 @@ class ShortVariable(name: String) : Variable(name) {
     override val valueType: KClass<out Any> = Short::class
     private var value: Short? = null
 
+    init {
+        value = 0
+    }
+
     override fun getValue(): Short? = value
 
     override fun setValueAfterChecks(value: Any?) {

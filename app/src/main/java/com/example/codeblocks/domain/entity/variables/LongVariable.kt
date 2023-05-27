@@ -8,6 +8,10 @@ class LongVariable(name: String) : Variable(name) {
     override val valueType: KClass<out Any> = Long::class
     private var value: Long? = null
 
+    init {
+        value = 0
+    }
+
     override fun getValue(): Long? = value
 
     override fun setValueAfterChecks(value: Any?) {

@@ -8,6 +8,10 @@ class FloatVariable(name: String) : Variable(name) {
     override val valueType: KClass<out Any> = Float::class
     private var value: Float? = null
 
+    init {
+        value = 0.0f
+    }
+
     override fun getValue(): Float? = value
 
     override fun setValueAfterChecks(value: Any?) {

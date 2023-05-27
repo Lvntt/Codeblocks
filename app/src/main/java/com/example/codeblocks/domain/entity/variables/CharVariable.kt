@@ -3,23 +3,19 @@ package com.example.codeblocks.domain.entity.variables
 import com.example.codeblocks.domain.entity.Variable
 import kotlin.reflect.KClass
 
-class IntegerVariable(name: String) : Variable(name) {
+class CharVariable(name: String) : Variable(name) {
 
-    override val valueType: KClass<out Any> = Integer::class
-    private var value: Int? = null
+    override val valueType: KClass<out Any> = Char::class
+    private var value: Char? = null
 
-    init {
-        value = 0
-    }
-
-    override fun getValue(): Int? = value
+    override fun getValue(): Char? = value
 
     override fun setValueAfterChecks(value: Any?) {
-        this.value = value as Int?
+        this.value = value as Char?
     }
 
     override fun copy(newName: String): Variable {
-        val newVariable = IntegerVariable(newName)
+        val newVariable = CharVariable(newName)
         newVariable.setValue(value)
         return newVariable
     }

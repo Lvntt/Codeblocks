@@ -5,10 +5,13 @@ import kotlin.reflect.KClass
 
 object VariableTypeMap {
 
-    private val floatRegex = Regex("^-?[0-9]+[.][0-9]+[fF]$")
-    private val doubleRegex = Regex("^-?[0-9]+[.][0-9]+$")
-    private val integerRegex = Regex("^-?[0-9]+$")
-    private val booleanRegex = Regex("^(?:true|false)$")
+    private val floatRegex = Regex("""^\s*-?[0-9]+[.][0-9]+[fF]\s*$""")
+    private val doubleRegex = Regex("""^\s*-?[0-9]+[.][0-9]+\s*$""")
+    private val integerRegex = Regex("^\\s*-?[0-9]+\\s*$")
+    private val booleanRegex = Regex("^\\s*(?:true|false)\\s*$")
+    private val stringRegex = Regex("^\\s*\"(.*)\"\\s*$")
+    private val charRegex = Regex("^\\s*\'(.)\'\\s*$")
+    private val nullRegex = Regex("^null$")
 
     val typeMap = mapOf<KClass<out Any>, KClass<out Variable>>(
         Byte::class to ByteVariable::class,
@@ -17,11 +20,13 @@ object VariableTypeMap {
         Long::class to LongVariable::class,
         Float::class to FloatVariable::class,
         Double::class to DoubleVariable::class,
-        Boolean::class to BooleanVariable::class
+        Boolean::class to BooleanVariable::class,
+        String::class to StringVariable::class,
+        Char::class to CharVariable::class
     )
 
     @JvmStatic
-    fun convertStringToVariableValue(string: String): Any? {
+    fun convertStringToPrimitiveValue(string: String): Any? {
         if (string.matches(floatRegex)){
             return string.toFloat()
         }
@@ -38,12 +43,21 @@ object VariableTypeMap {
             return string.toInt()
         }
         if (string.matches(integerRegex)){
-            return  string.toLong()
+            return string.toLong()
         }
         if (string.matches(booleanRegex)) {
             return string.toBooleanStrict()
         }
-        return null
+        if (string.matches(stringRegex)) {
+            return stringRegex.matchEntire(string)?.groupValues?.get(1)
+        }
+        if (string.matches(charRegex)) {
+            return charRegex.matchEntire(string)?.groupValues?.get(1)?.toCharArray()?.get(0)
+        }
+        if (string.matches(nullRegex)) {
+            return null
+        }
+        /*TODO error handling*/ throw Exception()
     }
 
 }

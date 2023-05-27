@@ -5,21 +5,21 @@ import com.example.codeblocks.domain.entity.blocks.expression.ExpressionBlock
 import com.example.codeblocks.domain.entity.parambundles.expression.TwoExpressionBlockBundle
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 
-data class OperatorExpressionBlockParameters(
-    var leftOperand: ExpressionBlockData? = null,
-    var rightOperand: ExpressionBlockData? = null
+data class TwoExpressionBlockParameters(
+    var firstExpression: ExpressionBlockData? = null,
+    var secondExpression: ExpressionBlockData? = null
 ) : BlockParameters() {
     override fun createBundle(): ParamBundle {
-        val leftOperand = leftOperand
-        val rightOperand = rightOperand
+        val firstExpression = firstExpression
+        val secondExpression = secondExpression
 
-        if (leftOperand == null || rightOperand == null) {
+        if (firstExpression == null || secondExpression == null) {
             // TODO catch in vm
             throw Exception()
         }
         return TwoExpressionBlockBundle(
-            leftOperand.createBlock() as ExpressionBlock,
-            rightOperand.createBlock() as ExpressionBlock
+            firstExpression.createBlock() as ExpressionBlock,
+            secondExpression.createBlock() as ExpressionBlock
         )
     }
 
