@@ -28,8 +28,9 @@ object AvailableVariableTypes {
     )
 
     val functionTypenameToKClass = typenameToKClass.plus(
-        Pair(
-            R.string.nullType, NullVariable::class,
+        mapOf(
+            R.string.nullType to NullVariable::class,
+            R.string.listType to ListVariable::class
         )
     )
 
