@@ -1,5 +1,6 @@
 package com.example.codeblocks.ui.view.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,6 +68,14 @@ fun ExpressionAdditionScreen(
     modifier: Modifier = Modifier,
     isInBlockWithNesting: Boolean = false
 ) {
+    BackHandler {
+        navController.navigate(CodeblocksDestinations.EDITOR_ROUTE) {
+            popUpTo(CodeblocksDestinations.EDITOR_ROUTE) {
+                inclusive = true
+            }
+        }
+    }
+
     LazyRow(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(BlockPadding)
@@ -79,7 +88,11 @@ fun ExpressionAdditionScreen(
                 items(availableExpressions) { currentBlockClass ->
                     val onClick: (KClass<out ExpressionBlock>) -> Unit = {
                         viewModel.executeCallback(it)
-                        navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
+                        navController.navigate(CodeblocksDestinations.EDITOR_ROUTE) {
+                            popUpTo(CodeblocksDestinations.EDITOR_ROUTE) {
+                                inclusive = true
+                            }
+                        }
                     }
 
                     val containerColor = if (isInBlockWithNesting) {

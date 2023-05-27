@@ -1,12 +1,12 @@
 package com.example.codeblocks.ui.navigation
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
+import com.example.codeblocks.reorderable.ReorderableLazyListState
 import com.example.codeblocks.ui.AvailableBlocks
 import com.example.codeblocks.ui.view.screens.BlocksAdditionScreen
 import com.example.codeblocks.ui.view.screens.ConsoleScreen
@@ -36,7 +37,9 @@ object CodeblocksDestinations {
 @Composable
 fun Navigation(
     navController: NavHostController,
-    viewModel: CodeEditorViewModel = koinViewModel()
+    viewModel: CodeEditorViewModel = koinViewModel(),
+    editorListState: ReorderableLazyListState,
+    editorRowState: LazyListState
 ) {
     NavHost(
         navController = navController,
@@ -45,7 +48,9 @@ fun Navigation(
         composable(CodeblocksDestinations.EDITOR_ROUTE) {
             EditorScreen(
                 navController = navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                listState = editorListState,
+                rowState = editorRowState
             )
         }
         composable(CodeblocksDestinations.CONSOLE_ROUTE) {
@@ -78,8 +83,9 @@ fun Navigation(
         composable(CodeblocksDestinations.SAVED_PROGRAMS_ROUTE) {
             SavedProgramsScreen(
                 navController = navController,
-                savedPrograms = viewModel.getSavedPrograms(LocalContext.current),
-                onProgramClick = viewModel::openSavedProgram
+                savedPrograms = viewModel.programList,
+                onProgramClick = viewModel::openSavedProgram,
+                getPrograms = viewModel::getSavedPrograms
             )
         }
     }

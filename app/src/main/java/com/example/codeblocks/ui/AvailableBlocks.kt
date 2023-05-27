@@ -50,14 +50,14 @@ object AvailableBlocks {
         SetVariableBlock::class,
         PrintToConsoleBlock::class,
         IfBlock::class,
+        ForBlock::class,
         WhileBlock::class,
         DoWhileBlock::class,
         BreakBlock::class,
         ContinueBlock::class,
-        FunctionReturnBlock::class,
         FunctionDeclaratorBlock::class,
+        FunctionReturnBlock::class,
         FunctionCallBlock::class,
-        ForBlock::class,
         CreateListBlock::class,
         AddElementToListBlock::class,
         RemoveElementFromListBlock::class,
@@ -70,6 +70,9 @@ object AvailableBlocks {
     val availableExpressions: List<KClass<out ExpressionBlock>> = listOf(
         VariableByNameBlock::class,
         VariableByValueBlock::class,
+        ListElementByIndexBlock::class,
+        ListExpressionBlock::class,
+        ListSizeBlock::class,
         PlusBlock::class,
         MinusBlock::class,
         DivisionBlock::class,
@@ -86,9 +89,6 @@ object AvailableBlocks {
         CastBlock::class,
         ReadFromConsoleBlock::class,
         FunctionCallBlock::class,
-        ListElementByIndexBlock::class,
-        ListExpressionBlock::class,
-        ListSizeBlock::class
     )
 
 }

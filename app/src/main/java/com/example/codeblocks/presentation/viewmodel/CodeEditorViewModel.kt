@@ -1,7 +1,6 @@
 package com.example.codeblocks.presentation.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
@@ -52,11 +51,11 @@ import com.example.codeblocks.domain.entity.blocks.variable.list.RemoveElementFr
 import com.example.codeblocks.domain.entity.blocks.variable.list.SetListElementBlock
 import com.example.codeblocks.domain.usecases.ClearConsoleUseCase
 import com.example.codeblocks.domain.usecases.WriteToConsoleUseCase
+import com.example.codeblocks.presentation.block.ProgramLoader
 import com.example.codeblocks.presentation.block.data.BlockData
 import com.example.codeblocks.presentation.block.data.BlockWithNestingData
 import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.data.SimpleBlockData
-import com.example.codeblocks.presentation.block.parameters.BlockParameters
 import com.example.codeblocks.presentation.block.parameters.CastExpressionParameters
 import com.example.codeblocks.presentation.block.parameters.EmptyParameters
 import com.example.codeblocks.presentation.block.parameters.ForLoopBlockParameters
@@ -72,21 +71,10 @@ import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockPa
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.reorderable.ItemPosition
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileOutputStream
-import java.lang.reflect.Type
 import java.util.UUID
 import kotlin.math.abs
 import kotlin.reflect.KClass
@@ -108,66 +96,13 @@ class CodeEditorViewModel(
     private val _addBlockButtonMap: MutableMap<UUID, BlockWithNestingData> = mutableMapOf()
     private val _bottomBlockBorderMap: MutableMap<UUID, BlockWithNestingData> = mutableMapOf()
 
-    private val _blockDataTypeAdapter = RuntimeTypeAdapterFactory.of(BlockData::class.java, "type")
-        .registerSubtype(
-            BlockWithNestingData::class.java,
-            BlockWithNestingData::class.qualifiedName
-        )
-        .registerSubtype(ExpressionBlockData::class.java, ExpressionBlockData::class.qualifiedName)
-        .registerSubtype(SimpleBlockData::class.java, SimpleBlockData::class.qualifiedName)
+    private val _programList: MutableState<Array<out File>?> = mutableStateOf(null)
+    val programList: State<Array<out File>?>
+        get() = _programList
 
-    private val _blockParametersTypeAdapter =
-        RuntimeTypeAdapterFactory.of(BlockParameters::class.java, "paramType")
-            .registerSubtype(
-                CastExpressionParameters::class.java,
-                CastExpressionParameters::class.qualifiedName
-            )
-            .registerSubtype(EmptyParameters::class.java, EmptyParameters::class.qualifiedName)
-            .registerSubtype(
-                ForLoopBlockParameters::class.java,
-                ForLoopBlockParameters::class.qualifiedName
-            )
-            .registerSubtype(
-                FunctionCallParameters::class.java,
-                FunctionCallParameters::class.qualifiedName
-            )
-            .registerSubtype(
-                FunctionDeclarationParameters::class.java,
-                FunctionDeclarationParameters::class.qualifiedName
-            )
-            .registerSubtype(
-                FunctionReturnParameters::class.java,
-                FunctionReturnParameters::class.qualifiedName
-            )
-            .registerSubtype(IfBlockParameters::class.java, IfBlockParameters::class.qualifiedName)
-            .registerSubtype(
-                ListExpressionParameters::class.java,
-                ListExpressionParameters::class.qualifiedName
-            )
-            .registerSubtype(
-                SingleExpressionParameter::class.java,
-                SingleExpressionParameter::class.qualifiedName
-            )
-            .registerSubtype(
-                StringExpressionParameter::class.java,
-                StringExpressionParameter::class.qualifiedName
-            )
-            .registerSubtype(
-                ThreeExpressionBlockParameters::class.java,
-                ThreeExpressionBlockParameters::class.qualifiedName
-            )
-            .registerSubtype(
-                TwoExpressionBlockParameters::class.java,
-                TwoExpressionBlockParameters::class.qualifiedName
-            )
-            .registerSubtype(
-                VariableAssignmentBlockParameters::class.java,
-                VariableAssignmentBlockParameters::class.qualifiedName
-            )
-            .registerSubtype(
-                VariableDeclarationBlockParameters::class.java,
-                VariableDeclarationBlockParameters::class.qualifiedName
-            )
+    private val _isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isLoading: State<Boolean>
+        get() = _isLoading
 
     private var _currentAddBlockCallback: (KClass<out Block>) -> Unit = {}
 
@@ -215,6 +150,12 @@ class CodeEditorViewModel(
     private val runtimeExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         writeToConsoleUseCase.writeErrorToConsole(throwable.stackTraceToString())
         writeToConsoleUseCase.writeOutputToConsole("\nProcess finished with exit code 1")
+    }
+
+    private val saverExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        writeToConsoleUseCase.writeErrorToConsole("\nAn error occurred during program saving/loading")
+        writeToConsoleUseCase.writeErrorToConsole(throwable.stackTraceToString())
+        _isLoading.value = false
     }
 
     fun setAddBlockCallback(callback: (KClass<out Block>) -> Unit) {
@@ -508,48 +449,32 @@ class CodeEditorViewModel(
     }
 
     fun saveProgram(filename: String, context: Context) {
-        val gson = GsonBuilder().registerTypeAdapter(KClass::class.java, KClassAdapter).create()
-
-        val file = File(context.filesDir, filename)
-        val jsonProgram = gson.toJson(rootProgramBlocks)
-
-        try {
-            val fileOutputStream = FileOutputStream(file)
-            fileOutputStream.write(jsonProgram.toByteArray())
-            fileOutputStream.close()
-        } catch (e: Exception) {
-            // TODO handle
-            Log.d("VIEWMODEL", "File was not created")
+        viewModelScope.launch(Dispatchers.IO + saverExceptionHandler) {
+            _isLoading.value = true
+            ProgramLoader.saveProgram(rootProgramBlocks, filename, context)
+            _isLoading.value = false
         }
     }
 
-    fun getSavedPrograms(context: Context): Array<out File>? {
-        try {
-            return context.filesDir.listFiles()
-        } catch (e: Exception) {
-            // TODO handle
-            Log.d("VIEWMODEL", "Couldn't retrieve saved programs")
+    fun getSavedPrograms(context: Context) {
+        viewModelScope.launch(Dispatchers.IO + saverExceptionHandler) {
+            _isLoading.value = true
+            _programList.value = ProgramLoader.getSavedPrograms(context)
+            _isLoading.value = false
         }
-        return null
     }
 
     fun openSavedProgram(savedProgram: File) {
-        val gson = GsonBuilder().registerTypeAdapter(KClass::class.java, KClassAdapter)
-            .registerTypeAdapterFactory(_blockDataTypeAdapter)
-            .registerTypeAdapterFactory(_blockParametersTypeAdapter).create()
-
-        try {
-            val importedRootProgramBlocks = savedProgram.readText()
-            rootProgramBlocks =
-                gson.fromJson(importedRootProgramBlocks, Array<BlockData>::class.java)
-                    .toMutableList()
+        viewModelScope.launch(Dispatchers.IO + saverExceptionHandler) {
+            _isLoading.value = true
+            val blocks = ProgramLoader.openSavedProgram(savedProgram)
+            rootProgramBlocks = mutableStateListOf()
+            rootProgramBlocks.addAll(blocks)
             _blockMap.clear()
             _addBlockButtonMap.clear()
             _bottomBlockBorderMap.clear()
             registerLoadedProgramLevel(rootProgramBlocks, null)
-        } catch (e: Exception) {
-            Log.d("VIEWMODEL", "Couldn't import program: ${e.message}")
-            // TODO handle
+            _isLoading.value = false
         }
     }
 
@@ -570,31 +495,6 @@ class CodeEditorViewModel(
                 registerLoadedProgramLevel(it.nestedBlocksData, it.id)
             }
         }
-    }
-
-}
-
-object KClassAdapter : JsonSerializer<KClass<*>>, JsonDeserializer<KClass<*>> {
-    override fun serialize(
-        src: KClass<*>?,
-        typeOfSrc: Type?,
-        context: JsonSerializationContext?
-    ): JsonElement {
-        if (src != null) {
-            return JsonPrimitive(src.qualifiedName)
-        }
-        return JsonNull.INSTANCE
-    }
-
-    override fun deserialize(
-        json: JsonElement?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
-    ): KClass<*> {
-        if (json != null) {
-            return Class.forName(json.asString).kotlin
-        }
-        return Any::class
     }
 
 }

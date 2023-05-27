@@ -153,7 +153,7 @@ fun FunctionDeclarationBlock(
                                 paramsSignature[parameterIndex] =
                                     Pair(paramsSignature[parameterIndex].first, it)
                             },
-                            variableTypesMap = AvailableVariableTypes.typenameToKClass,
+                            variableTypesMap = AvailableVariableTypes.listTypenameToKClass,
                             isEditable = isEditable
                         )
 

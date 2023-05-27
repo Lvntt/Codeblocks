@@ -1,6 +1,5 @@
 package com.example.codeblocks.domain.entity.blocks.console
 
-import android.util.Log
 import com.example.codeblocks.domain.entity.Block
 import com.example.codeblocks.domain.entity.ParamBundle
 import com.example.codeblocks.domain.entity.Scope
