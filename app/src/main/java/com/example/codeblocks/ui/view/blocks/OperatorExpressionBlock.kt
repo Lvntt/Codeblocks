@@ -23,6 +23,7 @@ import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.TwoExpressionBlockParameters
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import kotlin.reflect.KClass
@@ -36,7 +37,8 @@ fun OperatorExpressionBlock(
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
     parameters: TwoExpressionBlockParameters = TwoExpressionBlockParameters(),
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddLeftOperandClick = {
@@ -53,6 +55,12 @@ fun OperatorExpressionBlock(
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
     }
 
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
     Row(
         modifier = modifier
             .fillMaxSize()
@@ -64,7 +72,7 @@ fun OperatorExpressionBlock(
                     onAddBlockClick()
                 }
             }
-            .background(MaterialTheme.colorScheme.primaryContainer),
+            .background(containerColor),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -81,11 +89,13 @@ fun OperatorExpressionBlock(
         val parametersLeftOperandExpression = parameters.firstExpression
         if (parametersLeftOperandExpression == null) {
             AddExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 isEditable = isEditable,
                 onClick = { onAddLeftOperandClick() }
             )
         } else {
             ComposableByExpressionBlockClass(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 parametersExpression = parametersLeftOperandExpression,
                 setAddBlockCallback = setAddBlockCallback,
@@ -109,11 +119,13 @@ fun OperatorExpressionBlock(
         val parametersRightOperandExpression = parameters.secondExpression
         if (parametersRightOperandExpression == null) {
             AddExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 isEditable = isEditable,
                 onClick = { onAddRightOperandClick() }
             )
         } else {
             ComposableByExpressionBlockClass(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 parametersExpression = parametersRightOperandExpression,
                 setAddBlockCallback = setAddBlockCallback,

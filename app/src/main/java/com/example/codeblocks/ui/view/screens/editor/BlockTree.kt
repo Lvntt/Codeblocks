@@ -36,6 +36,7 @@ import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.DefaultBlockElevation
 import com.example.codeblocks.ui.theme.EndIfBlockWidth
 import com.example.codeblocks.ui.theme.NestingBlockPaddingInt
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.view.blocks.AddBlock
 import com.example.codeblocks.ui.view.blocks.SingleTextBlockView
 import com.example.codeblocks.ui.view.blocks.WhileLoopBlock
@@ -191,14 +192,17 @@ private fun LazyListScope.blockWithNestingBottomPart(
                 IfBlock::class -> {
                     if ((block.blockParametersData as IfBlockParameters).elseBlock == null) {
                         AddBlock(
+                            isInBlockWithNesting = true,
                             onClick = {
                                 viewModel.addElseBlock(block)
                             },
-                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                             labelId = R.string.addElseBranch
                         )
                     } else {
-                        SingleTextBlockView(descriptionStringRes = R.string.elseKeyword)
+                        SingleTextBlockView(
+                            isInBlockWithNesting = true,
+                            descriptionStringRes = R.string.elseKeyword
+                        )
                     }
                 }
 
@@ -208,7 +212,7 @@ private fun LazyListScope.blockWithNestingBottomPart(
                             .height(BlockHeight)
                             .width(EndIfBlockWidth)
                             .clip(BlockElementShape)
-                            .background(MaterialTheme.colorScheme.primaryContainer)
+                            .background(NestingColor.Container.color)
                             .padding(BlockPadding)
                     )
                 }
@@ -236,7 +240,7 @@ private fun LazyListScope.blockWithNestingBottomPart(
                         .height(BlockHeight)
                         .width(EndIfBlockWidth)
                         .clip(BlockElementShape)
-                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .background(NestingColor.Container.color)
                         .padding(BlockPadding)
                 )
             }

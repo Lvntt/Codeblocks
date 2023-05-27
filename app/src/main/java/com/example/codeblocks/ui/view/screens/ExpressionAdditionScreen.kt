@@ -45,6 +45,7 @@ import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.ExpressionBlockHeight
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.PaddingBetweenBlocks
 import com.example.codeblocks.ui.theme.SmallBlockMinimumWidth
 import com.example.codeblocks.ui.view.blocks.CastExpressionBlock
@@ -60,8 +61,9 @@ import kotlin.reflect.KClass
 fun ExpressionAdditionScreen(
     availableExpressions: List<KClass<out ExpressionBlock>>,
     navController: NavController,
+    viewModel: CodeEditorViewModel,
     modifier: Modifier = Modifier,
-    viewModel: CodeEditorViewModel
+    isInBlockWithNesting: Boolean = false
 ) {
     LazyRow(
         modifier = modifier.fillMaxSize(),
@@ -78,12 +80,18 @@ fun ExpressionAdditionScreen(
                         navController.navigate(CodeblocksDestinations.EDITOR_ROUTE)
                     }
 
+                    val containerColor = if (isInBlockWithNesting) {
+                        NestingColor.Container.color
+                    } else {
+                        MaterialTheme.colorScheme.primaryContainer
+                    }
+
                     Box(
                         modifier = modifier
                             .height(ExpressionBlockHeight)
                             .widthIn(SmallBlockMinimumWidth, Dp.Infinity)
                             .clip(BlockElementShape)
-                            .background(MaterialTheme.colorScheme.primaryContainer)
+                            .background(containerColor)
                             .padding(BlockPadding)
                     ) {
                         when (currentBlockClass) {

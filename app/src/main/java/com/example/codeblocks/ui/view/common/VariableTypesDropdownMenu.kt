@@ -23,6 +23,7 @@ import com.example.codeblocks.domain.entity.Variable
 import com.example.codeblocks.ui.theme.BlockAccentedTextStyle
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.VariableTypeChoiceHeight
 import com.example.codeblocks.ui.theme.VariableTypeChoiceWidth
 import kotlin.reflect.KClass
@@ -33,7 +34,8 @@ fun VariableTypesDropdownMenu(
     setCurrentType: (KClass<out Variable>) -> Unit,
     variableTypesMap: Map<Int, KClass<out Variable>>,
     modifier: Modifier = Modifier,
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val chosenTypeStringRes =
@@ -52,12 +54,18 @@ fun VariableTypesDropdownMenu(
         }
     }
 
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Nested.color
+    } else {
+        MaterialTheme.colorScheme.background
+    }
+
     Box(
         modifier = modifier
             .height(VariableTypeChoiceHeight)
             .width(VariableTypeChoiceWidth)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.background),
+            .background(containerColor),
         contentAlignment = Alignment.Center
     ) {
         Text(

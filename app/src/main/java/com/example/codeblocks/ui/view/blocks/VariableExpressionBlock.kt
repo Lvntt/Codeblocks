@@ -19,9 +19,11 @@ fun VariableExpressionBlock(
     modifier: Modifier = Modifier,
     parameters: StringExpressionParameter = StringExpressionParameter(),
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         modifier = modifier
             .fillMaxSize()
@@ -37,6 +39,7 @@ fun VariableExpressionBlock(
         verticalAlignment = Alignment.CenterVertically
     ) {
         VariableNameTextField(
+            isInBlockWithNesting = isInBlockWithNesting,
             parameterName = parameters.name,
             onValueChange = {
                 parameters.name = it

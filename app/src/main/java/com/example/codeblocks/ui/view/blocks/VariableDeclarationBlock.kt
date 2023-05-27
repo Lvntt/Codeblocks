@@ -30,6 +30,7 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.VariableNameTextField
 import com.example.codeblocks.ui.view.common.VariableTypesDropdownMenu
@@ -40,9 +41,22 @@ fun VariableDeclarationBlock(
     parameters: VariableDeclarationBlockParameters = VariableDeclarationBlockParameters(),
     @StringRes descriptionId: Int = R.string.variable,
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
 
     Box(
         modifier = modifier
@@ -57,7 +71,7 @@ fun VariableDeclarationBlock(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(containerColor)
             .padding(BlockPadding)
     ) {
         Row(
@@ -67,7 +81,7 @@ fun VariableDeclarationBlock(
         ) {
             Text(
                 text = stringResource(id = R.string.create),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -76,6 +90,7 @@ fun VariableDeclarationBlock(
             )
 
             VariableTypesDropdownMenu(
+                isInBlockWithNesting = isInBlockWithNesting,
                 getCurrentType = { parameters.type },
                 setCurrentType = { parameters.type = it },
                 variableTypesMap = AvailableVariableTypes.typenameToKClass,
@@ -88,7 +103,7 @@ fun VariableDeclarationBlock(
 
             Text(
                 text = stringResource(id = descriptionId),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -97,6 +112,7 @@ fun VariableDeclarationBlock(
             )
 
             VariableNameTextField(
+                isInBlockWithNesting = isInBlockWithNesting,
                 parameterName = parameters.name,
                 onValueChange = {
                     parameters.name = it

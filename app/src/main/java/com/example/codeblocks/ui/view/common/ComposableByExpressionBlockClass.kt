@@ -46,11 +46,13 @@ fun ComposableByExpressionBlockClass(
     navController: NavController,
     parametersExpression: ExpressionBlockData,
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit,
-    createBlockDataByType: (KClass<out Block>) -> BlockData?
+    createBlockDataByType: (KClass<out Block>) -> BlockData?,
+    isInBlockWithNesting: Boolean = false
 ) {
     when (parametersExpression.blockClass) {
         VariableByNameBlock::class -> {
             VariableExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 placeholderId = R.string.namePlaceholder,
                 parameters = parametersExpression.blockParametersData as StringExpressionParameter
             )
@@ -58,6 +60,7 @@ fun ComposableByExpressionBlockClass(
 
         VariableByValueBlock::class -> {
             VariableExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 placeholderId = R.string.valuePlaceholder,
                 parameters = parametersExpression.blockParametersData as StringExpressionParameter
             )
@@ -65,6 +68,7 @@ fun ComposableByExpressionBlockClass(
 
         PlusBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.additionOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -75,6 +79,7 @@ fun ComposableByExpressionBlockClass(
 
         MinusBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.subtractionOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -85,6 +90,7 @@ fun ComposableByExpressionBlockClass(
 
         DivisionBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.divisionOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -95,6 +101,7 @@ fun ComposableByExpressionBlockClass(
 
         MultiplicationBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.multiplicationOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -105,6 +112,7 @@ fun ComposableByExpressionBlockClass(
 
         RemainderBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.remainderOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -115,6 +123,7 @@ fun ComposableByExpressionBlockClass(
 
         EqualityCheckBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.equalityOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -125,6 +134,7 @@ fun ComposableByExpressionBlockClass(
 
         LessCheckBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.lessOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -135,6 +145,7 @@ fun ComposableByExpressionBlockClass(
 
         LessOrEqualCheckBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.lessOrEqualOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -145,6 +156,7 @@ fun ComposableByExpressionBlockClass(
 
         MoreCheckBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.greaterOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -155,6 +167,7 @@ fun ComposableByExpressionBlockClass(
 
         MoreOrEqualCheckBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.greaterOrEqualOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -165,6 +178,7 @@ fun ComposableByExpressionBlockClass(
 
         NotEqualCheckBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.inequalityOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -175,6 +189,7 @@ fun ComposableByExpressionBlockClass(
 
         AndBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.andOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -185,6 +200,7 @@ fun ComposableByExpressionBlockClass(
         
         OrBlock::class -> {
             OperatorExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 blockOperator = stringResource(id = R.string.orOperator),
                 parameters = parametersExpression.blockParametersData as TwoExpressionBlockParameters,
@@ -208,6 +224,7 @@ fun ComposableByExpressionBlockClass(
 
         CastBlock::class -> {
             CastExpressionBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 setAddBlockCallback = setAddBlockCallback,
                 createBlockDataByType = createBlockDataByType,

@@ -48,6 +48,7 @@ import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.view.blocks.ForLoopBlock
 import com.example.codeblocks.ui.view.blocks.FunctionCallBlock
 import com.example.codeblocks.ui.view.blocks.FunctionDeclarationBlock
@@ -71,12 +72,14 @@ fun BlockView(
     isDeleteMode: Boolean = false,
     onDeleteBlock: (UUID) -> Unit = {},
     setAddBlockCallback: ((KClass<out Block>) -> Unit) -> Unit,
-    createBlockDataByType: (KClass<out Block>) -> BlockData?
+    createBlockDataByType: (KClass<out Block>) -> BlockData?,
+    isInBlockWithNesting: Boolean = false
 ) {
 
     when (block.blockClass) {
         CreateVariableBlock::class -> {
             VariableDeclarationBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -89,6 +92,7 @@ fun BlockView(
 
         SetVariableBlock::class -> {
             VariableAssignmentBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -104,6 +108,7 @@ fun BlockView(
 
         PrintToConsoleBlock::class -> {
             OutputToConsoleBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -119,6 +124,7 @@ fun BlockView(
 
         ReadFromConsoleBlock::class -> {
             InputFromConsoleBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -160,6 +166,7 @@ fun BlockView(
 
         DoWhileBlock::class -> {
             SingleTextBlockView(
+                isInBlockWithNesting = true,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -172,6 +179,7 @@ fun BlockView(
 
         BreakBlock::class -> {
             SingleTextBlockView(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -184,6 +192,7 @@ fun BlockView(
 
         ContinueBlock::class -> {
             SingleTextBlockView(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -196,6 +205,7 @@ fun BlockView(
 
         FunctionReturnBlock::class -> {
             ReturnBlock(
+                isInBlockWithNesting = isInBlockWithNesting,
                 modifier = Modifier.deleteOnClick(
                     isDeleteMode = isDeleteMode,
                     onDeleteBlock = {
@@ -222,15 +232,22 @@ fun BlockView(
         }
 
         FunctionCallBlock::class -> {
+            val containerColor = if (isInBlockWithNesting) {
+                NestingColor.Container.color
+            } else {
+                MaterialTheme.colorScheme.primaryContainer
+            }
+
             Box(
                 modifier = Modifier
                     .height(BlockHeight)
                     .widthIn(BlockMinimumWidth, Dp.Infinity)
                     .clip(BlockElementShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(containerColor)
                     .padding(BlockPadding)
             ) {
                 FunctionCallBlock(
+                    isInBlockWithNesting = isInBlockWithNesting,
                     modifier = Modifier.deleteOnClick(
                         isDeleteMode = isDeleteMode,
                         onDeleteBlock = {

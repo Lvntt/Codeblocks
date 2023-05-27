@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.example.codeblocks.R
@@ -29,16 +28,24 @@ import com.example.codeblocks.ui.theme.BlockAccentedTextStyle
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockPadding
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SmallBlockMinimumWidth
 
 @Composable
 fun AddBlock(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    backgroundColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
-    @StringRes labelId: Int = R.string.addBlock
+    @StringRes labelId: Int = R.string.addBlock,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.tertiaryContainer
+    }
+
     Box(
         modifier = modifier
             .clickable(
@@ -50,7 +57,7 @@ fun AddBlock(
             .height(BlockHeight)
             .widthIn(SmallBlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(backgroundColor)
+            .background(containerColor)
             .padding(BlockPadding),
         contentAlignment = Alignment.Center
     ) {

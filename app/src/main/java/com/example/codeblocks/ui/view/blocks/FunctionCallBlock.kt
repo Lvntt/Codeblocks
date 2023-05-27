@@ -23,6 +23,7 @@ import com.example.codeblocks.presentation.block.data.ExpressionBlockData
 import com.example.codeblocks.presentation.block.parameters.FunctionCallParameters
 import com.example.codeblocks.ui.navigation.CodeblocksDestinations
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.SpacerBetweenInnerElementsWidth
 import com.example.codeblocks.ui.view.common.ComposableByExpressionBlockClass
 import com.example.codeblocks.ui.view.common.VariableNameTextField
@@ -36,7 +37,8 @@ fun FunctionCallBlock(
     createBlockDataByType: (KClass<out Block>) -> BlockData? = { null },
     parameters: FunctionCallParameters = FunctionCallParameters(),
     onAddBlockClick: () -> Unit = {},
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val onAddParameterValueClick = {
@@ -44,6 +46,18 @@ fun FunctionCallBlock(
             parameters.passedParameters.add(createBlockDataByType(it) as ExpressionBlockData)
         }
         navController.navigate(CodeblocksDestinations.EXPRESSION_ADDITION_ROUTE)
+    }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
     }
 
     Row(
@@ -57,7 +71,7 @@ fun FunctionCallBlock(
                     onAddBlockClick()
                 }
             }
-            .background(MaterialTheme.colorScheme.primaryContainer),
+            .background(containerColor),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -71,6 +85,7 @@ fun FunctionCallBlock(
         )
 
         VariableNameTextField(
+            isInBlockWithNesting = isInBlockWithNesting,
             parameterName = parameters.name,
             onValueChange = {
                 parameters.name = it
@@ -94,6 +109,7 @@ fun FunctionCallBlock(
 
         for (parameter in parameters.passedParameters) {
             ComposableByExpressionBlockClass(
+                isInBlockWithNesting = isInBlockWithNesting,
                 navController = navController,
                 parametersExpression = parameter,
                 setAddBlockCallback = setAddBlockCallback,
@@ -106,7 +122,7 @@ fun FunctionCallBlock(
 
             Text(
                 text = stringResource(id = R.string.comma),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
 
@@ -116,6 +132,7 @@ fun FunctionCallBlock(
         }
 
         AddExpressionBlock(
+            isInBlockWithNesting = isInBlockWithNesting,
             isEditable = isEditable,
             onClick = { onAddParameterValueClick() }
         )
