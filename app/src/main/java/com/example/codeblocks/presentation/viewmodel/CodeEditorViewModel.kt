@@ -547,7 +547,6 @@ class CodeEditorViewModel(
             _addBlockButtonMap.clear()
             _bottomBlockBorderMap.clear()
             registerLoadedProgramLevel(rootProgramBlocks, null)
-            rootProgramBlocks
         } catch (e: Exception) {
             Log.d("VIEWMODEL", "Couldn't import program: ${e.message}")
             // TODO handle
@@ -566,6 +565,7 @@ class CodeEditorViewModel(
                     addBlockToMap(elseBlock)
                     registerAddButton(elseBlock)
                     _bottomBlockBorderMap[elseBlock.bottomBorderId] = it
+                    registerLoadedProgramLevel(elseBlock.nestedBlocksData, elseBlock.id)
                 }
                 registerLoadedProgramLevel(it.nestedBlocksData, it.id)
             }
