@@ -25,15 +25,29 @@ import com.example.codeblocks.ui.theme.BlockHeight
 import com.example.codeblocks.ui.theme.BlockMinimumWidth
 import com.example.codeblocks.ui.theme.BlockPadding
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 
 @Composable
 fun SingleTextBlockView(
     modifier: Modifier = Modifier,
     onAddBlockClick: () -> Unit = {},
     @StringRes descriptionStringRes: Int,
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Container.color
+    } else {
+        MaterialTheme.colorScheme.primaryContainer
+    }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
 
     Box(
         modifier = modifier
@@ -48,7 +62,7 @@ fun SingleTextBlockView(
             .height(BlockHeight)
             .widthIn(BlockMinimumWidth, Dp.Infinity)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(containerColor)
             .padding(BlockPadding)
     ) {
         Row(
@@ -58,7 +72,7 @@ fun SingleTextBlockView(
         ) {
             Text(
                 text = stringResource(id = descriptionStringRes),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 style = BlockRegularTextStyle
             )
         }

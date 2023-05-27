@@ -1,11 +1,12 @@
 package com.example.codeblocks.ui.navigation
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -16,9 +17,10 @@ import com.example.codeblocks.presentation.viewmodel.CodeEditorViewModel
 import com.example.codeblocks.ui.AvailableBlocks
 import com.example.codeblocks.ui.view.screens.BlocksAdditionScreen
 import com.example.codeblocks.ui.view.screens.ConsoleScreen
-import com.example.codeblocks.ui.view.screens.editor.EditorScreen
 import com.example.codeblocks.ui.view.screens.ExpressionAdditionScreen
 import com.example.codeblocks.ui.view.screens.OverviewScreen
+import com.example.codeblocks.ui.view.screens.SavedProgramsScreen
+import com.example.codeblocks.ui.view.screens.editor.EditorScreen
 import org.koin.androidx.compose.koinViewModel
 
 object CodeblocksDestinations {
@@ -28,6 +30,7 @@ object CodeblocksDestinations {
     const val BLOCKS_ADDITION_ROUTE = "blocks_addition"
     const val EXPRESSION_ADDITION_ROUTE = "expression_addition"
     const val BLOCKS_WITHOUT_NESTING_ADDITION_ROUTE = "blocks_without_nesting_addition"
+    const val SAVED_PROGRAMS_ROUTE = "saved_programs"
 }
 
 @Composable
@@ -72,6 +75,13 @@ fun Navigation(
                 viewModel = viewModel
             )
         }
+        composable(CodeblocksDestinations.SAVED_PROGRAMS_ROUTE) {
+            SavedProgramsScreen(
+                navController = navController,
+                savedPrograms = viewModel.getSavedPrograms(LocalContext.current),
+                onProgramClick = viewModel::openSavedProgram
+            )
+        }
     }
 }
 
@@ -86,7 +96,8 @@ fun BottomNavigationBar(
 
     NavigationBar(
         modifier = modifier,
-        containerColor = Color.LightGray
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
     ) {
         buttons.forEach { item ->
             val selected = item.route == backStackEntry.value?.destination?.route
@@ -98,7 +109,7 @@ fun BottomNavigationBar(
                 icon = {
                     Icon(
                         painter = painterResource(id = item.iconId),
-                        contentDescription = item.name
+                        contentDescription = item.name,
                     )
                 }
             )

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.Dp
 import com.example.codeblocks.ui.theme.BlockAccentedTextStyle
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 import com.example.codeblocks.ui.theme.TextFieldHeight
 import com.example.codeblocks.ui.theme.TextFieldMinimumWidth
 import com.example.codeblocks.ui.theme.TextFieldPadding
@@ -36,16 +37,23 @@ fun VariableNameTextField(
     onValueChange: (String) -> Unit,
     @StringRes placeholderId: Int,
     modifier: Modifier = Modifier,
-    isEditable: Boolean = false
+    isEditable: Boolean = false,
+    isInBlockWithNesting: Boolean = false
 ) {
     var textFieldContent by remember { mutableStateOf(parameterName) }
+
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Nested.color
+    } else {
+        MaterialTheme.colorScheme.background
+    }
 
     Box(
         modifier = modifier
             .width(IntrinsicSize.Min)
             .height(TextFieldHeight)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.background)
+            .background(containerColor)
             .padding(horizontal = TextFieldPadding),
         contentAlignment = Alignment.Center
     ) {
@@ -58,7 +66,10 @@ fun VariableNameTextField(
             },
             modifier = modifier.widthIn(TextFieldMinimumWidth, Dp.Infinity),
             singleLine = true,
-            textStyle = BlockAccentedTextStyle.copy(textAlign = TextAlign.Center),
+            textStyle = BlockAccentedTextStyle.copy(
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
+            ),
             decorationBox = { innerTextField ->
                 if (textFieldContent.isEmpty()) {
                     Text(

@@ -5,13 +5,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 val BlockRegularTextStyle = TextStyle(
-    fontSize = 18.sp,
+    fontSize = 17.sp,
     fontFamily = Oxygen,
     fontWeight = FontWeight.Normal
 )
 
 val BlockAccentedTextStyle = TextStyle(
-    fontSize = 18.sp,
+    fontSize = 17.sp,
     fontFamily = Oxygen,
     fontWeight = FontWeight.Bold
 )
@@ -26,4 +26,22 @@ val SnackbarTextStyle = TextStyle(
     fontSize = 14.sp,
     fontFamily = Oxygen,
     fontWeight = FontWeight.Normal
+)
+
+val CardRegularTextStyle = TextStyle(
+    fontSize = 18.sp,
+    fontFamily = Oxygen,
+    fontWeight = FontWeight.Normal
+)
+
+val CardAccentedTextStyle = TextStyle(
+    fontSize = 18.sp,
+    fontFamily = Oxygen,
+    fontWeight = FontWeight.Bold
+)
+
+val CardTitleTextStyle = TextStyle(
+    fontSize = 21.sp,
+    fontFamily = Oxygen,
+    fontWeight = FontWeight.Bold
 )

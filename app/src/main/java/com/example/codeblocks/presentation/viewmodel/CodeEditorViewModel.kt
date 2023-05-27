@@ -1,5 +1,7 @@
 package com.example.codeblocks.presentation.viewmodel
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
@@ -59,9 +61,12 @@ import com.example.codeblocks.presentation.block.parameters.StringExpressionPara
 import com.example.codeblocks.presentation.block.parameters.VariableAssignmentBlockParameters
 import com.example.codeblocks.presentation.block.parameters.VariableDeclarationBlockParameters
 import com.example.codeblocks.reorderable.ItemPosition
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import java.util.UUID
 import kotlin.math.abs
 import kotlin.reflect.KClass
@@ -73,7 +78,7 @@ class CodeEditorViewModel(
     private val writeToConsoleUseCase: WriteToConsoleUseCase
 ) : ViewModel() {
 
-    val rootProgramBlocks: MutableList<BlockData> = mutableStateListOf()
+    var rootProgramBlocks: MutableList<BlockData> = mutableStateListOf()
     val rootAddBlockButtonId: UUID = UUID.randomUUID()
 
     private val _isDeleteMode: MutableState<Boolean> = mutableStateOf(false)
@@ -404,6 +409,45 @@ class CodeEditorViewModel(
 
     fun changeDeleteMode() {
         _isDeleteMode.value = !_isDeleteMode.value
+    }
+
+    fun saveProgram(filename: String, context: Context) {
+        val gson = Gson()
+
+        val file = File(context.filesDir, filename)
+        val jsonProgram = gson.toJson(rootProgramBlocks)
+        Log.d("VIEWMODEL", jsonProgram)
+
+        try {
+            val fileOutputStream = FileOutputStream(file)
+            fileOutputStream.write(jsonProgram.toByteArray())
+            fileOutputStream.close()
+        } catch (e: Exception) {
+            // TODO handle
+            Log.d("VIEWMODEL", "File was not created")
+        }
+    }
+
+    fun getSavedPrograms(context: Context): Array<out File>? {
+        try {
+            return context.filesDir.listFiles()
+        } catch (e: Exception) {
+            // TODO handle
+            Log.d("VIEWMODEL", "Couldn't retrieve saved programs")
+        }
+        return null
+    }
+
+    fun openSavedProgram(savedProgram: File) {
+        val gson = Gson()
+
+        try {
+            val importedRootProgramBlocks = savedProgram.readText()
+            rootProgramBlocks = gson.fromJson(importedRootProgramBlocks, Array<BlockData>::class.java).toMutableList()
+        } catch (e: Exception) {
+            Log.d("VIEWMODEL", "Couldn't import program: ${e.message}")
+            // TODO handle
+        }
     }
 
 }

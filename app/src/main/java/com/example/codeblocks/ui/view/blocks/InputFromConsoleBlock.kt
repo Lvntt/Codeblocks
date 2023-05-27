@@ -12,13 +12,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.codeblocks.R
 import com.example.codeblocks.ui.theme.BlockRegularTextStyle
+import com.example.codeblocks.ui.theme.NestingColor
 
 @Composable
 fun InputFromConsoleBlock(
     modifier: Modifier = Modifier,
-    onAddBlockClick: () -> Unit = {}
+    onAddBlockClick: () -> Unit = {},
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
+    val onContainerColor = if (isInBlockWithNesting) {
+        NestingColor.OnContainer.color
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
+
     Box(
         modifier = modifier
             .clickable(
@@ -31,7 +40,7 @@ fun InputFromConsoleBlock(
     ) {
         Text(
             text = stringResource(id = R.string.readFromConsole),
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = onContainerColor,
             style = BlockRegularTextStyle
         )
     }

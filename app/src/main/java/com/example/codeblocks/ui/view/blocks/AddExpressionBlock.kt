@@ -23,12 +23,14 @@ import androidx.compose.ui.draw.clip
 import com.example.codeblocks.ui.theme.AddExpressionButtonSize
 import com.example.codeblocks.ui.theme.BlockElementShape
 import com.example.codeblocks.ui.theme.BlockPadding
+import com.example.codeblocks.ui.theme.NestingColor
 
 @Composable
 fun AddExpressionBlock(
     modifier: Modifier = Modifier,
     isEditable: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isInBlockWithNesting: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var customModifier = modifier
@@ -41,13 +43,19 @@ fun AddExpressionBlock(
         }
     }
 
+    val containerColor = if (isInBlockWithNesting) {
+        NestingColor.Nested.color
+    } else {
+        MaterialTheme.colorScheme.tertiaryContainer
+    }
+
     Box(
         modifier = customModifier
             .height(AddExpressionButtonSize)
             .width(AddExpressionButtonSize)
             .aspectRatio(1f)
             .clip(BlockElementShape)
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .background(containerColor)
             .padding(BlockPadding),
         contentAlignment = Alignment.Center
     ) {
