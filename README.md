@@ -3,9 +3,9 @@
 Codeblocks is a project that was made as a laboratory work of the 7th module of studying in TSU, HITs.
 
 Authors:
-[Ruslan Gafarov](https://github.com/Suslanium)
-[Matvey Seregin](https://github.com/Lvntt)
-[Yuriy Eliseev](https://github.com/Viroos973)
++ [Ruslan Gafarov](https://github.com/Suslanium)
++ [Matvey Seregin](https://github.com/Lvntt)
++ [Yuriy Eliseev](https://github.com/Viroos973)
 
 # Technologies used
 
